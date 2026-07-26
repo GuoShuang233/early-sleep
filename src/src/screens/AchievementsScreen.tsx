@@ -28,7 +28,17 @@ const companionEmoji = (type: string, stage: number) => {
   return stages[Math.min(stage, stages.length - 1)];
 };
 
-const stageNames = ['种子发芽中', '茁壮成长', '郁郁葱葱', '开花结果', '完美形态'];
+const companionStageNames: Record<string, string[]> = {
+  plant: ['🌱 种子发芽中', '🌿 茁壮成长', '🌳 郁郁葱葱', '🌸 开花结果', '🌲 完美形态'],
+  flower: ['🌰 种子', '🌷 萌芽', '🌹 含苞待放', '🌺 盛放', '🏵️ 满园花开'],
+  cactus: ['🌵 小不点', '🌵 长个了', '🌵 挺拔', '🌸 开花啦', '🌵 仙人掌王'],
+  cat: ['🐈 小奶猫', '🐈 调皮猫', '🐱 优雅猫', '🐱 威风猫', '👑🐱 猫之王'],
+  owl: ['🪺 鸟蛋', '🐣 雏鸟', '🦉 小猫头鹰', '🦉 智慧之眼', '🦉✨ 森林守护者'],
+  ocean: ['🪸 珊瑚', '🐠 小鱼群', '🐋 鲸鱼', '🐋 深海遨游', '🌊✨ 海洋之心'],
+  star: ['✨ 星光点点', '🌙 月牙', '🌌 银河', '🌌 星云', '⭐🌟 星辰大海'],
+};
+
+const stageDefault = ['种子发芽中', '茁壮成长', '郁郁葱葱', '开花结果', '完美形态'];
 
 export default function AchievementsScreen() {
   const { theme } = useTheme();
@@ -60,6 +70,7 @@ export default function AchievementsScreen() {
 
   const companionType = theme.companion.type;
   const stage = Math.min(Math.floor(streak.current / 3), 4);
+  const names = companionStageNames[companionType] || stageDefault;
 
   return (
     <View style={s.container}>
@@ -68,7 +79,7 @@ export default function AchievementsScreen() {
 
         <View style={s.companionCard}>
           <Text style={s.companionEmoji}>{companionEmoji(companionType, stage)}</Text>
-          <Text style={s.companionLabel}>{stageNames[stage]}</Text>
+          <Text style={s.companionLabel}>{names[stage]}</Text>
           <View style={s.progressBar}>
             <View style={[s.progressFill, { width: `${Math.min((streak.current / (Math.max(stage, 1) * 3)) * 100, 100)}%` }]} />
           </View>

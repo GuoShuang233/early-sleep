@@ -1,211 +1,140 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Text, Modal, TouchableOpacity } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 import { useThemedStyles } from '../theme/useThemedStyles';
 
-// ── Color Picker ──────────────────────────────────────────
+const OVERLAY = { flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 };
 
-const COLOR_PRESETS = [
-  '#7170ff', '#5e6ad2', '#b8a0e0', '#80d890',
-  '#10b981', '#f0b888', '#f87171', '#fbbf24',
-  '#6c5ce7', '#00b894', '#e17055', '#0984e3',
-  '#d63031', '#e84393', '#6c5ce7', '#00cec9',
-];
+function CloseBtn({ onClose, label }: any) {
+  const { theme } = useTheme();
+  return (
+    <TouchableOpacity style={{ padding: 12, alignItems: 'center', marginTop: 8 }} onPress={onClose}>
+      <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{label || '完成'}</Text>
+    </TouchableOpacity>
+  );
+}
+
+// ── Color Picker ──────────────────────────────────────────
+const COLORS = ['#7170ff','#5e6ad2','#b8a0e0','#80d890','#10b981','#f0b888','#f87171','#fbbf24','#6c5ce7','#00b894','#e17055','#0984e3','#d63031','#e84393','#6c5ce7','#00cec9'];
 
 export function ColorPickerModal({ visible, onClose, onSelect, currentColor }: any) {
-  const s = useThemedStyles((t) => ({
-    overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-    content: { backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 20, padding: 24 },
-    title: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text, textAlign: 'center', marginBottom: 16 },
-    grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center' },
-    swatch: { width: 48, height: 48, borderRadius: 12, borderWidth: 2 },
-    currentRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16, paddingTop: 12, borderTopWidth: 1, borderTopColor: t.theme.colors.surfaceBorder },
-    currentLabel: { fontSize: 12, color: t.theme.colors.textSecondary },
-    currentValue: { fontSize: 12, color: t.theme.colors.text, fontFamily: 'monospace' },
-    closeBtn: { padding: 12, alignItems: 'center', marginTop: 8 },
-    closeText: { fontSize: 14, color: t.theme.colors.primary, fontWeight: '600' },
-  }));
-
+  const { theme } = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={s.overlay}>
-        <View style={s.content}>
-          <Text style={s.title}>🎨 选择主色</Text>
-          <View style={s.grid}>
-            {COLOR_PRESETS.map((c, i) => (
-              <TouchableOpacity
-                key={i}
-                onPress={() => onSelect(c)}
-                style={[s.swatch, { backgroundColor: c, borderColor: c === currentColor ? '#fff' : 'transparent' }]}
-              />
+      <View style={OVERLAY}>
+        <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🎨 选择主色</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
+            {COLORS.map((c, i) => (
+              <TouchableOpacity key={i} onPress={() => onSelect(c)}
+                style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: c, borderWidth: 2, borderColor: c === currentColor ? '#fff' : 'transparent' }} />
             ))}
           </View>
-          <View style={s.currentRow}>
-            <Text style={s.currentLabel}>当前颜色</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 16, paddingTop: 12, borderTopWidth: 1, borderTopColor: theme.colors.surfaceBorder }}>
+            <Text style={{ fontSize: 12, color: theme.colors.textSecondary }}>当前</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
               <View style={{ width: 20, height: 20, borderRadius: 6, backgroundColor: currentColor }} />
-              <Text style={s.currentValue}>{currentColor}</Text>
+              <Text style={{ fontSize: 12, color: theme.colors.text }}>{currentColor}</Text>
             </View>
           </View>
-          <TouchableOpacity style={s.closeBtn} onPress={onClose}>
-            <Text style={s.closeText}>完成</Text>
-          </TouchableOpacity>
+          <CloseBtn onClose={onClose} />
         </View>
       </View>
     </Modal>
   );
 }
 
-// ── Button Style Picker ───────────────────────────────────
-
-const BTN_STYLES = [
-  { key: 'rounded', icon: '🟣', label: '圆角' },
-  { key: 'pill', icon: '💊', label: '胶囊' },
-  { key: 'sharp', icon: '⬛', label: '直角' },
-  { key: 'glow', icon: '✨', label: '发光' },
-  { key: 'outline', icon: '🔲', label: '描边' },
-  { key: '3d', icon: '📦', label: '3D' },
-  { key: 'cat', icon: '🐱', label: '猫爪' },
-  { key: 'bear', icon: '🐻', label: '熊掌' },
-  { key: 'owl', icon: '🦉', label: '猫头鹰' },
-  { key: 'star', icon: '⭐', label: '星星' },
+// ── Button Style ──────────────────────────────────────────
+const BTNS = [
+  { key: 'rounded', icon: '🟣', label: '圆角' }, { key: 'pill', icon: '💊', label: '胶囊' },
+  { key: 'sharp', icon: '⬛', label: '直角' }, { key: 'glow', icon: '✨', label: '发光' },
+  { key: 'outline', icon: '🔲', label: '描边' }, { key: '3d', icon: '📦', label: '3D' },
+  { key: 'cat', icon: '🐱', label: '猫爪' }, { key: 'bear', icon: '🐻', label: '熊掌' },
+  { key: 'owl', icon: '🦉', label: '猫头鹰' }, { key: 'star', icon: '⭐', label: '星星' },
 ];
 
 export function ButtonStyleModal({ visible, onClose, onSelect, currentStyle }: any) {
   const { theme } = useTheme();
-  const s = useThemedStyles((t) => ({
-    overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-    content: { backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 20, padding: 24 },
-    title: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text, textAlign: 'center', marginBottom: 16 },
-    grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' },
-    item: { width: '28%', alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 12, backgroundColor: t.theme.colors.surface },
-    itemIcon: { fontSize: 24, marginBottom: 4 },
-    itemLabel: { fontSize: 10, color: t.theme.colors.textSecondary },
-    closeBtn: { padding: 12, alignItems: 'center', marginTop: 8 },
-    closeText: { fontSize: 14, color: t.theme.colors.primary, fontWeight: '600' },
-  }));
-
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={s.overlay}>
-        <View style={s.content}>
-          <Text style={s.title}>🎪 按钮风格</Text>
-          <View style={s.grid}>
-            {BTN_STYLES.map((b) => (
-              <TouchableOpacity
-                key={b.key}
-                onPress={() => onSelect(b.key)}
-                style={[s.item, { borderColor: currentStyle === b.key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
-                <Text style={s.itemIcon}>{b.icon}</Text>
-                <Text style={s.itemLabel}>{b.label}</Text>
+      <View style={OVERLAY}>
+        <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🎪 按钮风格</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+            {BTNS.map((b) => (
+              <TouchableOpacity key={b.key} onPress={() => onSelect(b.key)}
+                style={{ width: '28%', alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 12, borderColor: currentStyle === b.key ? theme.colors.primary : theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
+                <Text style={{ fontSize: 24, marginBottom: 4 }}>{b.icon}</Text>
+                <Text style={{ fontSize: 10, color: theme.colors.textSecondary }}>{b.label}</Text>
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity style={s.closeBtn} onPress={onClose}>
-            <Text style={s.closeText}>完成</Text>
-          </TouchableOpacity>
+          <CloseBtn onClose={onClose} />
         </View>
       </View>
     </Modal>
   );
 }
 
-// ── Companion Picker ──────────────────────────────────────
-
-const COMPANIONS = [
-  { key: 'plant', icon: '🌱', label: '植物' },
-  { key: 'flower', icon: '🌸', label: '花卉' },
-  { key: 'cactus', icon: '🌵', label: '仙人掌' },
-  { key: 'cat', icon: '🐱', label: '猫咪' },
-  { key: 'owl', icon: '🦉', label: '猫头鹰' },
-  { key: 'ocean', icon: '🐋', label: '海洋' },
+// ── Companion ─────────────────────────────────────────────
+const COMPS = [
+  { key: 'plant', icon: '🌱', label: '植物' }, { key: 'flower', icon: '🌸', label: '花卉' },
+  { key: 'cactus', icon: '🌵', label: '仙人掌' }, { key: 'cat', icon: '🐱', label: '猫咪' },
+  { key: 'owl', icon: '🦉', label: '猫头鹰' }, { key: 'ocean', icon: '🐋', label: '海洋' },
   { key: 'star', icon: '⭐', label: '星空' },
 ];
 
 export function CompanionModal({ visible, onClose, onSelect, currentType }: any) {
   const { theme } = useTheme();
-  const s = useThemedStyles((t) => ({
-    overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-    content: { backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 20, padding: 24 },
-    title: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text, textAlign: 'center', marginBottom: 16 },
-    grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' },
-    item: { width: '28%', alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, backgroundColor: t.theme.colors.surface },
-    itemIcon: { fontSize: 28, marginBottom: 4 },
-    itemLabel: { fontSize: 10, color: t.theme.colors.textSecondary },
-    closeBtn: { padding: 12, alignItems: 'center', marginTop: 8 },
-    closeText: { fontSize: 14, color: t.theme.colors.primary, fontWeight: '600' },
-  }));
-
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={s.overlay}>
-        <View style={s.content}>
-          <Text style={s.title}>🌱 虚拟伙伴</Text>
-          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
-            随连续天数进化成长
-          </Text>
-          <View style={s.grid}>
-            {COMPANIONS.map((c) => (
-              <TouchableOpacity
-                key={c.key}
-                onPress={() => onSelect(c.key)}
-                style={[s.item, { borderColor: currentType === c.key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
-                <Text style={s.itemIcon}>{c.icon}</Text>
-                <Text style={s.itemLabel}>{c.label}</Text>
+      <View style={OVERLAY}>
+        <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 8 }}>🌱 虚拟伙伴</Text>
+          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>随连续天数进化成长</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+            {COMPS.map((c) => (
+              <TouchableOpacity key={c.key} onPress={() => onSelect(c.key)}
+                style={{ width: '28%', alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, borderColor: currentType === c.key ? theme.colors.primary : theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
+                <Text style={{ fontSize: 28, marginBottom: 4 }}>{c.icon}</Text>
+                <Text style={{ fontSize: 10, color: theme.colors.textSecondary }}>{c.label}</Text>
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity style={s.closeBtn} onPress={onClose}>
-            <Text style={s.closeText}>完成</Text>
-          </TouchableOpacity>
+          <CloseBtn onClose={onClose} />
         </View>
       </View>
     </Modal>
   );
 }
 
-// ── Font Picker ───────────────────────────────────────────
-
+// ── Font ──────────────────────────────────────────────────
 const FONTS = [
-  { key: 'system', label: '系统默认' },
-  { key: 'rounded', label: '圆体' },
-  { key: 'serif', label: '衬线' },
-  { key: 'handwrite', label: '手写' },
-  { key: 'mono', label: '等宽' },
+  { key: 'system', label: '系统默认', preview: '系统默认字体', family: undefined as any },
+  { key: 'rounded', label: '圆体', preview: '圆润可爱字体', family: 'sans-serif-rounded' as any },
+  { key: 'serif', label: '衬线', preview: 'Serif 衬线体', family: 'serif' as any },
+  { key: 'handwrite', label: '手写', preview: '手写风格字体', family: 'cursive' as any },
+  { key: 'mono', label: '等宽', preview: '等宽字体 1234', family: 'monospace' as any },
 ];
 
 export function FontModal({ visible, onClose, onSelect, currentFont }: any) {
   const { theme } = useTheme();
-  const s = useThemedStyles((t) => ({
-    overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 },
-    content: { backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 20, padding: 24 },
-    title: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text, textAlign: 'center', marginBottom: 16 },
-    list: { gap: 6 },
-    item: { padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: t.theme.colors.surface },
-    itemLabel: { fontSize: 14, color: t.theme.colors.text },
-    closeBtn: { padding: 12, alignItems: 'center', marginTop: 8 },
-    closeText: { fontSize: 14, color: t.theme.colors.primary, fontWeight: '600' },
-  }));
-
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <View style={s.overlay}>
-        <View style={s.content}>
-          <Text style={s.title}>🔠 字体</Text>
-          <View style={s.list}>
+      <View style={OVERLAY}>
+        <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🔠 字体</Text>
+          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>字体大小跟随系统设置</Text>
+          <View style={{ gap: 6 }}>
             {FONTS.map((f) => (
-              <TouchableOpacity
-                key={f.key}
-                onPress={() => onSelect(f.key)}
-                style={[s.item, { borderColor: currentFont === f.key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
-                <Text style={s.itemLabel}>{f.icon || '🔤'} {f.label}</Text>
+              <TouchableOpacity key={f.key} onPress={() => onSelect(f.key)}
+                style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: currentFont === f.key ? theme.colors.primary : theme.colors.surfaceBorder }}>
+                <Text style={{ fontSize: 14, color: theme.colors.text, fontFamily: f.family }}>{f.preview}</Text>
                 {currentFont === f.key && <Text style={{ color: theme.colors.primary }}>✓</Text>}
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity style={s.closeBtn} onPress={onClose}>
-            <Text style={s.closeText}>完成</Text>
-          </TouchableOpacity>
+          <CloseBtn onClose={onClose} />
         </View>
       </View>
     </Modal>
