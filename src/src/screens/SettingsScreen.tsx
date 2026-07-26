@@ -4,6 +4,7 @@ import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { PresetKey } from '../theme/themes';
+import { ColorPickerModal, ButtonStyleModal, CompanionModal, FontModal } from '../components/CustomizationModals';
 
 const presetList: { key: PresetKey; icon: string; label: string; desc: string }[] = [
   { key: 'dark-precision', icon: '🌙', label: '暗色精确', desc: 'Linear 风格·深色' },
@@ -24,8 +25,12 @@ const customChips = [
 ];
 
 export default function SettingsScreen() {
-  const { theme, setPreset, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
+  const { theme, setPreset, setCustom, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
   const insets = useSafeAreaInsets();
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showBtnStyle, setShowBtnStyle] = useState(false);
+  const [showCompanion, setShowCompanion] = useState(false);
+  const [showFont, setShowFont] = useState(false);
   const s = useThemedStyles((t) => ({
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
@@ -62,7 +67,7 @@ export default function SettingsScreen() {
   }));
 
   return (
-    <View style={s.container}>
+    <React.Fragment><View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.title}>⚙️ 设置</Text>
 
@@ -105,13 +110,18 @@ export default function SettingsScreen() {
 
         <Text style={s.sectionTitle}>自定义</Text>
         <View style={s.customGrid}>
-          {customChips.map((c, i) => (
-            <TouchableOpacity key={i} style={s.chip}
-              onPress={() => Alert.alert('🛠️ 自定义', `${c.label}自定义功能开发中`)}>
+          {customChips.map((c, i) => {
+            let p = () => Alert.alert('🛠️ 自定义', c.label + '功能开发中');
+            if (c.label === '颜色') p = () => setShowColorPicker(true);
+            if (c.label === '按钮') p = () => setShowBtnStyle(true);
+            if (c.label === '伙伴') p = () => setShowCompanion(true);
+            if (c.label === '字体') p = () => setShowFont(true);
+            return (
+            <TouchableOpacity key={i} style={s.chip} onPress={p}>
               <Text style={s.chipIcon}>{c.icon}</Text>
               <Text style={s.chipLabel}>{c.label}</Text>
-            </TouchableOpacity>
-          ))}
+            </TouchableOpacity>);
+          })}
         </View>
 
         <View style={s.exportRow}>
@@ -132,5 +142,30 @@ export default function SettingsScreen() {
         </View>
       </ScrollView>
     </View>
+      <ColorPickerModal
+        visible={showColorPicker}
+        onClose={() => setShowColorPicker(false)}
+        onSelect={(c: string) => { setCustom({ colors: { ...theme.colors, primary: c } }); setShowColorPicker(false); }}
+        currentColor={theme.colors.primary}
+      />
+      <ButtonStyleModal
+        visible={showBtnStyle}
+        onClose={() => setShowBtnStyle(false)}
+        onSelect={(s: string) => { setCustom({ button: { ...theme.button, style: s as any } }); setShowBtnStyle(false); }}
+        currentStyle={theme.button.style}
+      />
+      <CompanionModal
+        visible={showCompanion}
+        onClose={() => setShowCompanion(false)}
+        onSelect={(t: string) => { setCustom({ companion: { ...theme.companion, type: t as any } }); setShowCompanion(false); }}
+        currentType={theme.companion.type}
+      />
+      <FontModal
+        visible={showFont}
+        onClose={() => setShowFont(false)}
+        onSelect={(f: string) => { setCustom({ font: f as any }); setShowFont(false); }}
+        currentFont={theme.font}
+      />
+      </React.Fragment>
   );
 }
