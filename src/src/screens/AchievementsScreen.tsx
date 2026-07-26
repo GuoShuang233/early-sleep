@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getStreak } from '../data/database';
 
@@ -31,8 +32,9 @@ const stageNames = ['种子发芽中', '茁壮成长', '郁郁葱葱', '开花�
 
 export default function AchievementsScreen() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const s = useThemedStyles((t) => ({
-    container: { flex: 1, backgroundColor: t.theme.colors.background },
+    container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
     title: { fontSize: 18, fontWeight: '600', color: t.theme.colors.text, marginBottom: 16 },
     companionCard: { borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 20, backgroundColor: t.theme.colors.surface },

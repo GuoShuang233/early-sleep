@@ -2,12 +2,18 @@ import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 
-export function useThemedStyles<T extends StyleSheet.NamedStyles<T> | StyleSheet.NamedStyles<any>>(
-  factory: (theme: ReturnType<typeof useTheme>) => T,
+/**
+ * Hook that creates a StyleSheet based on the current theme.
+ * Styles automatically update when the theme changes.
+ */
+export function useThemedStyles<T extends Record<string, any>>(
+  factory: (ctx: ReturnType<typeof useTheme>) => T,
 ): T {
-  const themeCtx = useTheme();
+  const ctx = useTheme();
+  // Use theme's identity (memoized reference) to detect changes
   return useMemo(() => {
-    const raw = factory(themeCtx);
-    return StyleSheet.create(raw) as T;
-  }, [themeCtx.theme, themeCtx.isDark]);
+    const raw = factory(ctx);
+    const styles = StyleSheet.create(raw);
+    return styles as unknown as T;
+  }, [ctx.theme, ctx.isDark]);
 }

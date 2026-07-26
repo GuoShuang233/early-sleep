@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { PresetKey } from '../theme/themes';
 
@@ -25,7 +26,7 @@ const customChips = [
 export default function SettingsScreen() {
   const { theme, setPreset, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
   const s = useThemedStyles((t) => ({
-    container: { flex: 1, backgroundColor: t.theme.colors.background },
+    container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
     title: { fontSize: 18, fontWeight: '600', color: t.theme.colors.text, marginBottom: 16 },
     sectionTitle: { fontSize: 11, color: t.theme.colors.textSecondary, fontWeight: '600', marginTop: 16, marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
@@ -104,7 +105,8 @@ export default function SettingsScreen() {
         <Text style={s.sectionTitle}>自定义</Text>
         <View style={s.customGrid}>
           {customChips.map((c, i) => (
-            <TouchableOpacity key={i} style={s.chip}>
+            <TouchableOpacity key={i} style={s.chip}
+              onPress={() => Alert.alert('🛠️ 自定义', `${c.label}自定义功能开发中`)}>
               <Text style={s.chipIcon}>{c.icon}</Text>
               <Text style={s.chipLabel}>{c.label}</Text>
             </TouchableOpacity>
@@ -112,7 +114,7 @@ export default function SettingsScreen() {
         </View>
 
         <View style={s.exportRow}>
-          <TouchableOpacity style={s.exportBtn}><Text style={s.exportText}>📤 导出主题</Text></TouchableOpacity>
+          <TouchableOpacity style={s.exportBtn} onPress={() => Alert.alert("📤 导出", "主题导出功能开发中")}><Text style={s.exportText}>📤 导出主题</Text></TouchableOpacity>
           <TouchableOpacity style={[s.exportBtn, { borderColor: theme.colors.primary + '40' }]}><Text style={[s.exportText, { color: theme.colors.primary }]}>📥 导入主题</Text></TouchableOpacity>
         </View>
 

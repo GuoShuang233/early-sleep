@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getRecentLogs } from '../data/database';
 
@@ -9,6 +10,7 @@ const DAYS = ['日','一','二','三','四','五','六'];
 
 export default function CalendarScreen() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -16,17 +18,17 @@ export default function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const s = useThemedStyles((t) => ({
-    container: { flex: 1, backgroundColor: t.theme.colors.background },
+    container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 40 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
     headerBtn: { padding: 10, borderRadius: 10, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder },
     headerBtnText: { fontSize: 16, color: t.theme.colors.text },
     headerTitle: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text },
     dayHeaderRow: { flexDirection: 'row', marginBottom: 4 },
-    dayHeader: { flex: 1, alignItems: 'center', paddingVertical: 6 },
+    dayHeader: { width: '14.28%', alignItems: 'center', paddingVertical: 6 },
     dayHeaderText: { fontSize: 11, color: t.theme.colors.textSecondary, fontWeight: '500' },
     weekRow: { flexDirection: 'row' },
-    dayCell: { flex: 1, alignItems: 'center', paddingVertical: 8 },
+    dayCell: { width: '14.28%', alignItems: 'center', paddingVertical: 8 },
     dayNum: { fontSize: 13, fontWeight: '500', color: t.theme.colors.text },
     dayDot: { width: 5, height: 5, borderRadius: 2.5, marginTop: 2 },
     selectedDay: { backgroundColor: t.theme.colors.primary + '20', borderRadius: 8 },

@@ -1,10 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import {
   ThemeConfig,
   presetThemes,
   PresetKey,
   darkPrecision,
-  minimalLight,
 } from './themes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,15 +17,7 @@ interface ThemeContextType {
   setAutoSwitch: (v: boolean) => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({
-  theme: darkPrecision,
-  isDark: true,
-  setPreset: () => {},
-  setCustom: () => {},
-  currentPreset: 'dark-precision',
-  autoSwitch: true,
-  setAutoSwitch: () => {},
-});
+const ThemeContext = createContext<ThemeContextType>(null!);
 
 const STORAGE_KEY = '@earlysleep_theme';
 
@@ -34,29 +25,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [currentPreset, setCurrentPreset] = useState<PresetKey | 'custom'>('dark-precision');
   const [customOverrides, setCustomOverrides] = useState<Partial<ThemeConfig>>({});
   const [autoSwitch, setAutoSwitch] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
-  // Hour-based auto-switch: 6-18 = Minimal Light, 18-6 = Dark Precision
-  useEffect(() => {
-    if (!autoSwitch) return;
-    const hour = new Date().getHours();
-    const isDay = hour >= 6 && hour < 18;
-    const targetPreset: PresetKey = isDay ? 'minimal-light' : 'dark-precision';
-    if (currentPreset !== targetPreset && currentPreset === 'custom') {
-      // Don't override manual custom
-    } else if (currentPreset !== targetPreset) {
-      setCurrentPreset(targetPreset);
-    }
-    // Re-check every 30 min
-    const interval = setInterval(() => {
-      const h = new Date().getHours();
-      const day = h >= 6 && h < 18;
-      const t: PresetKey = day ? 'minimal-light' : 'dark-precision';
-      setCurrentPreset((prev) => (prev === 'custom' ? prev : t));
-    }, 30 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [autoSwitch, currentPreset]);
-
-  // Load saved theme
+  // Load saved theme (once on mount)
   useEffect(() => {
     (async () => {
       try {
@@ -68,26 +39,41 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           if (parsed.autoSwitch !== undefined) setAutoSwitch(parsed.autoSwitch);
         }
       } catch {}
+      setLoaded(true);
     })();
   }, []);
 
   // Save theme on change
   useEffect(() => {
+    if (!loaded) return;
     AsyncStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({
-        preset: currentPreset,
-        custom: customOverrides,
-        autoSwitch,
-      })
+      JSON.stringify({ preset: currentPreset, custom: customOverrides, autoSwitch })
     ).catch(() => {});
-  }, [currentPreset, customOverrides, autoSwitch]);
+  }, [currentPreset, customOverrides, autoSwitch, loaded]);
 
-  // Build effective theme
-  const baseTheme =
-    currentPreset === 'custom'
-      ? { ...darkPrecision, ...customOverrides }
-      : { ...presetThemes[currentPreset as PresetKey], ...customOverrides };
+  // Auto-switch timer (once on mount, then every 30 min)
+  // IMPORTANT: does NOT depend on currentPreset — won't fight manual switches
+  useEffect(() => {
+    if (!autoSwitch || !loaded) return;
+    const applyAutoSwitch = () => {
+      const h = new Date().getHours();
+      const isDay = h >= 6 && h < 18;
+      const target: PresetKey = isDay ? 'minimal-light' : 'dark-precision';
+      setCurrentPreset((prev) => (prev === 'custom' ? prev : target));
+    };
+    applyAutoSwitch();
+    const interval = setInterval(applyAutoSwitch, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [autoSwitch, loaded]); // ✓ no currentPreset dependency
+
+  // Memoize theme so useThemedStyles can track identity
+  const theme = useMemo(() => {
+    const base = currentPreset === 'custom'
+      ? darkPrecision
+      : presetThemes[currentPreset as PresetKey];
+    return { ...base, ...customOverrides };
+  }, [currentPreset, customOverrides]);
 
   const hour = new Date().getHours();
   const isDark = hour < 6 || hour >= 18;
@@ -95,7 +81,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   return (
     <ThemeContext.Provider
       value={{
-        theme: baseTheme,
+        theme,
         isDark,
         setPreset: (key) => {
           setCurrentPreset(key);

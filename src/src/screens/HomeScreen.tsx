@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getTodayLog, logBedtime, logWaketime, getStreak, getRecentLogs } from '../data/database';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const s = useThemedStyles((t) => {
     const c = t.theme.colors;
     return {
-      container: { flex: 1, backgroundColor: c.background },
+      container: { flex: 1, paddingTop: insets.top, backgroundColor: c.background },
       scroll: { padding: 20, paddingBottom: 80 },
       greeting: { fontSize: 24, fontWeight: '600', color: c.text, letterSpacing: -0.3 },
       targetText: { fontSize: 13, color: c.textSecondary, marginTop: 2, marginBottom: 14 },

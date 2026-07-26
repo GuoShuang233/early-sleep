@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getStreak, getRecentLogs, getTodayLog } from '../data/database';
 
 export default function ReportScreen() {
   const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
   const s = useThemedStyles((t) => ({
-    container: { flex: 1, backgroundColor: t.theme.colors.background },
+    container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
     header: { alignItems: 'center', paddingVertical: 12 },
     headerIcon: { fontSize: 36 },
