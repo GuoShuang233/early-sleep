@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>早睡系统 · 主题与广告展示</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#08090a;color:#f7f8f8;padding:40px 20px}
+.container{max-width:1200px;margin:0 auto}
+h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px}
+.sub{color:#8a8f98;font-size:14px;margin-bottom:32px;line-height:1.6}
+
+.section-title{font-size:20px;font-weight:600;margin:40px 0 16px;color:#f7f8f8;display:flex;align-items:center;gap:8px}
+.section-title small{font-size:13px;color:#62666d;font-weight:400}
+
+.phone-grid{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+
+.phone{width:380px;border-radius:44px;overflow:hidden;position:relative;margin-bottom:10px}
+.phone-label{text-align:center;font-size:11px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:1.5px;padding:12px 0 6px}
+.phone-inner{height:780px;overflow-y:auto;padding:0 0 10px}
+.phone-inner::-webkit-scrollbar{width:3px}
+.phone-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+/* Theme A */
+.theme-a .phone-inner{background:#08090a}
+.theme-a .status-bar{display:flex;justify-content:space-between;padding:14px 24px 4px;font-size:13px;font-weight:500;color:#f7f8f8}
+.theme-a .content{padding:4px 20px 0}
+.theme-a .sec-title{font-size:12px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.8px;padding:14px 0 8px}
+.theme-a .btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px}
+.theme-a .btn:active{background:rgba(255,255,255,0.06)}
+.theme-a .btn-icon{font-size:22px;width:36px;text-align:center}
+.theme-a .btn-text{flex:1}
+.theme-a .btn-text .tl{font-size:14px;font-weight:500;color:#f7f8f8}
+.theme-a .btn-text .td{font-size:11px;color:#62666d;margin-top:1px}
+.theme-a .btn-arrow{color:#62666d;font-size:16px}
+
+.theme-a .theme-option{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.theme-option.active{border-color:#7170ff;background:rgba(113,112,255,0.08)}
+.theme-swatch{width:40px;height:40px;border-radius:10px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ts-a{background:#08090a;color:#7170ff;border:1px solid rgba(255,255,255,0.1)}
+.ts-b{background:linear-gradient(135deg,#120c1a,#1e1630);color:#b8a0e0;border:1px solid rgba(200,180,230,0.1)}
+.ts-c{background:linear-gradient(135deg,#0c140e,#102014);color:#80d890;border:1px solid rgba(80,180,100,0.1)}
+.ts-d{background:#ffffff;color:#6c5ce7;border:1px solid #e0deda}
+.theme-info .ti{font-size:14px;font-weight:500}
+.theme-info .td{font-size:11px;color:#62666d}
+
+.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info .tl{font-size:14px;font-weight:500}
+.toggle-info .td{font-size:11px;color:#62666d}
+.toggle-switch{width:44px;height:24px;background:rgba(255,255,255,0.1);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0}
+.toggle-switch.on{background:#7170ff}
+.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;border-radius:50%;transition:transform 0.2s}
+.toggle-switch.on::after{transform:translateX(20px)}
+
+.upload-area{background:rgba(113,112,255,0.04);border:2px dashed rgba(113,112,255,0.15);border-radius:14px;padding:24px;text-align:center;margin:12px 0;cursor:pointer}
+.upload-area .up-icon{font-size:32px;margin-bottom:6px}
+.upload-area .up-text{font-size:13px;color:#8a8f98}
+.upload-area .up-hint{font-size:10px;color:#62666d;margin-top:4px}
+
+/* Ad styles */
+.ad-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px;margin:10px 0;display:flex;align-items:center;gap:10px}
+.ad-card .ad-badge{font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:1px;position:absolute;top:6px;right:8px}
+.ad-card{position:relative}
+.ad-icon{font-size:28px;width:40px;text-align:center}
+.ad-info{flex:1}
+.ad-info .ad-title{font-size:12px;font-weight:500;color:#8a8f98}
+.ad-info .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
+.ad-cta{font-size:11px;color:#7170ff;font-weight:600;background:rgba(113,112,255,0.08);padding:4px 10px;border-radius:6px;flex-shrink:0}
+
+.ad-banner{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:16px;text-align:center;margin:10px 0;position:relative}
+.ad-banner .ad-badge{position:absolute;top:4px;right:6px;font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:1px}
+.ad-banner .ad-img{font-size:36px;margin-bottom:6px}
+.ad-banner .ad-title{font-size:13px;font-weight:500;color:#8a8f98}
+.ad-banner .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
+.ad-banner .ad-btn{display:inline-block;margin-top:8px;font-size:11px;color:#7170ff;font-weight:600;background:rgba(113,112,255,0.08);padding:4px 14px;border-radius:6px}
+
+.ad-video{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:20px;text-align:center;margin:10px 0;position:relative}
+.ad-video .ad-badge{position:absolute;top:4px;right:6px;font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px}
+.ad-video .ad-icon{font-size:40px;margin-bottom:8px}
+.ad-video .ad-title{font-size:13px;font-weight:500;color:#f7f8f8}
+.ad-video .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
+.ad-video .ad-btn{display:inline-block;margin-top:10px;font-size:12px;color:#f7f8f8;font-weight:600;background:linear-gradient(135deg,#5e6ad2,#7170ff);padding:6px 20px;border-radius:8px}
+
+/* Day/Night toggle demo */
+.daynight-demo{display:flex;gap:16px;margin:16px 0}
+.daynight-card{flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;text-align:center}
+.daynight-card .dn-icon{font-size:28px;margin-bottom:4px}
+.daynight-card .dn-label{font-size:13px;font-weight:500;color:#f7f8f8}
+.daynight-card .dn-time{font-size:11px;color:#62666d;margin-top:2px}
+.daynight-card .dn-preview{width:100%;height:60px;border-radius:8px;margin-top:8px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.dn-preview.day{background:#f5f3f0;color:#2c2c2c}
+.dn-preview.night{background:#08090a;color:#f7f8f8;border:1px solid rgba(255,255,255,0.06)}
+.daynight-arrow{display:flex;align-items:center;font-size:24px;color:#62666d}
+
+@media(max-width:800px){.daynight-demo{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🌙 主题系统 & 广告位展示</h1>
+<p class="sub">4 套主题可手动切换 · 自定义背景图 · 白天/夜晚自动切换 · 3 种广告形式</p>
+
+<!-- Day/Night Auto Switch -->
+<div class="section-title">🔄 日夜自动切换 <small>6:00-18:00 用亮色 · 18:00-6:00 用深色</small></div>
+<div class="daynight-demo">
+  <div class="daynight-card">
+    <div class="dn-icon">☀️</div>
+    <div class="dn-label">白天模式</div>
+    <div class="dn-time">6:00 - 18:00</div>
+    <div class="dn-preview day">方案 D · Minimal Light</div>
+  </div>
+  <div style="display:flex;align-items:center;font-size:28px;color:#3e3e44;padding:0 4px;">↻</div>
+  <div class="daynight-card" style="border-color:rgba(113,112,255,0.15);background:rgba(113,112,255,0.04);">
+    <div class="dn-icon">🌙</div>
+    <div class="dn-label">夜晚模式</div>
+    <div class="dn-time">18:00 - 6:00</div>
+    <div class="dn-preview night">方案 A · Dark Precision</div>
+  </div>
+  <div style="display:flex;align-items:center;font-size:24px;color:#3e3e44;padding:0 4px;">⚡</div>
+  <div class="daynight-card" style="border-color:rgba(80,180,100,0.15);background:rgba(80,180,100,0.04);">
+    <div class="dn-icon">🎨</div>
+    <div class="dn-label">手动覆盖</div>
+    <div class="dn-time">随时可切换任意主题</div>
+    <div style="font-size:10px;color:#62666d;margin-top:6px;">自动切换在后台静默运行</div>
+  </div>
+</div>
+
+<!-- Theme Switcher -->
+<div class="section-title">🎨 主题选择界面（设置页内）</div>
+<div class="phone-grid">
+<div class="phone"><div class="phone-label">📱 设置 → 主题与外观</div>
+<div class="phone-inner theme-a">
+<div class="status-bar"><span>12:00</span><span>📶 🔋</span></div>
+<div class="content">
+<div style="padding:8px 0;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:12px;">
+  <span style="font-size:20px;cursor:pointer;">←</span>
+  <span style="font-size:18px;font-weight:600;">主题与外观</span>
+</div>
+
+<div class="sec-title">当前主题</div>
+<div class="theme-option active">
+  <div class="theme-swatch ts-d">☀️</div>
+  <div class="theme-info"><div class="ti">Minimal Light</div><div class="td">亮色 · 极简白天模式</div></div>
+  <span style="margin-left:auto;color:#7170ff;">✓</span>
+</div>
+<div class="theme-option">
+  <div class="theme-swatch ts-a">🌙</div>
+  <div class="theme-info"><div class="ti">Dark Precision</div><div class="td">深色 · 夜晚默认主题</div></div>
+</div>
+<div class="theme-option">
+  <div class="theme-swatch ts-b">🔮</div>
+  <div class="theme-info"><div class="ti">Warm Night</div><div class="td">深色 · 暖紫助眠风</div></div>
+</div>
+<div class="theme-option">
+  <div class="theme-swatch ts-c">🌿</div>
+  <div class="theme-info"><div class="ti">Nature Calm</div><div class="td">深色 · 绿植自然风</div></div>
+</div>
+
+<div class="sec-title" style="margin-top:16px;">⚡ 自动切换</div>
+<div class="toggle-row">
+  <div class="toggle-info"><div class="tl">日夜自动切换</div><div class="td">白天用亮色 · 夜晚用深色</div></div>
+  <div class="toggle-switch on"></div>
+</div>
+<div class="toggle-row" style="border:none;">
+  <div class="toggle-info"><div class="tl">日出时刻</div><div class="td">自动切换为亮色主题</div></div>
+  <div style="font-size:13px;color:#8a8f98;">6:00</div>
+</div>
+<div class="toggle-row" style="border:none;">
+  <div class="toggle-info"><div class="tl">日落时刻</div><div class="td">自动切换为深色主题</div></div>
+  <div style="font-size:13px;color:#8a8f98;">18:00</div>
+</div>
+
+<div class="sec-title" style="margin-top:16px;">🖼️ 自定义背景</div>
+<div class="upload-area">
+  <div class="up-icon">🖼️</div>
+  <div class="up-text">点击上传照片作为背景</div>
+  <div class="up-hint">支持 JPG / PNG / WebP · 建议使用深色或模糊效果的照片</div>
+</div>
+<div class="toggle-row">
+  <div class="toggle-info"><div class="tl">背景模糊</div><div class="td">让文字在图片上更清晰</div></div>
+  <div class="toggle-switch on"></div>
+</div>
+<div class="toggle-row" style="border:none;">
+  <div class="toggle-info"><div class="tl">暗色遮罩</div><div class="td">自动叠加半透明黑色层</div></div>
+  <div class="toggle-switch on"></div>
+</div>
+
+</div></div></div>
+
+<!-- Custom Background Demo -->
+<div class="phone"><div class="phone-label">📱 自定义背景效果预览</div>
+<div class="phone-inner" style="border-radius:44px;overflow:hidden;position:relative;">
+<div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400') center/cover;filter:blur(2px) brightness(0.4);"></div>
+<div style="position:relative;height:100%;padding:14px 24px 4px;z-index:1;">
+<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:500;color:rgba(255,255,255,0.9);">23:15<span>📶 🔋</span></div>
+<div style="padding:20px 0 0;">
+<div style="font-size:24px;font-weight:600;color:white;margin-bottom:2px;">🌙 晚上好</div>
+<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;">你上传的照片作为了背景</div>
+<div style="display:flex;gap:6px;margin-bottom:16px;">
+<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
+<div style="font-size:22px;font-weight:700;color:white;">3</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">连续</div>
+</div>
+<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
+<div style="font-size:22px;font-weight:700;color:white;">67%</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">宵禁率</div>
+</div>
+<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
+<div style="font-size:22px;font-weight:700;color:white;">7h</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">睡眠</div>
+</div>
+</div>
+<button style="width:100%;background:linear-gradient(135deg,#5e6ad2,#7170ff);border:none;border-radius:14px;padding:18px;color:white;font-size:16px;font-weight:600;">🌙 准备睡觉</button>
+</div>
+</div>
+</div>
+<div style="text-align:center;font-size:10px;color:#62666d;margin-top:6px;">照片来自 Unsplash · 自动叠加暗色遮罩 + 模糊效果</div>
+</div>
+</div>
+
+<!-- Ad Placements -->
+<div class="section-title">📢 广告位示意 <small>3 种形式 · 不干扰核心操作 · 睡前流程不放广告</small></div>
+
+<div style="display:flex;gap:24px;flex-wrap:wrap;">
+
+<div style="flex:1;min-width:280px;">
+<div class="section-title" style="font-size:15px;margin:0 0 12px;">① 晨间报告底部 Banner</div>
+<div class="phone" style="width:340px;">
+<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
+<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">☀️ 早上好</div>
+<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">昨晚睡眠 7h38m · 宵禁达标 ✅</div>
+<div class="ad-banner" style="margin:8px 0;">
+  <span class="ad-badge">广告</span>
+  <div class="ad-img">🛏️</div>
+  <div class="ad-title">泰国乳胶枕 · 限时 7 折</div>
+  <div class="ad-desc">你的睡眠值得更好的枕头</div>
+  <div class="ad-btn">了解详情</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1;min-width:280px;">
+<div class="section-title" style="font-size:15px;margin:0 0 12px;">② 成就页激励视频</div>
+<div class="phone" style="width:340px;">
+<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
+<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">🏆 成就</div>
+<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">看广告解锁新主题</div>
+<div class="ad-video">
+  <span class="ad-badge">广告</span>
+  <div class="ad-icon">🎬</div>
+  <div class="ad-title">看视频解锁「极光」主题</div>
+  <div class="ad-desc">30秒后即可获得专属夜间主题</div>
+  <div class="ad-btn">🎬 观看广告解锁</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="flex:1;min-width:280px;">
+<div class="section-title" style="font-size:15px;margin:0 0 12px;">③ 首页/报告原生卡片</div>
+<div class="phone" style="width:340px;">
+<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
+<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">📊 本周报告</div>
+<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">你的睡眠趋势</div>
+<div class="ad-card">
+  <span class="ad-badge">广告</span>
+  <div class="ad-icon">📚</div>
+  <div class="ad-info">
+    <div class="ad-title">得到 App · 每晚听本书</div>
+    <div class="ad-desc">放下手机，用听的方式入眠</div>
+  </div>
+  <div class="ad-cta">打开</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- Bottom nav -->
+<div style="margin-top:40px;padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,0.04);color:#62666d;font-size:12px;">
+<a href="https://test.justmoyu.xyz/early-sleep/" style="color:#7170ff;text-decoration:none;">← 返回设计稿总览</a> · 
+<a href="https://test.justmoyu.xyz/early-sleep/001-dark-precision/" style="color:#7170ff;text-decoration:none;">方案 A</a> · 
+<a href="https://test.justmoyu.xyz/early-sleep/002-warm-night/" style="color:#7170ff;text-decoration:none;">方案 B</a> · 
+<a href="https://test.justmoyu.xyz/early-sleep/003-nature-calm/" style="color:#7170ff;text-decoration:none;">方案 C</a> · 
+<a href="https://test.justmoyu.xyz/early-sleep/004-minimal-light/" style="color:#7170ff;text-decoration:none;">方案 D</a>
+</div>
+
+</div>
+</body>
+</html>

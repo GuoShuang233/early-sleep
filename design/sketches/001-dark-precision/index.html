@@ -2,328 +2,137 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>早睡系统 · 深色方案</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>早睡系统 · Dark Precision</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Inter', -apple-system, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background: #08090a;
-  color: #f7f8f8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:#08090a;color:#f7f8f8;padding:20px;}
+.page-title{text-align:center;font-size:28px;font-weight:700;margin:20px 0 8px;letter-spacing:-0.3px}
+.page-sub{text-align:center;font-size:14px;color:#8a8f98;margin-bottom:32px}
+.screens{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;max-width:1200px;margin:0 auto}
 
-/* Phone frame */
-.phone {
-  width: 390px;
-  height: 820px;
-  background: #08090a;
-  border-radius: 44px;
-  border: 1px solid rgba(255,255,255,0.08);
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.6);
-}
+.phone{width:380px;background:#08090a;border-radius:44px;border:1px solid rgba(255,255,255,0.08);overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.05),0 24px 80px rgba(0,0,0,0.6)}
+.phone-label{text-align:center;font-size:12px;font-weight:600;color:#4a4a5a;text-transform:uppercase;letter-spacing:2px;padding:16px 0 8px}
+.status-bar{display:flex;justify-content:space-between;padding:14px 24px 4px;font-size:13px;font-weight:500;color:#f7f8f8}
+.content{padding:4px 20px 0}
 
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 28px 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #f7f8f8;
-}
+.greeting h1{font-size:24px;font-weight:600;letter-spacing:-0.5px;color:#f7f8f8;margin-bottom:2px}
+.greeting p{font-size:13px;color:#8a8f98}
 
-.content {
-  padding: 8px 24px 0;
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 50px);
-}
+.streak-row{display:flex;gap:6px;margin:14px 0}
+.streak-item{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 8px;text-align:center}
+.streak-num{font-size:22px;font-weight:700;line-height:1.1}
+.streak-num .ac{color:#7170ff}
+.streak-num .gd{color:#10b981}
+.streak-num .wl{color:#fbbf24}
+.streak-label{font-size:10px;color:#62666d;font-weight:500;margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
 
-/* Greeting */
-.greeting {
-  margin-bottom: 4px;
-}
-.greeting h1 {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  color: #f7f8f8;
-}
-.greeting p {
-  font-size: 14px;
-  color: #8a8f98;
-  margin-top: 2px;
-}
+.btn-sleep{background:linear-gradient(135deg,#5e6ad2,#7170ff);border:none;border-radius:14px;padding:20px;margin-bottom:10px;color:white;font-size:18px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 32px rgba(113,112,255,0.25)}
+.btn-sleep:active{transform:scale(0.97)}
+.btn-sleep .sub{font-size:12px;font-weight:400;opacity:0.7}
+.btn-wake{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:14px;color:#f7f8f8;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 
-/* Streak row */
-.streak-row {
-  display: flex;
-  gap: 8px;
-  margin: 16px 0;
-}
-.streak-item {
-  flex: 1;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 14px 12px;
-  text-align: center;
-}
-.streak-num {
-  font-size: 24px;
-  font-weight: 700;
-  color: #f7f8f8;
-  line-height: 1.1;
-}
-.streak-num span { color: #7170ff; }
-.streak-label {
-  font-size: 11px;
-  color: #62666d;
-  font-weight: 500;
-  margin-top: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
+.log-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:16px;margin-bottom:14px}
+.log-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.log-card-header h3{font-size:12px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.8px}
+.log-card-header a{font-size:11px;color:#7170ff;text-decoration:none;font-weight:500}
+.log-entry{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.log-entry:last-child{border-bottom:none}
+.log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.log-dot.bed{background:#7170ff}
+.log-dot.wake{background:#10b981}
+.log-dot.curfew{background:#fbbf24}
+.log-info{flex:1}
+.log-info .label{font-size:13px;color:#d0d6e0;font-weight:500}
+.log-info .time{font-size:11px;color:#62666d}
+.log-check{font-size:13px;color:#10b981}
 
-/* Target section */
-.target-box {
-  background: linear-gradient(135deg, rgba(113,112,255,0.12), rgba(113,112,255,0.04));
-  border: 1px solid rgba(113,112,255,0.15);
-  border-radius: 14px;
-  padding: 16px 18px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.target-label { font-size: 12px; color: #8a8f98; font-weight: 500; }
-.target-time { font-size: 22px; font-weight: 700; color: #f7f8f8; letter-spacing: -0.3px; }
-.target-sub { font-size: 12px; color: #62666d; margin-top: 2px; }
-.target-status {
-  text-align: right;
-}
-.target-status .badge {
-  display: inline-block;
-  background: rgba(16,185,129,0.15);
-  color: #10b981;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 6px;
-}
+.confirm-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px 20px;text-align:center;margin:10px 0}
+.confirm-icon{font-size:52px;margin-bottom:12px}
+.confirm-card h2{font-size:22px;font-weight:700;margin-bottom:4px;color:#f7f8f8}
+.confirm-card p{font-size:14px;color:#8a8f98;margin-bottom:20px;line-height:1.5}
+.confirm-btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,#5e6ad2,#7170ff);color:white;box-shadow:0 6px 24px rgba(113,112,255,0.3);margin-bottom:10px}
+.confirm-btn-dismiss{width:100%;padding:12px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:transparent;color:#62666d;font-size:14px;font-weight:500;font-family:inherit;cursor:pointer}
 
-/* Main action buttons */
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.btn-sleep {
-  background: linear-gradient(135deg, #5e6ad2, #7170ff);
-  border: none;
-  border-radius: 16px;
-  padding: 22px;
-  color: white;
-  font-size: 20px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 8px 32px rgba(113,112,255,0.25);
-  transition: transform 0.15s, box-shadow 0.15s;
-  letter-spacing: -0.2px;
-}
-.btn-sleep:active { transform: scale(0.97); }
-.btn-sleep .icon { font-size: 24px; }
-.btn-sleep .sub {
-  font-size: 13px;
-  font-weight: 400;
-  opacity: 0.7;
-}
-.btn-wake {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 18px;
-  color: #f7f8f8;
-  font-size: 18px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  transition: background 0.15s;
-}
-.btn-wake:active { background: rgba(255,255,255,0.08); }
-.btn-wake .icon { font-size: 20px; }
+.report-header{text-align:center;padding:12px 0}
+.report-header .big-icon{font-size:48px}
+.report-header h1{font-size:26px;font-weight:700;color:#f7f8f8}
+.report-stat{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.report-stat:last-child{border-bottom:none}
+.report-stat .label{font-size:14px;color:#8a8f98}
+.report-stat .value{font-size:14px;font-weight:600;color:#f7f8f8}
 
-/* Today's log mini card */
-.log-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 16px 18px;
-  margin-bottom: 16px;
-}
-.log-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.log-card-header h3 {
-  font-size: 13px;
-  font-weight: 600;
-  color: #62666d;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.log-card-header a {
-  font-size: 12px;
-  color: #7170ff;
-  text-decoration: none;
-  font-weight: 500;
-}
-.log-entry {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.log-entry:last-child { border-bottom: none; }
-.log-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.log-dot.bed { background: #7170ff; }
-.log-dot.wake { background: #10b981; }
-.log-dot.curfew { background: #fbbf24; }
-.log-info { flex: 1; }
-.log-info .label { font-size: 13px; color: #d0d6e0; font-weight: 500; }
-.log-info .time { font-size: 12px; color: #62666d; }
-.log-check { font-size: 14px; }
+.app-bar{display:flex;align-items:center;gap:10px;padding:8px 0}
+.app-bar .app-name{width:60px;font-size:12px;color:#8a8f98}
+.app-bar .bar-bg{flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:10px;overflow:hidden}
+.app-bar .bar-fill{height:100%;background:linear-gradient(90deg,#5e6ad2,#7170ff);border-radius:10px}
+.app-bar .app-time{width:40px;text-align:right;font-size:12px;font-weight:500;color:#d0d6e0}
 
-/* Bottom ad placeholder */
-.ad-placeholder {
-  margin-top: auto;
-  margin-bottom: 12px;
-  background: rgba(255,255,255,0.02);
-  border: 1px dashed rgba(255,255,255,0.06);
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
-  font-size: 11px;
-  color: #3e3e44;
-}
+.advice-box{background:rgba(113,112,255,0.06);border:1px solid rgba(113,112,255,0.1);border-radius:12px;padding:14px;margin:12px 0}
+.advice-box .advice-text{font-size:13px;color:#d0d6e0;line-height:1.5}
 
-/* Nav bar */
-.nav-bar {
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 12px 12px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.nav-item {
-  text-align: center;
-  font-size: 10px;
-  color: #62666d;
-  font-weight: 500;
-  padding: 4px 12px;
-}
-.nav-item.active { color: #7170ff; }
-.nav-item .nav-icon { font-size: 20px; margin-bottom: 2px; }
+.cal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+.cal-header h3{font-size:16px;font-weight:600;color:#f7f8f8}
+.cal-header .nav-btn{background:none;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 10px;color:#62666d;font-size:14px;cursor:pointer}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-day-name{font-size:10px;color:#62666d;font-weight:600;padding:6px 0;text-transform:uppercase}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;border-radius:50%;color:#62666d}
+.cal-day.good{background:rgba(16,185,129,0.15);color:#10b981}
+.cal-day.ok{background:rgba(251,191,36,0.12);color:#fbbf24}
+.cal-day.bad{background:rgba(248,113,113,0.12);color:#f87171}
+.cal-day.today{border:2px solid #7170ff;color:#f7f8f8;font-weight:700}
+.cal-day.future{opacity:0.2}
+
+.achieve-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.achieve-item{text-align:center;padding:14px 8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:14px}
+.achieve-item .icon{font-size:28px;margin-bottom:4px}
+.achieve-item .name{font-size:10px;color:#62666d;font-weight:500}
+.achieve-item.locked{opacity:0.35}
+.achieve-item.locked .icon{filter:grayscale(1)}
+.plant-container{text-align:center;padding:20px 0;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;margin:12px 0}
+.plant-emoji{font-size:72px;display:block}
+.plant-bar{height:6px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden;margin:8px 20px 0}
+.plant-fill{height:100%;background:linear-gradient(90deg,#5e6ad2,#7170ff);border-radius:3px}
+
+.setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.setting-item:last-child{border-bottom:none}
+.setting-item .left .label{font-size:14px;color:#d0d6e0}
+.setting-item .left .desc{font-size:11px;color:#62666d}
+.setting-item .right{font-size:13px;color:#8a8f98}
+
+.ad-placeholder{margin:10px 0;background:rgba(255,255,255,0.01);border:1px dashed rgba(255,255,255,0.04);border-radius:10px;padding:8px;text-align:center;font-size:10px;color:#3e3e44}
+
+.nav-bar{display:flex;justify-content:space-around;padding:6px 8px 10px;border-top:1px solid rgba(255,255,255,0.05)}
+.nav-item{text-align:center;font-size:9px;color:#62666d;font-weight:500;padding:3px 8px}
+.nav-item.active{color:#7170ff}
+.nav-item .nav-icon{font-size:18px;margin-bottom:1px}
 </style>
 </head>
 <body>
-<div class="phone">
-  <div class="status-bar">
-    <span>23:15</span>
-    <span>📶 🔋</span>
-  </div>
+<p class="page-title">🎨 风格 A：Dark Precision</p>
+<p class="page-sub">Linear 风格 · 深色精确 · 6 屏展示</p>
+<div class="screens">
+
+<!-- Screen 1: Home -->
+<div><div class="phone-label">🏠 首页</div><div class="phone">
+  <div class="status-bar"><span>23:15</span><span>📶 🔋</span></div>
   <div class="content">
-    <div class="greeting">
-      <h1>🌙 晚上好</h1>
-      <p>今晚的目标是 23:00 · 还剩 0 分钟</p>
-    </div>
-
+    <div class="greeting"><h1>🌙 晚上好</h1><p>今晚目标 23:00 · 还剩 0 分钟</p></div>
     <div class="streak-row">
-      <div class="streak-item">
-        <div class="streak-num"><span>3</span></div>
-        <div class="streak-label">连续天数</div>
-      </div>
-      <div class="streak-item">
-        <div class="streak-num">67%</div>
-        <div class="streak-label">宵禁达标率</div>
-      </div>
-      <div class="streak-item">
-        <div class="streak-num">7h</div>
-        <div class="streak-label">平均睡眠</div>
-      </div>
+      <div class="streak-item"><div class="streak-num"><span class="ac">3</span></div><div class="streak-label">连续天数</div></div>
+      <div class="streak-item"><div class="streak-num"><span class="wl">67%</span></div><div class="streak-label">宵禁达标率</div></div>
+      <div class="streak-item"><div class="streak-num"><span class="gd">7h</span></div><div class="streak-label">平均睡眠</div></div>
     </div>
-
-    <div class="actions">
-      <button class="btn-sleep">
-        <span class="icon">🌙</span>
-        <span>准备睡觉</span>
-        <span class="sub">放下手机</span>
-      </button>
-      <button class="btn-wake">
-        <span class="icon">☀️</span>
-        <span>我起床了</span>
-      </button>
-    </div>
-
+    <button class="btn-sleep"><span>🌙</span>准备睡觉<span class="sub">放下手机</span></button>
+    <button class="btn-wake"><span>☀️</span>我起床了</button>
     <div class="log-card">
-      <div class="log-card-header">
-        <h3>昨晚</h3>
-        <a href="#">查看详情 →</a>
-      </div>
-      <div class="log-entry">
-        <div class="log-dot bed"></div>
-        <div class="log-info">
-          <div class="label">就寝</div>
-          <div class="time">23:15</div>
-        </div>
-        <div class="log-check">✅</div>
-      </div>
-      <div class="log-entry">
-        <div class="log-dot wake"></div>
-        <div class="log-info">
-          <div class="label">起床</div>
-          <div class="time">07:30</div>
-        </div>
-        <div class="log-check">✅</div>
-      </div>
-      <div class="log-entry">
-        <div class="log-dot curfew"></div>
-        <div class="log-info">
-          <div class="label">宵禁</div>
-          <div class="time">打卡后无使用</div>
-        </div>
-        <div class="log-check">✅ 达标</div>
-      </div>
+      <div class="log-card-header"><h3>昨晚</h3><a href="#">详情 →</a></div>
+      <div class="log-entry"><div class="log-dot bed"></div><div class="log-info"><div class="label">就寝</div><div class="time">23:15</div></div>✅</div>
+      <div class="log-entry"><div class="log-dot wake"></div><div class="log-info"><div class="label">起床</div><div class="time">07:30</div></div>✅</div>
+      <div class="log-entry"><div class="log-dot curfew"></div><div class="log-info"><div class="label">宵禁</div><div class="time">打卡后无使用</div></div><span class="log-check">✅ 达标</span></div>
     </div>
-
-    <div class="ad-placeholder">
-      [ 广告位 · 你的早晨由 XXX 陪伴 ]
-    </div>
-
+    <div class="ad-placeholder">[ 广告位 ]</div>
     <div class="nav-bar">
       <div class="nav-item active"><div class="nav-icon">🌙</div>首页</div>
       <div class="nav-item"><div class="nav-icon">📊</div>报告</div>
@@ -331,6 +140,130 @@ body {
       <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
     </div>
   </div>
+</div></div>
+
+<!-- Screen 2: Bedtime -->
+<div><div class="phone-label">🌙 睡前确认</div><div class="phone">
+  <div class="status-bar"><span>23:15</span><span>📶 🔋</span></div>
+  <div class="content">
+    <div class="confirm-card">
+      <div class="confirm-icon">🌙</div>
+      <h2>准备入睡</h2>
+      <p>手机将进入宵禁监控模式<br>检测到使用时会记录但不打扰你</p>
+      <button class="confirm-btn">🌙 确认睡觉</button>
+      <button class="confirm-btn-dismiss">再刷 15 分钟</button>
+    </div>
+    <div class="advice-box"><div class="advice-text">💡 连续 3 天 23:30 前入睡，继续保持！</div></div>
+    <div class="ad-placeholder" style="margin-top:20px;">[ 广告位 ]</div>
+    <div class="nav-bar">
+      <div class="nav-item active"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Screen 3: Report -->
+<div><div class="phone-label">☀️ 晨间报告</div><div class="phone">
+  <div class="status-bar"><span>07:30</span><span>📶 🔋</span></div>
+  <div class="content">
+    <div class="report-header"><div class="big-icon">☀️</div><h1>早上好</h1></div>
+    <div class="report-stat"><span class="label">🌙 就寝</span><span class="value">23:15</span></div>
+    <div class="report-stat"><span class="label">☀️ 起床</span><span class="value">07:30</span></div>
+    <div class="report-stat"><span class="label">💤 睡眠</span><span class="value">7h 38m</span></div>
+    <div class="report-stat"><span class="label">📵 宵禁</span><span class="value">✅ 达标</span></div>
+    <div style="margin-top:12px;font-size:12px;color:#62666d;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">📱 睡前 App 使用</div>
+    <div class="app-bar"><span class="app-name">抖音</span><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div><span class="app-time">1h20m</span></div>
+    <div class="app-bar"><span class="app-name">微信</span><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div><span class="app-time">45m</span></div>
+    <div class="app-bar"><span class="app-name">小红书</span><div class="bar-bg"><div class="bar-fill" style="width:15%"></div></div><span class="app-time">8m</span></div>
+    <div class="advice-box"><div class="advice-text">💡 打卡后又刷了半小时。今晚试试打卡后直接放客厅充电？</div></div>
+    <div class="ad-placeholder">[ 广告位 · 你的早晨由 XXX 陪伴 ]</div>
+    <div class="nav-bar">
+      <div class="nav-item"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item active"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Screen 4: Calendar -->
+<div><div class="phone-label">📅 日历</div><div class="phone">
+  <div class="status-bar"><span>07:30</span><span>📶 🔋</span></div>
+  <div class="content">
+    <div class="cal-header"><button class="nav-btn">←</button><h3>2026 年 7 月</h3><button class="nav-btn">→</button></div>
+    <div class="cal-days">
+      <div class="cal-day-name">一</div><div class="cal-day-name">二</div><div class="cal-day-name">三</div><div class="cal-day-name">四</div><div class="cal-day-name">五</div><div class="cal-day-name">六</div><div class="cal-day-name">日</div>
+      <div class="cal-day future">29</div><div class="cal-day future">30</div><div class="cal-day good">1</div><div class="cal-day good">2</div><div class="cal-day ok">3</div><div class="cal-day bad">4</div><div class="cal-day good">5</div>
+      <div class="cal-day good">6</div><div class="cal-day good">7</div><div class="cal-day ok">8</div><div class="cal-day good">9</div><div class="cal-day bad">10</div><div class="cal-day good">11</div><div class="cal-day good">12</div>
+      <div class="cal-day good">13</div><div class="cal-day ok">14</div><div class="cal-day good">15</div><div class="cal-day good">16</div><div class="cal-day good">17</div><div class="cal-day ok">18</div><div class="cal-day good">19</div>
+      <div class="cal-day good">20</div><div class="cal-day good">21</div><div class="cal-day bad">22</div><div class="cal-day good">23</div><div class="cal-day good">24</div><div class="cal-day good">25</div><div class="cal-day today">26</div>
+      <div class="cal-day future">27</div><div class="cal-day future">28</div><div class="cal-day future">29</div><div class="cal-day future">30</div><div class="cal-day future">31</div><div class="cal-day future">1</div><div class="cal-day future">2</div>
+    </div>
+    <div style="display:flex;gap:12px;margin:14px 0;justify-content:center;font-size:11px;color:#62666d;"><span>🟢 达标</span><span>🟡 一般</span><span>🔴 熬夜</span></div>
+    <div class="ad-placeholder">[ 广告位 ]</div>
+    <div class="nav-bar">
+      <div class="nav-item"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item active"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Screen 5: Achievements -->
+<div><div class="phone-label">🏆 成就</div><div class="phone">
+  <div class="status-bar"><span>07:30</span><span>📶 🔋</span></div>
+  <div class="content">
+    <div class="greeting"><h1>🏆 成就</h1><p>继续打卡解锁更多奖励</p></div>
+    <div style="font-size:12px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 8px;">🌱 你的花园</div>
+    <div class="plant-container">
+      <span class="plant-emoji">🌱</span>
+      <div style="font-size:14px;color:#8a8f98;margin:4px 0;">种子发芽中</div>
+      <div class="plant-bar"><div class="plant-fill" style="width:30%"></div></div>
+      <div style="font-size:11px;color:#62666d;margin-top:4px;">连续 3/7 天 → 🌿 小树苗</div>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.8px;margin:12px 0 8px;">徽章</div>
+    <div class="achieve-grid">
+      <div class="achieve-item"><div class="icon">🔥</div><div class="name">连续 3 天</div></div>
+      <div class="achieve-item locked"><div class="icon">🌿</div><div class="name">连续 7 天</div></div>
+      <div class="achieve-item locked"><div class="icon">🌳</div><div class="name">连续 14 天</div></div>
+      <div class="achieve-item"><div class="icon">📵</div><div class="name">宵禁铁壁</div></div>
+      <div class="achieve-item locked"><div class="icon">💤</div><div class="name">黄金 8h</div></div>
+      <div class="achieve-item locked"><div class="icon">👑</div><div class="name">百日筑基</div></div>
+    </div>
+    <div class="ad-placeholder">[ 激励视频 · 看广告解锁主题 ]</div>
+    <div class="nav-bar">
+      <div class="nav-item"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item active"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Screen 6: Settings -->
+<div><div class="phone-label">⚙️ 设置</div><div class="phone">
+  <div class="status-bar"><span>07:30</span><span>📶 🔋</span></div>
+  <div class="content">
+    <div class="greeting"><h1>⚙️ 设置</h1></div>
+    <div class="setting-item"><div class="left"><div class="label">🌙 目标就寝</div><div class="desc">系统将在此时提醒你</div></div><div class="right">23:00</div></div>
+    <div class="setting-item"><div class="left"><div class="label">☀️ 目标起床</div><div class="desc">调整你的生物钟</div></div><div class="right">07:30</div></div>
+    <div class="setting-item"><div class="left"><div class="label">🔔 睡前提醒</div><div class="desc">到点推送通知</div></div><div class="right">✅ 已开启</div></div>
+    <div class="setting-item"><div class="left"><div class="label">📵 宵禁检测</div><div class="desc">读取手机使用记录</div></div><div class="right">✅ 已授权</div></div>
+    <div class="setting-item"><div class="left"><div class="label">💤 健康数据</div><div class="desc">读取系统睡眠记录</div></div><div class="right" style="color:#62666d;">可选</div></div>
+    <div class="setting-item"><div class="left"><div class="label">🎤 语音打卡</div><div class="desc">Siri / 小爱 / 小布</div></div><div class="right">✅ 已配置</div></div>
+    <div class="setting-item"><div class="left"><div class="label">🎨 成就主题</div><div class="desc">植物外观选择</div></div><div class="right">默认</div></div>
+    <div class="ad-placeholder" style="margin-top:10px;">[ 广告位 ]</div>
+    <div class="nav-bar">
+      <div class="nav-item"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item active"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div></div>
 </div>
 </body>
 </html>
