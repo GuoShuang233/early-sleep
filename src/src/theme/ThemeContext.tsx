@@ -90,7 +90,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           setCustomOverrides({});
         },
         setCustom: (partial) => {
-          setCurrentPreset('custom');
+          // Don't switch to 'custom' mode - stay on current preset + apply overrides
           setCustomOverrides((prev) => ({ ...prev, ...partial }));
         },
         currentPreset,
