@@ -52,7 +52,7 @@ export default function TimePicker({ value, onChange, onClose }: {
   );
 
   return (
-    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', padding: 20 }}>
+    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
       <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
         <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>选择时间</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 20, marginBottom: 16 }}>

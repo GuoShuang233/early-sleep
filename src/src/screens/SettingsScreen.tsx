@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import TimePicker from '../components/TimePicker';
 import { useTheme } from '../theme/ThemeContext';
@@ -19,7 +19,7 @@ const CUSTOM = [
 ];
 
 export default function SettingsScreen() {
-  const { theme, setPreset, setCustom, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
+  const { theme, setPreset, setCustom, currentPreset, autoSwitch, setAutoSwitch, resetBackground } = useTheme();
   const { t, lang, setLang, langName, supportedLangs } = useI18n();
   const insets = useSafeAreaInsets();
 
@@ -67,10 +67,6 @@ export default function SettingsScreen() {
   const openTime = (which: 'bed'|'wake') => {
     setTimeTarget(which); setShowTime(true);
   };
-
-  const formatTime = (val: string) => val;
-
-  const MODAL_OVERLAY = { flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 };
 
   return (
     <View style={s.container}>
@@ -149,17 +145,23 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        {/* Background upload */}
-        <TouchableOpacity onPress={handleBg} style={s.uploadBox}>
-          <Text style={{ fontSize: 22 }}>🖼️</Text>
-          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginTop: 6 }}>{t('settings.custom.upload')}</Text>
-          <Text style={{ fontSize: 9, color: theme.colors.textSecondary }}>{t('settings.custom.upload.hint')}</Text>
-        </TouchableOpacity>
+        {/* Background - only via chip, no separate upload box */}
+        {theme.background.type === 'photo' && theme.background.photoPath ? (
+          <TouchableOpacity onPress={handleBg} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text style={{ fontSize: 16 }}>🖼️</Text>
+              <Text style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</Text>
+            </View>
+            <TouchableOpacity onPress={resetBackground} style={{ padding: 4 }}>
+              <Text style={{ fontSize: 11, color: theme.colors.error || '#f87171' }}>恢复默认</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        ) : null}
       </ScrollView>
 
-      {/* Language modal */}
-      {showLang && (
-        <View style={MODAL_OVERLAY}>
+      {/* Language modal - wrapped in RN Modal to avoid scroll clipping */}
+      <Modal visible={showLang} transparent animationType="fade" onRequestClose={() => setShowLang(false)}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 }}>
           <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
             <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</Text>
             <View style={{ gap: 6 }}>
@@ -176,7 +178,7 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      )}
+      </Modal>
 
       {/* Time picker (native wheel) */}
       {showTime && (

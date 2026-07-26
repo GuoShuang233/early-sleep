@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
+import { I18nManager, Platform, NativeModules } from 'react-native';
 import {
-  ThemeConfig,
-  presetThemes,
-  PresetKey,
-  darkPrecision,
+  ThemeConfig, presetThemes, PresetKey, darkPrecision,
 } from './themes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,10 +13,10 @@ interface ThemeContextType {
   currentPreset: PresetKey | 'custom';
   autoSwitch: boolean;
   setAutoSwitch: (v: boolean) => void;
+  resetBackground: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>(null!);
-
 const STORAGE_KEY = '@earlysleep_theme';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -27,7 +25,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [autoSwitch, setAutoSwitch] = useState(true);
   const [loaded, setLoaded] = useState(false);
 
-  // Load saved theme (once on mount)
+  // Load saved theme
   useEffect(() => {
     (async () => {
       try {
@@ -46,56 +44,57 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // Save theme on change
   useEffect(() => {
     if (!loaded) return;
-    AsyncStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ preset: currentPreset, custom: customOverrides, autoSwitch })
-    ).catch(() => {});
+    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({
+      preset: currentPreset, custom: customOverrides, autoSwitch,
+    })).catch(() => {});
   }, [currentPreset, customOverrides, autoSwitch, loaded]);
 
-  // Auto-switch timer (once on mount, then every 30 min)
-  // IMPORTANT: does NOT depend on currentPreset — won't fight manual switches
+  // Auto-switch timer (does NOT depend on currentPreset)
   useEffect(() => {
     if (!autoSwitch || !loaded) return;
-    const applyAutoSwitch = () => {
+    const apply = () => {
       const h = new Date().getHours();
-      const isDay = h >= 6 && h < 18;
-      const target: PresetKey = isDay ? 'minimal-light' : 'dark-precision';
-      setCurrentPreset((prev) => (prev === 'custom' ? prev : target));
+      const t: PresetKey = (h >= 6 && h < 18) ? 'minimal-light' : 'dark-precision';
+      setCurrentPreset((prev) => (prev === 'custom' ? prev : t));
     };
-    applyAutoSwitch();
-    const interval = setInterval(applyAutoSwitch, 30 * 60 * 1000);
+    apply();
+    const interval = setInterval(apply, 30 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [autoSwitch, loaded]); // ✓ no currentPreset dependency
+  }, [autoSwitch, loaded]);
 
-  // Memoize theme so useThemedStyles can track identity
+  // Memoize theme
   const theme = useMemo(() => {
-    const base = currentPreset === 'custom'
-      ? darkPrecision
-      : presetThemes[currentPreset as PresetKey];
+    const base = currentPreset === 'custom' ? darkPrecision : presetThemes[currentPreset as PresetKey];
     return { ...base, ...customOverrides };
   }, [currentPreset, customOverrides]);
 
-  // Compute isDark from the theme, not the clock
-  const bgColor = theme.colors.background;
-  // Simple luminance check: if the theme background is dark, it's a dark theme
-  const isDark = !bgColor.startsWith('#f') && !bgColor.startsWith('#e') && !bgColor.startsWith('#d');
+  // isDark from theme background
+  const bg = theme.colors.background;
+  const isDark = !bg.startsWith('#f') && !bg.startsWith('#e') && !bg.startsWith('#d');
+
+  // Preserve background override when switching presets
+  const setPresetWithBg = (key: PresetKey) => {
+    const bgOverride = customOverrides.background ? { background: customOverrides.background } : {};
+    setCurrentPreset(key);
+    setCustomOverrides(bgOverride as Partial<ThemeConfig>);
+  };
+
+  const resetBackground = () => {
+    setCustomOverrides((prev) => {
+      const { background, ...rest } = prev;
+      return rest;
+    });
+  };
 
   return (
     <ThemeContext.Provider
       value={{
-        theme,
-        isDark,
-        setPreset: (key) => {
-          setCurrentPreset(key);
-          setCustomOverrides({});
-        },
+        theme, isDark,
+        setPreset: setPresetWithBg,
         setCustom: (partial) => {
-          // Don't switch to 'custom' mode - stay on current preset + apply overrides
           setCustomOverrides((prev) => ({ ...prev, ...partial }));
         },
-        currentPreset,
-        autoSwitch,
-        setAutoSwitch,
+        currentPreset, autoSwitch, setAutoSwitch, resetBackground,
       }}>
       {children}
     </ThemeContext.Provider>

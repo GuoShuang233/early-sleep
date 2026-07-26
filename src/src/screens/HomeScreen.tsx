@@ -18,13 +18,15 @@ function btnRadius(style: string) {
 function btnExtra(btn: any, colors: any) {
   const s = btn?.style || 'rounded';
   const r: any = {};
-  if (s === 'glow') { r.shadowOpacity = 0.5; r.shadowRadius = 30; r.borderWidth = 0; }
-  else if (s === 'outline') { r.borderWidth = 2; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; }
-  else if (s === '3d') { r.borderBottomWidth = 5; r.borderBottomColor = colors.primary + '99'; }
-  else if (s === 'cat') { r.backgroundColor = '#ff9eb5'; }
-  else if (s === 'bear') { r.backgroundColor = '#c4a882'; }
-  else if (s === 'owl') { r.backgroundColor = '#8b6f9e'; }
-  else if (s === 'star') { r.backgroundColor = '#f7d44a'; }
+  if (s === 'glow') { r.shadowOpacity = 0.6; r.shadowRadius = 35; r.elevation = 12; r.borderWidth = 0; }
+  else if (s === 'outline') { r.borderWidth = 2.5; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; }
+  else if (s === '3d') { r.borderBottomWidth = 6; r.borderBottomColor = colors.primary + 'aa'; r.borderLeftWidth = 1; r.borderRightWidth = 1; r.borderLeftColor = colors.primary + '30'; r.borderRightColor = colors.primary + '30'; }
+  else if (s === 'pill') { r.paddingVertical = 18; }
+  else if (s === 'cat') { r.backgroundColor = '#ff9eb5'; r.borderTopLeftRadius = 4; r.borderTopRightRadius = 24; r.borderBottomLeftRadius = 24; r.borderBottomRightRadius = 4; }
+  else if (s === 'bear') { r.backgroundColor = '#c4a882'; r.borderRadius = 28; }
+  else if (s === 'owl') { r.backgroundColor = '#8b6f9e'; r.borderTopLeftRadius = 24; r.borderTopRightRadius = 4; r.borderBottomLeftRadius = 4; r.borderBottomRightRadius = 24; }
+  else if (s === 'star') { r.backgroundColor = '#f7d44a'; r.transform = [{ rotate: '-2deg' }]; }
+  else if (s === 'sharp') { r.borderWidth = 1; r.borderColor = colors.primary + '40'; }
   return r;
 }
 
