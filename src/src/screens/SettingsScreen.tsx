@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Modal, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
@@ -21,13 +22,15 @@ export default function SettingsScreen() {
   const { theme, setPreset, setCustom, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
   const { t, lang, setLang, langName, supportedLangs } = useI18n();
   const insets = useSafeAreaInsets();
+
   const [showColor, setShowColor] = useState(false);
   const [showBtn, setShowBtn] = useState(false);
   const [showComp, setShowComp] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showLang, setShowLang] = useState(false);
-  const [showTime, setShowTime] = useState<'bed'|'wake'|null>(null);
-  const [timeInput, setTimeInput] = useState('');
+  const [showTime, setShowTime] = useState(false);
+  const [timeDate, setTimeDate] = useState(new Date());
+  const [timeTarget, setTimeTarget] = useState<'bed'|'wake'>('bed');
   const [targetBed, setTargetBed] = useState('23:00');
   const [targetWake, setTargetWake] = useState('07:30');
 
@@ -47,7 +50,8 @@ export default function SettingsScreen() {
     presetItem: { flex: 1, alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, backgroundColor: tc.theme.colors.surface },
     toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
     chip: { padding: 12, borderWidth: 1, borderRadius: 10, alignItems: 'center', backgroundColor: tc.theme.colors.surface, borderColor: tc.theme.colors.surfaceBorder, minWidth: 64 },
-    chipIcon: { fontSize: 22 }, chipLabel: { fontSize: 9, color: tc.theme.colors.textSecondary, marginTop: 2 },
+    chipIcon: { fontSize: 22 },
+    chipLabel: { fontSize: 9, color: tc.theme.colors.textSecondary, marginTop: 2 },
     setRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: tc.theme.colors.surfaceBorder },
     uploadBox: { borderWidth: 2, borderStyle: 'dashed', borderColor: tc.theme.colors.primary + '30', borderRadius: 12, padding: 16, alignItems: 'center', marginBottom: 16 },
   }));
@@ -61,29 +65,28 @@ export default function SettingsScreen() {
     });
   };
 
-  const saveTime = async () => {
-    const m = timeInput.match(/^(\d{1,2}):(\d{2})$/);
-    if (!m || parseInt(m[1]) > 23 || parseInt(m[2]) > 59) {
-      Alert.alert('格式错误', '请输入正确时间，如 23:00');
-      return;
-    }
-    const val = String(m[1]).padStart(2,'0') + ':' + m[2];
-    if (showTime === 'bed') { await setSetting('target_bedtime', val); setTargetBed(val); }
-    else { await setSetting('target_waketime', val); setTargetWake(val); }
-    setShowTime(null);
+  const openTime = (which: 'bed'|'wake') => {
+    const [h, m] = (which === 'bed' ? targetBed : targetWake).split(':').map(Number);
+    const d = new Date(); d.setHours(h, m, 0, 0);
+    setTimeDate(d); setTimeTarget(which); setShowTime(true);
   };
 
-  const openTime = (which: 'bed'|'wake') => {
-    setTimeInput(which === 'bed' ? targetBed : targetWake);
-    setShowTime(which);
+  const onTimeChange = (_: any, date?: Date) => {
+    if (!date) return;
+    const val = String(date.getHours()).padStart(2,'0') + ':' + String(date.getMinutes()).padStart(2,'0');
+    if (timeTarget === 'bed') { setSetting('target_bedtime', val); setTargetBed(val); }
+    else { setSetting('target_waketime', val); setTargetWake(val); }
+    setShowTime(false);
   };
+
+  const MODAL_OVERLAY = { flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 };
 
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
         <Text style={s.title}>{t('settings.title')}</Text>
 
-        {/* Theme */}
+        {/* Theme Presets */}
         <Text style={s.sectionTitle}>{t('settings.theme')}</Text>
         <View style={s.presetRow}>
           {(['dark-precision','warm-night','nature-calm','minimal-light'] as PresetKey[]).map((key) => {
@@ -119,7 +122,7 @@ export default function SettingsScreen() {
           <Text style={{ fontSize: 13, color: theme.colors.text }}>{langName}</Text>
         </TouchableOpacity>
 
-        {/* Time settings */}
+        {/* Preferences (times) */}
         <Text style={s.sectionTitle}>{t('settings.pref')}</Text>
         <View style={s.setRow}>
           <Text style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.bedtime.target')}</Text>
@@ -163,36 +166,9 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* Time picker modal */}
-      {(showTime === 'bed' || showTime === 'wake') && (
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
-          <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 28 }}>
-            <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>
-              {showTime === 'bed' ? t('settings.bedtime.target') : t('settings.wakeup.target')}
-            </Text>
-            <TextInput
-              style={{ backgroundColor: theme.colors.surface || '#222', borderWidth: 1, borderColor: theme.colors.primary, borderRadius: 12, padding: 14, fontSize: 24, color: theme.colors.text, textAlign: 'center', marginBottom: 12 }}
-              value={timeInput}
-              onChangeText={setTimeInput}
-              placeholder="23:00"
-              placeholderTextColor={theme.colors.textSecondary}
-              autoFocus
-              maxLength={5}
-            />
-            <Text style={{ fontSize: 11, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 16 }}>格式: HH:MM（24小时制）</Text>
-            <TouchableOpacity onPress={saveTime} style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-              <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowTime(null)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-              <Text style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('home.cancel')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
-
       {/* Language modal */}
       {showLang && (
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
+        <View style={MODAL_OVERLAY}>
           <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
             <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</Text>
             <View style={{ gap: 6 }}>
@@ -209,6 +185,18 @@ export default function SettingsScreen() {
             </TouchableOpacity>
           </View>
         </View>
+      )}
+
+      {/* Time picker (native wheel) */}
+      {showTime && (
+        <DateTimePicker
+          value={timeDate}
+          mode="time"
+          is24Hour
+          display="spinner"
+          onChange={onTimeChange}
+          themeVariant={theme.colors.background === '#ffffff' ? 'light' : 'dark'}
+        />
       )}
 
       <ColorPickerModal visible={showColor} onClose={() => setShowColor(false)}

@@ -8,10 +8,23 @@ import { resolveFont } from '../theme/fonts';
 import { getTodayLog, logBedtime, logWaketime, getStreak, getRecentLogs, getSetting } from '../data/database';
 
 function btnRadius(style: string) {
-  if (style === 'pill') return 24;
+  if (style === 'pill') return 30;
   if (style === 'sharp') return 0;
-  if (['cat','bear','owl','star'].includes(style)) return 18;
+  if (['cat', 'bear', 'owl', 'star'].includes(style)) return 24;
   return 14;
+}
+
+function btnExtra(btn: any, colors: any) {
+  const s = btn?.style || 'rounded';
+  const r: any = {};
+  if (s === 'glow') { r.shadowOpacity = 0.5; r.shadowRadius = 30; r.borderWidth = 0; }
+  else if (s === 'outline') { r.borderWidth = 2; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; }
+  else if (s === '3d') { r.borderBottomWidth = 5; r.borderBottomColor = colors.primary + '99'; }
+  else if (s === 'cat') { r.backgroundColor = '#ff9eb5'; }
+  else if (s === 'bear') { r.backgroundColor = '#c4a882'; }
+  else if (s === 'owl') { r.backgroundColor = '#8b6f9e'; }
+  else if (s === 'star') { r.backgroundColor = '#f7d44a'; }
+  return r;
 }
 
 export default function HomeScreen() {
@@ -76,6 +89,7 @@ export default function HomeScreen() {
   const br = btnRadius(theme.button.style);
   const activeFont = resolveFont(theme.font);
   const bgPhoto = theme.background.type === 'photo' ? theme.background.photoPath : null;
+  const bExtra = btnExtra(theme.button, theme.colors);
   const Wrapper = bgPhoto ? ImageBackground : View;
   const wrapProps = bgPhoto ? { source: { uri: bgPhoto } as any, style: s.container, imageStyle: { opacity: 0.3 } } : { style: s.container };
 
@@ -93,14 +107,14 @@ export default function HomeScreen() {
 
         {!todayLog?.bedtime && (
           <TouchableOpacity onPress={() => setShowBedtimeModal(true)} activeOpacity={0.8}
-            style={{ backgroundColor: theme.colors.primary, padding: 16, alignItems: 'center', borderRadius: br, shadowColor: theme.colors.primary, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8 }}>
+            style={{ backgroundColor: theme.colors.primary, padding: 16, alignItems: 'center', borderRadius: br, ...bExtra, shadowColor: theme.colors.primary, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8 }}>
             <Text style={{ color: '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</Text>
             <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</Text>
           </TouchableOpacity>
         )}
         {todayLog?.bedtime && !todayLog?.waketime && (
           <TouchableOpacity onPress={handleWakeup} activeOpacity={0.8}
-            style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: br, padding: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
+            style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: br, ...bExtra, padding: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
             <Text style={{ color: theme.colors.text, fontSize: 16, fontWeight: '500' }}>{t('home.wakeup')}</Text>
           </TouchableOpacity>
         )}
