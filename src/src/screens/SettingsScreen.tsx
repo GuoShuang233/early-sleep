@@ -146,23 +146,34 @@ export default function SettingsScreen() {
           ))}
         </View>
 
-        {/* Background - only via chip, no separate upload box */}
+        {/* Background - with intensity control */}
         {theme.background.type === 'photo' && theme.background.photoPath ? (
-          <TouchableOpacity onPress={handleBg} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <T style={{ fontSize: 16 }}>🖼️</T>
-              <T style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</T>
+          <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 12, padding: 16, marginBottom: 16 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <T style={{ fontSize: 16 }}>🖼️</T>
+                <T style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</T>
+              </View>
+              <TouchableOpacity onPress={resetBackground} style={{ padding: 4 }}>
+                <T style={{ fontSize: 11, color: '#f87171' }}>恢复默认</T>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={resetBackground} style={{ padding: 4 }}>
-              <T style={{ fontSize: 11, color: theme.colors.error || '#f87171' }}>恢复默认</T>
-            </TouchableOpacity>
-          </TouchableOpacity>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度</T>
+            <View style={{ flexDirection: 'row', gap: 6 }}>
+              {[30, 50, 70].map((v) => (
+                <TouchableOpacity key={v} onPress={() => setCustom({ background: { ...theme.background, overlay: v / 100 } })}
+                  style={{ paddingVertical: 6, paddingHorizontal: 14, borderWidth: 1, borderRadius: 8, borderColor: (theme.background.overlay || 0.3) * 100 === v ? theme.colors.primary : theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
+                  <T style={{ fontSize: 10, color: (theme.background.overlay || 0.3) * 100 === v ? theme.colors.primary : theme.colors.text }}>{v}%</T>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
         ) : null}
       </ScrollView>
 
       {/* Language modal - wrapped in RN Modal to avoid scroll clipping */}
       <Modal visible={showLang} transparent animationType="fade" onRequestClose={() => setShowLang(false)}>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 }}>
+        <View style={{ flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
           <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
             <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</T>
             <View style={{ gap: 6 }}>

@@ -4,17 +4,14 @@ import { useTheme } from './ThemeContext';
 import { resolveFont } from './fonts';
 
 // Themed Text component - applies the active font globally
+// Uses fontFamily as a hard override to ensure it actually takes effect
 export function T(props: TextProps & { children?: any }) {
   const { theme } = useTheme();
   const font = resolveFont(theme.font);
+  const fontStyle = font ? { fontFamily: font } : {};
   return (
-    <RNText {...props} style={[props.style, font ? { fontFamily: font } : null]}>
+    <RNText {...props} style={[props.style, fontStyle]}>
       {props.children}
     </RNText>
   );
 }
-
-// Convenience: bold, secondary, etc.
-export function TTitle(props: any) { return <T {...props} style={[{ fontSize: 18, fontWeight: '700' }, props.style]} />; }
-export function TLabel(props: any) { return <T {...props} style={[{ fontSize: 14, fontWeight: '500' }, props.style]} />; }
-export function TMuted(props: any) { return <T {...props} style={[{ fontSize: 11, color: '#62666d' }, props.style]} />; }

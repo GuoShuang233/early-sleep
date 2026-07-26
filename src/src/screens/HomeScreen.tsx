@@ -20,14 +20,14 @@ function btnExtra(btn: any, colors: any) {
   const s = btn?.style || 'rounded';
   const r: any = {};
   if (s === 'glow') { r.shadowOpacity = 0.6; r.shadowRadius = 35; r.elevation = 12; r.borderWidth = 0; }
-  else if (s === 'outline') { r.borderWidth = 2.5; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; }
-  else if (s === '3d') { r.borderBottomWidth = 6; r.borderBottomColor = colors.primary + 'aa'; r.borderLeftWidth = 1; r.borderRightWidth = 1; r.borderLeftColor = colors.primary + '30'; r.borderRightColor = colors.primary + '30'; }
-  else if (s === 'pill') { r.paddingVertical = 18; }
-  else if (s === 'cat') { r.backgroundColor = '#ff9eb5'; r.borderTopLeftRadius = 4; r.borderTopRightRadius = 24; r.borderBottomLeftRadius = 24; r.borderBottomRightRadius = 4; }
-  else if (s === 'bear') { r.backgroundColor = '#c4a882'; r.borderRadius = 28; }
-  else if (s === 'owl') { r.backgroundColor = '#8b6f9e'; r.borderTopLeftRadius = 24; r.borderTopRightRadius = 4; r.borderBottomLeftRadius = 4; r.borderBottomRightRadius = 24; }
-  else if (s === 'star') { r.backgroundColor = '#f7d44a'; r.transform = [{ rotate: '-2deg' }]; }
-  else if (s === 'sharp') { r.borderWidth = 1; r.borderColor = colors.primary + '40'; }
+  else if (s === 'outline') { r.borderWidth = 2.5; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; r.borderRadius = 14; }
+  else if (s === '3d') { r.borderBottomWidth = 6; r.borderBottomColor = colors.primary + 'aa'; r.borderLeftWidth = 1; r.borderRightWidth = 1; r.borderLeftColor = colors.primary + '40'; r.borderRightColor = colors.primary + '40'; }
+  else if (s === 'pill') { r.paddingVertical = 20; r.paddingHorizontal = 32; }
+  else if (s === 'sharp') { r.borderWidth = 1; r.borderColor = colors.textSecondary + '40'; r.borderRadius = 2; }
+  else if (s === 'cat') { r.borderRadius = 18; r.backgroundColor = '#ff9eb5'; }
+  else if (s === 'bear') { r.borderRadius = 30; r.backgroundColor = '#c4a882'; }
+  else if (s === 'owl') { r.borderRadius = 20; r.backgroundColor = '#8b6f9e'; }
+  else if (s === 'star') { r.borderRadius = 22; r.backgroundColor = '#f7d44a'; }
   return r;
 }
 
@@ -96,7 +96,7 @@ export default function HomeScreen() {
   const bgPhoto = theme.background.type === 'photo' ? theme.background.photoPath : null;
   const bExtra = btnExtra(theme.button, theme.colors);
   const Wrapper = bgPhoto ? ImageBackground : View;
-  const wrapProps = bgPhoto ? { source: { uri: bgPhoto } as any, style: s.container, imageStyle: { opacity: 0.3 } } : { style: s.container };
+  const wrapProps = bgPhoto ? { source: { uri: bgPhoto } as any, style: s.container, imageStyle: { opacity: theme.background.overlay || 0.3 } } : { style: s.container };
 
   return (
     <Wrapper {...wrapProps}>
