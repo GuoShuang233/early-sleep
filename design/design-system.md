@@ -1,226 +1,97 @@
-# 早睡系统 · UI 设计规范（统一标准）
+# 早睡系统 · UI 设计规范 & 组件库
 
-> 所有 4 套主题共享同一套布局结构、间距、组件标准。
-> 差异只在于颜色、圆角、氛围——结构完全一致。
-
----
-
-## 一、布局结构（所有主题统一）
-
-```
-┌──────────────────────┐
-│    状态栏 44pt        │  ← 系统标准
-├──────────────────────┤
-│                      │
-│  页面内容区域          │  ← 两侧 20px padding
-│  (滚动视图)            │
-│                      │
-│                      │
-│                      │
-│  广告位（可选）         │  ← 距底部导航上方
-├──────────────────────┤
-│  底部导航栏 64pt       │  ← 4个图标+标签
-└──────────────────────┘
-```
-
-### 间距系统（8pt 网格）
-
-| Token | 值 | 用途 |
-|-------|-----|------|
-| `spacing-xs` | 4pt | 极小间隙 |
-| `spacing-sm` | 8pt | 组件内间距 |
-| `spacing-md` | 12pt | 组件间间距 |
-| `spacing-lg` | 16pt | 卡片内边距 |
-| `spacing-xl` | 20pt | 页面两侧 padding |
-| `spacing-2xl` | 24pt | 大区块间距 |
-| `spacing-3xl` | 32pt | 页面顶部间距 |
+> 所有 4 套主题 + 自定义组合共享同一套布局、间距、组件标准。
+> 差异只在于 Theme 对象的颜色/圆角/氛围值。
 
 ---
 
-## 二、组件系统（所有主题共享）
+## 统一画布
 
-### 2.1 核心按钮
-
-```
-┌────────────────────────────────────┐
-│  🌙 准备睡觉                        │  ← 主按钮：渐变背景，44pt 高度
-│       放下手机                      │     font-size: 17pt, weight: 600
-└────────────────────────────────────┘
-                                     间距 10pt
-┌────────────────────────────────────┐
-│  ☀️ 我起床了                        │  ← 次按钮：描边/半透明背景
-└────────────────────────────────────┘     44pt 高度，font-size: 16pt
-```
-
-### 2.2 统计卡片
-
-```
-┌──────┐  ┌──────┐  ┌──────┐
-│  3   │  │ 67%  │  │ 7h   │       ← 三列等宽，圆角 12-14pt
-│ 连续  │  │宵禁率 │  │睡眠  │       font-size: 22pt weight 700
-└──────┘  └──────┘  └──────┘         标签: 10pt uppercase
-```
-
-### 2.3 记录卡片
-
-```
-┌──────────────────────────────┐
-│  昨晚                  详情 → │  ← 标题行 12pt uppercase
-├──────────────────────────────┤
-│  ● 就寝  23:15          ✅   │  ← 每行 44pt 高度
-│  ● 起床  07:30          ✅   │     圆点 8pt + 标签 13pt + 时间 11pt
-│  ● 宵禁  打卡后无使用   ✅   │
-└──────────────────────────────┘
-```
-
-### 2.4 底部导航
-
-```
-  ┌─────┐  ┌─────┐  ┌─────┐  ┌─────┐
-  │ 🌙 │  │ 📊 │  │ 🏆 │  │ ⚙️ │     ← 44x44pt 触控区域
-  │ 首页│  │报告 │  │成就 │  │设置 │     图标 22pt，标签 9pt
-  └─────┘  └─────┘  └─────┘  └─────┘     active 色 = 主题主色
-```
+| 项目 | 值 |
+|------|----|
+| 手机画布 | 380 × 740px |
+| 圆角 | 44pt（外框） |
+| 状态栏 | 44pt |
+| 底部导航 | 64pt |
+| 页面 padding | 20pt（水平） |
+| 间距系统 | 8pt 网格 |
 
 ---
 
-## 三、主题色板
+## 组件库
+
+### 核心按钮
+
+| 状态 | 样式 |
+|------|------|
+| 主按钮（睡觉） | 渐变背景，44pt 高，14pt 圆角，17pt font-weight 600 |
+| 次按钮（起床） | 半透明背景，1px 边框，44pt 高 |
+| 宠物按钮 | 猫爪/熊掌/猫头鹰/星星 + emoji 装饰 |
+
+### 统计卡片
+
+3 列等宽，圆角 12pt，统计数值 22pt weight 700，标签 10pt uppercase。
+
+### 记录卡片
+
+标题行 12pt uppercase，每行 44pt 高，圆点 8pt，标签 13pt，时间 11pt。
+
+### 底部导航
+
+4 项，触控区域 44×44pt，图标 22pt，标签 9pt，活跃态主色。
+
+### 广告位
+
+| 类型 | 尺寸 | 特点 |
+|------|------|------|
+| Banner | 通栏 40pt | 圆角 10pt，左上标"广告" |
+| 信息流 | 与列表行一致 | 右上标"广告"，外观融合 |
+| 激励/视频 | 通栏 80pt | 居中图标，底部按钮 |
+
+---
+
+## 4 套预设主题色板
 
 | Token | A: Dark Precision | B: Warm Night | C: Nature Calm | D: Minimal Light |
 |-------|------------------|--------------|---------------|-----------------|
-| **背景** | `#08090a` | `#120c1a` → `#1e1630` | `#0c140e` → `#102014` | `#ffffff` |
-| **卡片** | `rgba(255,255,255,0.02-0.03)` | `rgba(200,180,230,0.03-0.04)` | `rgba(80,180,100,0.03-0.04)` | `#faf9f7` |
-| **主色** | `#7170ff` | `#b8a0e0` | `#80d890` | `#6c5ce7` |
-| **主文字** | `#f7f8f8` | `#f0ece4` | `#e0efe0` | `#2c2c2c` |
-| **次要文字** | `#8a8f98` | `#8a7a9a` | `#6a8a6a` | `#9a9a9a` |
-| **边框** | `rgba(255,255,255,0.06)` | `rgba(200,180,230,0.08)` | `rgba(80,180,100,0.08)` | `#eeece8` |
-| **圆角** | 14pt | 18pt | 16pt | 14pt |
+| 背景 | `#08090a` | `#120c1a→#1e1630` | `#0c140e→#102014` | `#ffffff` |
+| 卡片 | `rgba(255,255,255,0.02)` | `rgba(200,180,230,0.04)` | `rgba(80,180,100,0.04)` | `#faf9f7` |
+| 主色 | `#7170ff` | `#b8a0e0` | `#80d890` | `#6c5ce7` |
+| 文字 | `#f7f8f8` | `#f0ece4` | `#e0efe0` | `#2c2c2c` |
+| 次要 | `#8a8f98` | `#8a7a9a` | `#6a8a6a` | `#9a9a9a` |
+| 边框 | `rgba(255,255,255,0.06)` | `rgba(200,180,230,0.08)` | `rgba(80,180,100,0.08)` | `#eeece8` |
+| 圆角 | 12-14pt | 16-18pt | 14-16pt | 12-14pt |
 
 ---
 
-## 四、广告位标准（统一展示）
+## 8 个主题自定义维度
 
-所有主题共享 3 种广告布局，位置固定：
-
-### 类型 A：Banner 广告（晨间报告底部）
-
-```
-┌──────────────────────────────────┐
-│  🛏️ 泰国乳胶枕 · 限时 7 折      │  ← 16pt 高度，占一整行
-│  你的睡眠值得更好的枕头  [了解]   │    放在晨间报告卡片下方
-│                    广告          │
-└──────────────────────────────────┘
-```
-
-### 类型 B：激励视频（成就页）
-
-```
-┌──────────────────────────────────┐
-│           🎬                      │
-│   看视频解锁「极光」主题           │
-│                                   │
-│   30秒后即可获得专属夜间主题       │
-│                                   │
-│   ┌──────────────────────┐       │
-│   │  🎬 观看广告解锁      │       │
-│   └──────────────────────┘       │
-│                   广告            │
-└──────────────────────────────────┘
-```
-
-### 类型 C：原生信息流卡片（首页/报告页）
-
-```
-┌──────────────────────────────────┐
-│  📚 得到 App · 每晚听本书  [打开]  │  ← 与列表 UI 融合
-│  放下手机，用听的方式入眠          │
-│                     广告          │
-└──────────────────────────────────┘
-```
-
-### 广告位置规则
-
-| 页面 | 广告类型 | 规则 |
-|------|---------|------|
-| 首页 | 无 | ❌ 睡前不放广告 |
-| 睡前确认页 | 无 | ❌ 不打扰 |
-| **晨间报告** | **Banner C 或 A** | ✅ 报告内容下方，自然的上下文 |
-| **日历/历史** | **原生卡片 C** | ✅ 数据下方，不干扰浏览 |
-| **成就页** | **激励视频 B** | ✅ 用户主动选择看 |
-| **周报** | **Banner A** | ✅ 分析数据下方 |
+见 `theme-customization.md`，UI 效果见 `sketches/000-showcase/`。
 
 ---
 
-## 五、日夜自动切换
-
-```
-自动规则：
-  6:00 - 18:00  → 主题 D（Minimal Light）
-  18:00 - 6:00  → 主题 A（Dark Precision）
-
-手动覆盖：
-  用户可在设置中切换到任意主题
-  手动选择后，"自动切换"暂时暂停
-  第二天系统自动恢复日夜切换
-
-自定义背景：
-  用户上传照片 → 自动叠加 40% 暗色遮罩 + 8px 高斯模糊
-  所有主题都支持自定义背景覆盖
-  不影响文字可读性
-```
-
----
-
-## 六、React Native 实现要点
+## React Native 实现
 
 ```typescript
-// 统一主题结构 (ThemeContext)
-interface Theme {
-  name: string;
+interface ThemeConfig {
+  preset?: 'dark-precision' | 'warm-night' | 'nature-calm' | 'minimal-light';
   colors: {
-    background: string;       // 页面背景
-    surface: string;          // 卡片背景
-    surfaceBorder: string;    // 卡片边框
-    primary: string;          // 主色（按钮/活跃状态）
-    text: string;             // 主文字色
-    textSecondary: string;    // 次要文字色
-    success: string;          // 成功状态
-    warning: string;          // 警告
-    error: string;            // 错误
+    primary, background, backgroundGradient, surface, surfaceBlur, text, textSecondary, success, warning, error
   };
-  radii: {
-    sm: number;    // 8
-    md: number;    // 12
-    lg: number;    // 14
-    xl: number;    // 18
-    full: number;  // 9999
+  button: {
+    style: 'rounded' | 'pill' | 'sharp' | 'pet' | 'glow' | 'outline' | '3d';
+    petType?: 'cat' | 'bear' | 'owl' | 'star';
   };
-  spacing: {
-    xs: number;  // 4
-    sm: number;  // 8
-    md: number;  // 12
-    lg: number;  // 16
-    xl: number;  // 20
-    xxl: number; // 24
-  };
-  typography: {
-    button: { size: number; weight: string };
-    statNumber: { size: number; weight: string };
-    statLabel: { size: number; weight: string };
-    body: { size: number; weight: string };
-    caption: { size: number; weight: string };
-  };
+  companion: { type: 'plant' | 'flower' | 'cactus' | 'cat' | 'owl' | 'ocean' | 'star'; currentStage: number };
+  background: { type: 'color' | 'gradient' | 'photo' | 'animated' | 'texture'; photoPath?: string; blur?: number; overlay?: number };
+  sound: { bedtime?: string; wakeup?: string; feedback?: string };
+  font: 'system' | 'rounded' | 'serif' | 'handwrite' | 'mono';
+  density: 'comfortable' | 'compact' | 'minimal';
+  animation: 'smooth' | 'reduced' | 'playful' | 'none';
 }
 
-// 4 套主题实例化
-const themes = {
-  darkPrecision: Theme,
-  warmNight: Theme,
-  natureCalm: Theme,
-  minimalLight: Theme,
-};
+// ThemeProvider 包裹整个 App
+// 所有组件通过 useTheme() 获取当前颜色/尺寸/字体
+// 预设主题 = 4 个预填充的 ThemeConfig 对象
+// 自定义 = 用户修改任意字段 → 合并到当前 theme
 ```
-
----
-
-**总结：所有 4 套主题共享同一个组件结构和间距系统。差异只在 `colors`、`radii` 和氛围细节。代码层面就是一套组件 + 4 个 theme 对象。**
