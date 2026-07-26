@@ -25,6 +25,7 @@ const customChips = [
 
 export default function SettingsScreen() {
   const { theme, setPreset, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
+  const insets = useSafeAreaInsets();
   const s = useThemedStyles((t) => ({
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
