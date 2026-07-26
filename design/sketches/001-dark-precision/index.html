@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>早睡系统 · 深色方案</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #08090a;
+  color: #f7f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Phone frame */
+.phone {
+  width: 390px;
+  height: 820px;
+  background: #08090a;
+  border-radius: 44px;
+  border: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 24px 80px rgba(0,0,0,0.6);
+}
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 28px 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #f7f8f8;
+}
+
+.content {
+  padding: 8px 24px 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 50px);
+}
+
+/* Greeting */
+.greeting {
+  margin-bottom: 4px;
+}
+.greeting h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #f7f8f8;
+}
+.greeting p {
+  font-size: 14px;
+  color: #8a8f98;
+  margin-top: 2px;
+}
+
+/* Streak row */
+.streak-row {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+.streak-item {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+}
+.streak-num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #f7f8f8;
+  line-height: 1.1;
+}
+.streak-num span { color: #7170ff; }
+.streak-label {
+  font-size: 11px;
+  color: #62666d;
+  font-weight: 500;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Target section */
+.target-box {
+  background: linear-gradient(135deg, rgba(113,112,255,0.12), rgba(113,112,255,0.04));
+  border: 1px solid rgba(113,112,255,0.15);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.target-label { font-size: 12px; color: #8a8f98; font-weight: 500; }
+.target-time { font-size: 22px; font-weight: 700; color: #f7f8f8; letter-spacing: -0.3px; }
+.target-sub { font-size: 12px; color: #62666d; margin-top: 2px; }
+.target-status {
+  text-align: right;
+}
+.target-status .badge {
+  display: inline-block;
+  background: rgba(16,185,129,0.15);
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* Main action buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.btn-sleep {
+  background: linear-gradient(135deg, #5e6ad2, #7170ff);
+  border: none;
+  border-radius: 16px;
+  padding: 22px;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(113,112,255,0.25);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: -0.2px;
+}
+.btn-sleep:active { transform: scale(0.97); }
+.btn-sleep .icon { font-size: 24px; }
+.btn-sleep .sub {
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+.btn-wake {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px;
+  color: #f7f8f8;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s;
+}
+.btn-wake:active { background: rgba(255,255,255,0.08); }
+.btn-wake .icon { font-size: 20px; }
+
+/* Today's log mini card */
+.log-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+.log-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.log-card-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #62666d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.log-card-header a {
+  font-size: 12px;
+  color: #7170ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.log-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.log-entry:last-child { border-bottom: none; }
+.log-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.log-dot.bed { background: #7170ff; }
+.log-dot.wake { background: #10b981; }
+.log-dot.curfew { background: #fbbf24; }
+.log-info { flex: 1; }
+.log-info .label { font-size: 13px; color: #d0d6e0; font-weight: 500; }
+.log-info .time { font-size: 12px; color: #62666d; }
+.log-check { font-size: 14px; }
+
+/* Bottom ad placeholder */
+.ad-placeholder {
+  margin-top: auto;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  font-size: 11px;
+  color: #3e3e44;
+}
+
+/* Nav bar */
+.nav-bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 12px 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.nav-item {
+  text-align: center;
+  font-size: 10px;
+  color: #62666d;
+  font-weight: 500;
+  padding: 4px 12px;
+}
+.nav-item.active { color: #7170ff; }
+.nav-item .nav-icon { font-size: 20px; margin-bottom: 2px; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar">
+    <span>23:15</span>
+    <span>📶 🔋</span>
+  </div>
+  <div class="content">
+    <div class="greeting">
+      <h1>🌙 晚上好</h1>
+      <p>今晚的目标是 23:00 · 还剩 0 分钟</p>
+    </div>
+
+    <div class="streak-row">
+      <div class="streak-item">
+        <div class="streak-num"><span>3</span></div>
+        <div class="streak-label">连续天数</div>
+      </div>
+      <div class="streak-item">
+        <div class="streak-num">67%</div>
+        <div class="streak-label">宵禁达标率</div>
+      </div>
+      <div class="streak-item">
+        <div class="streak-num">7h</div>
+        <div class="streak-label">平均睡眠</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-sleep">
+        <span class="icon">🌙</span>
+        <span>准备睡觉</span>
+        <span class="sub">放下手机</span>
+      </button>
+      <button class="btn-wake">
+        <span class="icon">☀️</span>
+        <span>我起床了</span>
+      </button>
+    </div>
+
+    <div class="log-card">
+      <div class="log-card-header">
+        <h3>昨晚</h3>
+        <a href="#">查看详情 →</a>
+      </div>
+      <div class="log-entry">
+        <div class="log-dot bed"></div>
+        <div class="log-info">
+          <div class="label">就寝</div>
+          <div class="time">23:15</div>
+        </div>
+        <div class="log-check">✅</div>
+      </div>
+      <div class="log-entry">
+        <div class="log-dot wake"></div>
+        <div class="log-info">
+          <div class="label">起床</div>
+          <div class="time">07:30</div>
+        </div>
+        <div class="log-check">✅</div>
+      </div>
+      <div class="log-entry">
+        <div class="log-dot curfew"></div>
+        <div class="log-info">
+          <div class="label">宵禁</div>
+          <div class="time">打卡后无使用</div>
+        </div>
+        <div class="log-check">✅ 达标</div>
+      </div>
+    </div>
+
+    <div class="ad-placeholder">
+      [ 广告位 · 你的早晨由 XXX 陪伴 ]
+    </div>
+
+    <div class="nav-bar">
+      <div class="nav-item active"><div class="nav-icon">🌙</div>首页</div>
+      <div class="nav-item"><div class="nav-icon">📊</div>报告</div>
+      <div class="nav-item"><div class="nav-icon">🏆</div>成就</div>
+      <div class="nav-item"><div class="nav-icon">⚙️</div>设置</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
