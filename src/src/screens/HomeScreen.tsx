@@ -10,7 +10,7 @@ export default function HomeScreen() {
   const [curfewRate] = useState(67);
   const [avgSleep] = useState('7h');
 
-  const styles = createStyles(theme);
+  const s = styles;
 
   return (
     <View style={styles.container}>
