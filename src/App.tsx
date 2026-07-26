@@ -52,20 +52,7 @@ function AppNavigator() {
           fontSize: 9,
           fontWeight: '500',
         },
-        tabBarIcon: ({ focused }) => {
-          const icons: Record<string, string> = {
-            Home: '🌙',
-            Report: '📊',
-            Achievements: '🏆',
-            Settings: '⚙️',
-          };
-          const icon = icons[route.name] || '🌙';
-          return (
-            <React.Fragment>
-              <>{/* Icon: {icon} */}</React.Fragment>
-            </React.Fragment>
-          );
-        },
+        tabBarIcon: () => null,
       })}>
       <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: '首页' }} />
       <Tab.Screen name="Report" component={ReportScreen} options={{ tabBarLabel: '报告' }} />
