@@ -3,291 +3,310 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>早睡系统 · 主题与广告展示</title>
+<title>早睡系统 · 统一展示</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#08090a;color:#f7f8f8;padding:40px 20px}
-.container{max-width:1200px;margin:0 auto}
-h1{font-size:32px;font-weight:700;letter-spacing:-0.5px;margin-bottom:8px}
-.sub{color:#8a8f98;font-size:14px;margin-bottom:32px;line-height:1.6}
+body{font-family:'Inter',system-ui,sans-serif;background:#08090a;color:#f7f8f8;padding:30px}
+h1{text-align:center;font-size:30px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px}
+.sub{text-align:center;color:#8a8f98;font-size:14px;margin-bottom:30px}
 
-.section-title{font-size:20px;font-weight:600;margin:40px 0 16px;color:#f7f8f8;display:flex;align-items:center;gap:8px}
-.section-title small{font-size:13px;color:#62666d;font-weight:400}
+.section-title{font-size:18px;font-weight:600;margin:36px 0 16px;display:flex;align-items:center;gap:8px}
 
-.phone-grid{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+/* 所有手机统一 380x740px */
+.phone{width:380px;height:740px;border-radius:44px;overflow:hidden;position:relative;margin:0 auto 8px;display:flex;flex-direction:column}
+.phone-label{text-align:center;font-size:10px;color:#4a4a5a;letter-spacing:1.5px;padding:8px 0 4px;text-transform:uppercase}
 
-.phone{width:380px;border-radius:44px;overflow:hidden;position:relative;margin-bottom:10px}
-.phone-label{text-align:center;font-size:11px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:1.5px;padding:12px 0 6px}
-.phone-inner{height:780px;overflow-y:auto;padding:0 0 10px}
-.phone-inner::-webkit-scrollbar{width:3px}
-.phone-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+.phone-inner{flex:1;overflow-y:auto;padding:0;display:flex;flex-direction:column}
+.phone-inner::-webkit-scrollbar{width:2px}
+.phone-inner::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 
-/* Theme A */
-.theme-a .phone-inner{background:#08090a}
-.theme-a .status-bar{display:flex;justify-content:space-between;padding:14px 24px 4px;font-size:13px;font-weight:500;color:#f7f8f8}
-.theme-a .content{padding:4px 20px 0}
-.theme-a .sec-title{font-size:12px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.8px;padding:14px 0 8px}
-.theme-a .btn{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px}
-.theme-a .btn:active{background:rgba(255,255,255,0.06)}
-.theme-a .btn-icon{font-size:22px;width:36px;text-align:center}
-.theme-a .btn-text{flex:1}
-.theme-a .btn-text .tl{font-size:14px;font-weight:500;color:#f7f8f8}
-.theme-a .btn-text .td{font-size:11px;color:#62666d;margin-top:1px}
-.theme-a .btn-arrow{color:#62666d;font-size:16px}
+.flex-row{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
 
-.theme-a .theme-option{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;margin-bottom:8px;cursor:pointer}
-.theme-option.active{border-color:#7170ff;background:rgba(113,112,255,0.08)}
-.theme-swatch{width:40px;height:40px;border-radius:10px;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:18px}
-.ts-a{background:#08090a;color:#7170ff;border:1px solid rgba(255,255,255,0.1)}
-.ts-b{background:linear-gradient(135deg,#120c1a,#1e1630);color:#b8a0e0;border:1px solid rgba(200,180,230,0.1)}
-.ts-c{background:linear-gradient(135deg,#0c140e,#102014);color:#80d890;border:1px solid rgba(80,180,100,0.1)}
-.ts-d{background:#ffffff;color:#6c5ce7;border:1px solid #e0deda}
-.theme-info .ti{font-size:14px;font-weight:500}
-.theme-info .td{font-size:11px;color:#62666d}
+/* ===== Theme A (Dark Precision) ===== */
+.theme-a{background:#08090a;color:#f7f8f8}
+.theme-a .sb{display:flex;justify-content:space-between;padding:14px 20px 4px;font-size:12px;color:#f7f8f8;flex-shrink:0}
+.theme-a .ct{padding:4px 18px 0;flex:1;display:flex;flex-direction:column}
+.theme-a .st{font-size:10px;font-weight:600;color:#62666d;text-transform:uppercase;letter-spacing:0.6px;padding:10px 0 6px}
+.theme-a .ad-banner{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px 14px;margin:6px 0;display:flex;align-items:center;gap:10px;position:relative;flex-shrink:0}
+.theme-a .ad-badge{position:absolute;top:3px;right:5px;font-size:7px;color:#4a4a5a;background:rgba(255,255,255,0.02);padding:1px 4px;border-radius:2px;letter-spacing:1px}
+.theme-a .ad-cta{font-size:10px;color:#7170ff;font-weight:600;background:rgba(113,112,255,0.08);padding:3px 10px;border-radius:5px;flex-shrink:0}
 
-.toggle-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
-.toggle-row:last-child{border-bottom:none}
-.toggle-info .tl{font-size:14px;font-weight:500}
-.toggle-info .td{font-size:11px;color:#62666d}
-.toggle-switch{width:44px;height:24px;background:rgba(255,255,255,0.1);border-radius:12px;position:relative;cursor:pointer;flex-shrink:0}
-.toggle-switch.on{background:#7170ff}
-.toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:white;border-radius:50%;transition:transform 0.2s}
-.toggle-switch.on::after{transform:translateX(20px)}
+.note-input{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 12px;margin:6px 0;flex-shrink:0}
+.note-input .note-label{font-size:10px;color:#62666d;margin-bottom:4px}
+.note-input .note-field{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:8px 10px;font-size:12px;color:#d0d6e0;width:100%}
+.note-input .note-field:empty::before{content:'加班、应酬、失眠...';color:#4a4a5a}
 
-.upload-area{background:rgba(113,112,255,0.04);border:2px dashed rgba(113,112,255,0.15);border-radius:14px;padding:24px;text-align:center;margin:12px 0;cursor:pointer}
-.upload-area .up-icon{font-size:32px;margin-bottom:6px}
-.upload-area .up-text{font-size:13px;color:#8a8f98}
-.upload-area .up-hint{font-size:10px;color:#62666d;margin-top:4px}
+/* Ad types */
+.ad-banner-row{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px 14px;margin:6px 0;display:flex;align-items:center;gap:10px;position:relative;flex-shrink:0}
+.ad-native{background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);padding:10px 0;display:flex;align-items:center;gap:10px;position:relative}
+.ad-native .ad-badge{position:absolute;top:2px;right:0;font-size:7px;color:#4a4a5a;letter-spacing:1px}
 
-/* Ad styles */
-.ad-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px;margin:10px 0;display:flex;align-items:center;gap:10px}
-.ad-card .ad-badge{font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:1px;position:absolute;top:6px;right:8px}
-.ad-card{position:relative}
-.ad-icon{font-size:28px;width:40px;text-align:center}
-.ad-info{flex:1}
-.ad-info .ad-title{font-size:12px;font-weight:500;color:#8a8f98}
-.ad-info .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
-.ad-cta{font-size:11px;color:#7170ff;font-weight:600;background:rgba(113,112,255,0.08);padding:4px 10px;border-radius:6px;flex-shrink:0}
+.nav-bar{display:flex;justify-content:space-around;padding:6px 8px 10px;border-top:1px solid rgba(255,255,255,0.04);flex-shrink:0;margin-top:auto}
+.nav-item{text-align:center;font-size:8px;color:#4a4a5a;padding:2px 6px}
+.nav-item.active{color:#7170ff}
+.nav-item .ni{font-size:16px;margin-bottom:1px}
 
-.ad-banner{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:16px;text-align:center;margin:10px 0;position:relative}
-.ad-banner .ad-badge{position:absolute;top:4px;right:6px;font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:1px}
-.ad-banner .ad-img{font-size:36px;margin-bottom:6px}
-.ad-banner .ad-title{font-size:13px;font-weight:500;color:#8a8f98}
-.ad-banner .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
-.ad-banner .ad-btn{display:inline-block;margin-top:8px;font-size:11px;color:#7170ff;font-weight:600;background:rgba(113,112,255,0.08);padding:4px 14px;border-radius:6px}
-
-.ad-video{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:20px;text-align:center;margin:10px 0;position:relative}
-.ad-video .ad-badge{position:absolute;top:4px;right:6px;font-size:8px;color:#62666d;background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:3px}
-.ad-video .ad-icon{font-size:40px;margin-bottom:8px}
-.ad-video .ad-title{font-size:13px;font-weight:500;color:#f7f8f8}
-.ad-video .ad-desc{font-size:10px;color:#62666d;margin-top:2px}
-.ad-video .ad-btn{display:inline-block;margin-top:10px;font-size:12px;color:#f7f8f8;font-weight:600;background:linear-gradient(135deg,#5e6ad2,#7170ff);padding:6px 20px;border-radius:8px}
-
-/* Day/Night toggle demo */
-.daynight-demo{display:flex;gap:16px;margin:16px 0}
-.daynight-card{flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;text-align:center}
-.daynight-card .dn-icon{font-size:28px;margin-bottom:4px}
-.daynight-card .dn-label{font-size:13px;font-weight:500;color:#f7f8f8}
-.daynight-card .dn-time{font-size:11px;color:#62666d;margin-top:2px}
-.daynight-card .dn-preview{width:100%;height:60px;border-radius:8px;margin-top:8px;display:flex;align-items:center;justify-content:center;font-size:11px}
-.dn-preview.day{background:#f5f3f0;color:#2c2c2c}
-.dn-preview.night{background:#08090a;color:#f7f8f8;border:1px solid rgba(255,255,255,0.06)}
-.daynight-arrow{display:flex;align-items:center;font-size:24px;color:#62666d}
-
-@media(max-width:800px){.daynight-demo{flex-direction:column}}
+/* ===== MOCKUP GRID ===== */
+.grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-bottom:30px}
 </style>
 </head>
 <body>
-<div class="container">
 
-<h1>🌙 主题系统 & 广告位展示</h1>
-<p class="sub">4 套主题可手动切换 · 自定义背景图 · 白天/夜晚自动切换 · 3 种广告形式</p>
+<h1>🌙 早睡系统 · 统一展示</h1>
+<p class="sub">所有手机统一 380×740px · 高度一致 · 每屏结构相同</p>
 
-<!-- Day/Night Auto Switch -->
-<div class="section-title">🔄 日夜自动切换 <small>6:00-18:00 用亮色 · 18:00-6:00 用深色</small></div>
-<div class="daynight-demo">
-  <div class="daynight-card">
-    <div class="dn-icon">☀️</div>
-    <div class="dn-label">白天模式</div>
-    <div class="dn-time">6:00 - 18:00</div>
-    <div class="dn-preview day">方案 D · Minimal Light</div>
-  </div>
-  <div style="display:flex;align-items:center;font-size:28px;color:#3e3e44;padding:0 4px;">↻</div>
-  <div class="daynight-card" style="border-color:rgba(113,112,255,0.15);background:rgba(113,112,255,0.04);">
-    <div class="dn-icon">🌙</div>
-    <div class="dn-label">夜晚模式</div>
-    <div class="dn-time">18:00 - 6:00</div>
-    <div class="dn-preview night">方案 A · Dark Precision</div>
-  </div>
-  <div style="display:flex;align-items:center;font-size:24px;color:#3e3e44;padding:0 4px;">⚡</div>
-  <div class="daynight-card" style="border-color:rgba(80,180,100,0.15);background:rgba(80,180,100,0.04);">
-    <div class="dn-icon">🎨</div>
-    <div class="dn-label">手动覆盖</div>
-    <div class="dn-time">随时可切换任意主题</div>
-    <div style="font-size:10px;color:#62666d;margin-top:6px;">自动切换在后台静默运行</div>
-  </div>
-</div>
+<!-- H1: 各页面统一高度 -->
+<div class="section-title">📐 统一高度 · 6 屏示例（方案 A Dark Precision）</div>
+<div class="grid">
 
-<!-- Theme Switcher -->
-<div class="section-title">🎨 主题选择界面（设置页内）</div>
-<div class="phone-grid">
-<div class="phone"><div class="phone-label">📱 设置 → 主题与外观</div>
+<!-- 1. Home -->
+<div>
+<div class="phone-label">🏠 首页</div>
+<div class="phone">
 <div class="phone-inner theme-a">
-<div class="status-bar"><span>12:00</span><span>📶 🔋</span></div>
-<div class="content">
-<div style="padding:8px 0;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.04);padding-bottom:12px;">
-  <span style="font-size:20px;cursor:pointer;">←</span>
-  <span style="font-size:18px;font-weight:600;">主题与外观</span>
+<div class="sb"><span>23:15</span><span>🔋</span></div>
+<div class="ct">
+<div style="padding:6px 0 0;"><span style="font-size:20px;font-weight:600;">🌙 晚上好</span><br><span style="font-size:11px;color:#62666d;">目标 23:00</span></div>
+<div style="display:flex;gap:4px;margin:10px 0;">
+<div style="flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:18px;font-weight:700;color:#7170ff;">3</div><div style="font-size:8px;color:#4a4a5a;letter-spacing:0.5px;">连续</div></div>
+<div style="flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:18px;font-weight:700;color:#fbbf24;">67%</div><div style="font-size:8px;color:#4a4a5a;letter-spacing:0.5px;">宵禁率</div></div>
+<div style="flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:8px;text-align:center;"><div style="font-size:18px;font-weight:700;color:#10b981;">7h</div><div style="font-size:8px;color:#4a4a5a;letter-spacing:0.5px;">睡眠</div></div>
 </div>
-
-<div class="sec-title">当前主题</div>
-<div class="theme-option active">
-  <div class="theme-swatch ts-d">☀️</div>
-  <div class="theme-info"><div class="ti">Minimal Light</div><div class="td">亮色 · 极简白天模式</div></div>
-  <span style="margin-left:auto;color:#7170ff;">✓</span>
+<button style="width:100%;background:linear-gradient(135deg,#5e6ad2,#7170ff);border:none;border-radius:12px;padding:14px;color:white;font-size:15px;font-weight:600;font-family:inherit;flex-shrink:0;">🌙 准备睡觉</button>
+<button style="width:100%;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px;color:#d0d6e0;font-size:14px;font-family:inherit;margin-top:6px;flex-shrink:0;">☀️ 我起床了</button>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px;margin:10px 0;">
+<div style="display:flex;justify-content:space-between;font-size:10px;color:#4a4a5a;font-weight:600;letter-spacing:0.6px;margin-bottom:8px;"><span>昨晚</span><span style="color:#7170ff;">详情 →</span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);"><span style="width:6px;height:6px;border-radius:50%;background:#7170ff;"></span><div style="flex:1;"><span style="font-size:12px;">就寝</span><span style="font-size:10px;color:#4a4a5a;margin-left:6px;">23:15</span></div><span style="font-size:11px;color:#10b981;">✅</span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.03);"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span><div style="flex:1;"><span style="font-size:12px;">起床</span><span style="font-size:10px;color:#4a4a5a;margin-left:6px;">07:30</span></div><span style="font-size:11px;color:#10b981;">✅</span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:5px 0;"><span style="width:6px;height:6px;border-radius:50%;background:#fbbf24;"></span><div style="flex:1;"><span style="font-size:12px;">宵禁</span><span style="font-size:10px;color:#4a4a5a;margin-left:6px;">达标</span></div><span style="font-size:11px;color:#10b981;">✅</span></div>
 </div>
-<div class="theme-option">
-  <div class="theme-swatch ts-a">🌙</div>
-  <div class="theme-info"><div class="ti">Dark Precision</div><div class="td">深色 · 夜晚默认主题</div></div>
+<div class="ad-banner-row"><span class="ad-badge">广告</span><span style="font-size:18px;">🛏️</span><div style="flex:1;font-size:11px;color:#8a8f98;">泰国乳胶枕 · 限时 7 折</div><span class="ad-cta">了解</span></div>
 </div>
-<div class="theme-option">
-  <div class="theme-swatch ts-b">🔮</div>
-  <div class="theme-info"><div class="ti">Warm Night</div><div class="td">深色 · 暖紫助眠风</div></div>
-</div>
-<div class="theme-option">
-  <div class="theme-swatch ts-c">🌿</div>
-  <div class="theme-info"><div class="ti">Nature Calm</div><div class="td">深色 · 绿植自然风</div></div>
-</div>
-
-<div class="sec-title" style="margin-top:16px;">⚡ 自动切换</div>
-<div class="toggle-row">
-  <div class="toggle-info"><div class="tl">日夜自动切换</div><div class="td">白天用亮色 · 夜晚用深色</div></div>
-  <div class="toggle-switch on"></div>
-</div>
-<div class="toggle-row" style="border:none;">
-  <div class="toggle-info"><div class="tl">日出时刻</div><div class="td">自动切换为亮色主题</div></div>
-  <div style="font-size:13px;color:#8a8f98;">6:00</div>
-</div>
-<div class="toggle-row" style="border:none;">
-  <div class="toggle-info"><div class="tl">日落时刻</div><div class="td">自动切换为深色主题</div></div>
-  <div style="font-size:13px;color:#8a8f98;">18:00</div>
-</div>
-
-<div class="sec-title" style="margin-top:16px;">🖼️ 自定义背景</div>
-<div class="upload-area">
-  <div class="up-icon">🖼️</div>
-  <div class="up-text">点击上传照片作为背景</div>
-  <div class="up-hint">支持 JPG / PNG / WebP · 建议使用深色或模糊效果的照片</div>
-</div>
-<div class="toggle-row">
-  <div class="toggle-info"><div class="tl">背景模糊</div><div class="td">让文字在图片上更清晰</div></div>
-  <div class="toggle-switch on"></div>
-</div>
-<div class="toggle-row" style="border:none;">
-  <div class="toggle-info"><div class="tl">暗色遮罩</div><div class="td">自动叠加半透明黑色层</div></div>
-  <div class="toggle-switch on"></div>
-</div>
-
+<div class="nav-bar"><div class="nav-item active"><div class="ni">🌙</div>首页</div><div class="nav-item"><div class="ni">📊</div>报告</div><div class="nav-item"><div class="ni">🏆</div>成就</div><div class="nav-item"><div class="ni">⚙️</div>设置</div></div>
 </div></div></div>
 
-<!-- Custom Background Demo -->
-<div class="phone"><div class="phone-label">📱 自定义背景效果预览</div>
-<div class="phone-inner" style="border-radius:44px;overflow:hidden;position:relative;">
-<div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400') center/cover;filter:blur(2px) brightness(0.4);"></div>
-<div style="position:relative;height:100%;padding:14px 24px 4px;z-index:1;">
-<div style="display:flex;justify-content:space-between;font-size:13px;font-weight:500;color:rgba(255,255,255,0.9);">23:15<span>📶 🔋</span></div>
-<div style="padding:20px 0 0;">
-<div style="font-size:24px;font-weight:600;color:white;margin-bottom:2px;">🌙 晚上好</div>
-<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;">你上传的照片作为了背景</div>
-<div style="display:flex;gap:6px;margin-bottom:16px;">
-<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
-<div style="font-size:22px;font-weight:700;color:white;">3</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">连续</div>
+<!-- 2. Bedtime -->
+<div>
+<div class="phone-label">🌙 睡前确认 + 备注</div>
+<div class="phone">
+<div class="phone-inner theme-a">
+<div class="sb"><span>23:15</span><span>🔋</span></div>
+<div class="ct">
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;text-align:center;margin:8px 0;">
+<div style="font-size:38px;margin-bottom:6px;">🌙</div>
+<div style="font-size:18px;font-weight:600;margin-bottom:2px;">准备入睡</div>
+<div style="font-size:12px;color:#62666d;margin-bottom:12px;line-height:1.4;">手机将进入宵禁检测模式<br>检测到使用会记录但不打扰你</div>
+<button style="width:100%;background:linear-gradient(135deg,#5e6ad2,#7170ff);border:none;border-radius:10px;padding:12px;color:white;font-size:14px;font-weight:600;font-family:inherit;">🌙 确认睡觉</button>
+<button style="width:100%;background:transparent;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px;color:#4a4a5a;font-size:13px;font-family:inherit;margin-top:6px;">再刷 15 分钟</button>
 </div>
-<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
-<div style="font-size:22px;font-weight:700;color:white;">67%</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">宵禁率</div>
+<div class="note-input">
+<div class="note-label">📝 备注（选填）</div>
+<div class="note-field">加班、应酬、失眠、喝咖啡了...</div>
+<div style="font-size:9px;color:#4a4a5a;margin-top:4px;">填写后分析时会考虑 · 不加倍惩罚</div>
 </div>
-<div style="flex:1;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:12px;text-align:center;">
-<div style="font-size:22px;font-weight:700;color:white;">7h</div><div style="font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-top:3px;">睡眠</div>
+<div style="background:rgba(113,112,255,0.06);border:1px solid rgba(113,112,255,0.08);border-radius:8px;padding:8px 10px;margin:6px 0;font-size:11px;color:#d0d6e0;flex-shrink:0;">💡 连续 3 天 23:30 前入睡 · 今晚加油</div>
 </div>
+<div class="nav-bar"><div class="nav-item active"><div class="ni">🌙</div>首页</div><div class="nav-item"><div class="ni">📊</div>报告</div><div class="nav-item"><div class="ni">🏆</div>成就</div><div class="nav-item"><div class="ni">⚙️</div>设置</div></div>
+</div></div></div>
+
+<!-- 3. Report -->
+<div>
+<div class="phone-label">☀️ 晨间报告 + 备注显示</div>
+<div class="phone">
+<div class="phone-inner theme-a">
+<div class="sb"><span>07:30</span><span>🔋</span></div>
+<div class="ct">
+<div style="text-align:center;padding:8px 0;"><span style="font-size:32px;">☀️</span><div style="font-size:20px;font-weight:700;">早上好</div></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:#62666d;">🌙 就寝</span><span style="font-size:12px;font-weight:600;">23:15</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:#62666d;">☀️ 起床</span><span style="font-size:12px;font-weight:600;">07:30</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:#62666d;">💤 睡眠</span><span style="font-size:12px;font-weight:600;">7h 38m</span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);"><span style="font-size:12px;color:#62666d;">📵 宵禁</span><span style="font-size:12px;font-weight:600;color:#10b981;">✅ 达标</span></div>
+<div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.08);border-radius:8px;padding:8px 10px;margin:8px 0;font-size:11px;color:#fbbf24;display:flex;align-items:center;gap:6px;"><span>📝</span>备注：昨晚加班到 10 点，回来晚了</div>
+<div style="font-size:10px;color:#4a4a5a;font-weight:600;letter-spacing:0.6px;margin:6px 0;">📱 睡前 App 使用</div>
+<div style="display:flex;align-items:center;gap:8px;padding:5px 0;"><span style="width:50px;font-size:10px;color:#62666d;">抖音</span><div style="flex:1;height:14px;background:rgba(255,255,255,0.03);border-radius:7px;overflow:hidden;"><div style="width:70%;height:100%;background:linear-gradient(90deg,#5e6ad2,#7170ff);border-radius:7px;"></div></div><span style="width:35px;text-align:right;font-size:10px;">1h20m</span></div>
+<div style="display:flex;align-items:center;gap:8px;padding:5px 0;"><span style="width:50px;font-size:10px;color:#62666d;">微信</span><div style="flex:1;height:14px;background:rgba(255,255,255,0.03);border-radius:7px;overflow:hidden;"><div style="width:40%;height:100%;background:linear-gradient(90deg,#5e6ad2,#7170ff);border-radius:7px;"></div></div><span style="width:35px;text-align:right;font-size:10px;">45m</span></div>
+<div style="flex:1;"></div>
+<div class="ad-banner-row"><span class="ad-badge">广告</span><span style="font-size:18px;">🛏️</span><div style="flex:1;font-size:11px;color:#8a8f98;">泰国乳胶枕 · 每晚好眠</div><span class="ad-cta">去看看</span></div>
 </div>
-<button style="width:100%;background:linear-gradient(135deg,#5e6ad2,#7170ff);border:none;border-radius:14px;padding:18px;color:white;font-size:16px;font-weight:600;">🌙 准备睡觉</button>
+<div class="nav-bar"><div class="nav-item"><div class="ni">🌙</div>首页</div><div class="nav-item active"><div class="ni">📊</div>报告</div><div class="nav-item"><div class="ni">🏆</div>成就</div><div class="nav-item"><div class="ni">⚙️</div>设置</div></div>
+</div></div></div>
+
+<!-- 4. Calendar -->
+<div>
+<div class="phone-label">📅 日历</div>
+<div class="phone">
+<div class="phone-inner theme-a">
+<div class="sb"><span>07:30</span><span>🔋</span></div>
+<div class="ct">
+<div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:14px;font-weight:600;">2026 年 7 月</span><span style="color:#4a4a5a;font-size:14px;">→</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;">
+<span style="font-size:8px;color:#4a4a5a;padding:4px 0;">一</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">二</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">三</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">四</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">五</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">六</span><span style="font-size:8px;color:#4a4a5a;padding:4px 0;">日</span>
+<div style="opacity:0.2;font-size:11px;">29</div><div style="opacity:0.2;font-size:11px;">30</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">1</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">2</div>
+<div style="font-size:11px;background:rgba(251,191,36,0.1);border-radius:50%;color:#fbbf24;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">3</div>
+<div style="font-size:11px;background:rgba(248,113,113,0.1);border-radius:50%;color:#f87171;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">4</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">5</div>
 </div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;margin-top:3px;">
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">6</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">7</div>
+<div style="font-size:11px;background:rgba(251,191,36,0.1);border-radius:50%;color:#fbbf24;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">8</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">9</div>
+<div style="font-size:11px;background:rgba(248,113,113,0.1);border-radius:50%;color:#f87171;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">10</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">11</div>
+<div style="font-size:11px;background:rgba(16,185,129,0.12);border-radius:50%;color:#10b981;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">12</div>
 </div>
+<div style="display:flex;gap:10px;font-size:9px;color:#4a4a5a;justify-content:center;padding:8px 0;"><span>🟢 达标</span><span>🟡 有备注</span><span>🔴 熬夜</span></div>
+<div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.08);border-radius:8px;padding:6px 10px;margin:4px 0;display:flex;align-items:center;gap:6px;font-size:10px;color:#fbbf24;"><span>📝</span>3 日加班 · 4 日应酬</div>
+<div class="ad-banner-row"><span class="ad-badge">广告</span><span style="font-size:18px;">📚</span><div style="flex:1;font-size:11px;color:#8a8f98;">得到 · 每晚听本书入眠</div><span class="ad-cta">打开</span></div>
 </div>
-<div style="text-align:center;font-size:10px;color:#62666d;margin-top:6px;">照片来自 Unsplash · 自动叠加暗色遮罩 + 模糊效果</div>
+<div class="nav-bar"><div class="nav-item"><div class="ni">🌙</div>首页</div><div class="nav-item active"><div class="ni">📊</div>报告</div><div class="nav-item"><div class="ni">🏆</div>成就</div><div class="nav-item"><div class="ni">⚙️</div>设置</div></div>
+</div></div></div>
+
+<!-- 5. Achievements -->
+<div>
+<div class="phone-label">🏆 成就</div>
+<div class="phone">
+<div class="phone-inner theme-a">
+<div class="sb"><span>07:30</span><span>🔋</span></div>
+<div class="ct">
+<div style="font-size:16px;font-weight:600;padding:6px 0;">🏆 成就</div>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:14px;text-align:center;margin:6px 0;">
+<div style="font-size:48px;">🌱</div>
+<div style="font-size:12px;color:#62666d;margin:2px 0;">种子发芽中</div>
+<div style="height:4px;background:rgba(255,255,255,0.04);border-radius:2px;margin:6px 0;overflow:hidden;"><div style="width:30%;height:100%;background:linear-gradient(90deg,#7170ff,#a29bfe);border-radius:2px;"></div></div>
+<div style="font-size:9px;color:#4a4a5a;">连续 3/7 天 → 🌿 小树苗</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+<div style="text-align:center;padding:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;"><div style="font-size:20px;">🔥</div><div style="font-size:8px;color:#4a4a5a;">连续 3 天</div></div>
+<div style="text-align:center;padding:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;opacity:0.35;"><div style="font-size:20px;filter:grayscale(1);">🌿</div><div style="font-size:8px;color:#4a4a5a;">连续 7 天</div></div>
+<div style="text-align:center;padding:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:10px;opacity:0.35;"><div style="font-size:20px;filter:grayscale(1);">🌳</div><div style="font-size:8px;color:#4a4a5a;">连续 14 天</div></div>
+</div>
+<div style="flex:1;"></div>
+<div class="ad-banner-row"><span class="ad-badge">广告</span><span style="font-size:18px;">🎬</span><div style="flex:1;font-size:11px;color:#8a8f98;">夜间助眠音乐 · 免费试听</div><span class="ad-cta">播放</span></div>
+</div>
+<div class="nav-bar"><div class="nav-item"><div class="ni">🌙</div>首页</div><div class="nav-item"><div class="ni">📊</div>报告</div><div class="nav-item active"><div class="ni">🏆</div>成就</div><div class="nav-item"><div class="ni">⚙️</div>设置</div></div>
+</div></div></div>
+
+<!-- 6. Settings -->
+<div>
+<div class="phone-label">⚙️ 设置</div>
+<div class="phone">
+<div class="phone-inner theme-a">
+<div class="sb"><span>12:00</span><span>🔋</span></div>
+<div class="ct">
+<div style="display:flex;align-items:center;gap:6px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);margin-bottom:6px;"><span style="font-size:14px;">←</span><span style="font-size:15px;font-weight:600;">主题与外观</span></div>
+<div style="font-size:10px;color:#4a4a5a;font-weight:600;letter-spacing:0.6px;">当前主题</div>
+<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(113,112,255,0.06);border:1px solid rgba(113,112,255,0.12);border-radius:8px;margin:4px 0;"><span style="font-size:16px;">☀️</span><span style="font-size:12px;flex:1;">Minimal Light（白天）</span><span style="color:#7170ff;font-size:11px;">✓</span></div>
+<div style="display:flex;gap:6px;margin:4px 0;">
+<div style="flex:1;padding:6px;text-align:center;border:1px solid rgba(255,255,255,0.04);border-radius:8px;cursor:pointer;"><span style="font-size:18px;">🌙</span><div style="font-size:7px;color:#4a4a5a;">暗色</div></div>
+<div style="flex:1;padding:6px;text-align:center;border:1px solid rgba(255,255,255,0.04);border-radius:8px;cursor:pointer;"><span style="font-size:18px;">🔮</span><div style="font-size:7px;color:#4a4a5a;">暖紫</div></div>
+<div style="flex:1;padding:6px;text-align:center;border:1px solid rgba(255,255,255,0.04);border-radius:8px;cursor:pointer;"><span style="font-size:18px;">🌿</span><div style="font-size:7px;color:#4a4a5a;">自然</div></div>
+<div style="flex:1;padding:6px;text-align:center;border:2px solid #7170ff;border-radius:8px;cursor:pointer;"><span style="font-size:18px;">☀️</span><div style="font-size:7px;color:#7170ff;">亮色</div></div>
+</div>
+<div style="background:rgba(255,255,255,0.02);border:1px dashed rgba(113,112,255,0.12);border-radius:10px;padding:12px;text-align:center;margin:6px 0;"><div style="font-size:22px;">🖼️</div><div style="font-size:11px;color:#62666d;">点击上传照片作为背景</div><div style="font-size:8px;color:#4a4a5a;margin-top:2px;">自动叠加暗色遮罩 + 模糊</div></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);"><span style="font-size:11px;color:#d0d6e0;">日夜自动切换</span><span style="width:34px;height:18px;background:#7170ff;border-radius:9px;position:relative;"><span style="position:absolute;top:2px;right:2px;width:14px;height:14px;background:white;border-radius:50%;"></span></span></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0;font-size:10px;color:#4a4a5a;"><span>白天（6:00-18:00）亮色</span><span>夜晚（18:00-6:00）深色</span></div>
+</div>
+<div class="nav-bar"><div class="nav-item"><div class="ni">🌙</div>首页</div><div class="nav-item"><div class="ni">📊</div>报告</div><div class="nav-item"><div class="ni">🏆</div>成就</div><div class="nav-item active"><div class="ni">⚙️</div>设置</div></div>
+</div></div></div>
+
+</div>
+
+<!-- H2: 广告类型说明 -->
+<div class="section-title">📢 广告位 3 种形式</div>
+<div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
+
+<div style="flex:1;min-width:260px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:8px;">① Banner 横条广告</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:12px;">晨间报告底部、设置页底部。占一行，不干扰操作。</div>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;position:relative;">
+<span class="ad-badge" style="position:absolute;top:2px;right:4px;font-size:7px;color:#4a4a5a;">广告</span>
+<span style="font-size:16px;">🛏️</span>
+<span style="flex:1;font-size:11px;color:#8a8f98;">泰国乳胶枕 · 限时优惠</span>
+<span style="font-size:10px;color:#7170ff;font-weight:600;">了解</span>
 </div>
 </div>
 
-<!-- Ad Placements -->
-<div class="section-title">📢 广告位示意 <small>3 种形式 · 不干扰核心操作 · 睡前流程不放广告</small></div>
-
-<div style="display:flex;gap:24px;flex-wrap:wrap;">
-
-<div style="flex:1;min-width:280px;">
-<div class="section-title" style="font-size:15px;margin:0 0 12px;">① 晨间报告底部 Banner</div>
-<div class="phone" style="width:340px;">
-<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
-<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">☀️ 早上好</div>
-<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">昨晚睡眠 7h38m · 宵禁达标 ✅</div>
-<div class="ad-banner" style="margin:8px 0;">
-  <span class="ad-badge">广告</span>
-  <div class="ad-img">🛏️</div>
-  <div class="ad-title">泰国乳胶枕 · 限时 7 折</div>
-  <div class="ad-desc">你的睡眠值得更好的枕头</div>
-  <div class="ad-btn">了解详情</div>
-</div>
-</div>
+<div style="flex:1;min-width:260px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:8px;">② 视频/音频广告</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:12px;">成就页底部、报告底部。展示型广告，非激励，用户不需要互动即可跳过。</div>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;position:relative;">
+<span class="ad-badge" style="position:absolute;top:2px;right:4px;font-size:7px;color:#4a4a5a;">广告</span>
+<span style="font-size:16px;">🎬</span>
+<span style="flex:1;font-size:11px;color:#8a8f98;">夜间助眠音乐 · 免费试听</span>
+<span style="font-size:10px;color:#7170ff;font-weight:600;">播放</span>
 </div>
 </div>
 
-<div style="flex:1;min-width:280px;">
-<div class="section-title" style="font-size:15px;margin:0 0 12px;">② 成就页激励视频</div>
-<div class="phone" style="width:340px;">
-<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
-<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">🏆 成就</div>
-<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">看广告解锁新主题</div>
-<div class="ad-video">
-  <span class="ad-badge">广告</span>
-  <div class="ad-icon">🎬</div>
-  <div class="ad-title">看视频解锁「极光」主题</div>
-  <div class="ad-desc">30秒后即可获得专属夜间主题</div>
-  <div class="ad-btn">🎬 观看广告解锁</div>
+<div style="flex:1;min-width:260px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:8px;">③ 原生信息流广告</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:12px;">嵌入列表/卡片流中，外观与普通内容一致，只标注"广告"小字区分。出现在日历页、周报等数据流中。</div>
+<div style="background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.05);padding:8px 0;display:flex;align-items:center;gap:8px;position:relative;">
+<span class="ad-badge" style="position:absolute;top:0;right:0;font-size:7px;color:#4a4a5a;">广告</span>
+<span style="font-size:16px;">📚</span>
+<span style="flex:1;font-size:11px;color:#8a8f98;">得到 App · 每晚听本书</span>
+<span style="font-size:10px;color:#7170ff;font-weight:600;">打开</span>
 </div>
-</div>
-</div>
-</div>
-
-<div style="flex:1;min-width:280px;">
-<div class="section-title" style="font-size:15px;margin:0 0 12px;">③ 首页/报告原生卡片</div>
-<div class="phone" style="width:340px;">
-<div class="phone-inner" style="background:#08090a;padding:4px 20px 0;height:auto;min-height:auto;">
-<div style="padding:8px 0;color:#f7f8f8;font-size:16px;font-weight:600;">📊 本周报告</div>
-<div style="color:#8a8f98;font-size:13px;margin-bottom:12px;">你的睡眠趋势</div>
-<div class="ad-card">
-  <span class="ad-badge">广告</span>
-  <div class="ad-icon">📚</div>
-  <div class="ad-info">
-    <div class="ad-title">得到 App · 每晚听本书</div>
-    <div class="ad-desc">放下手机，用听的方式入眠</div>
-  </div>
-  <div class="ad-cta">打开</div>
-</div>
-</div>
-</div>
+<div style="font-size:9px;color:#4a4a5a;margin-top:6px;">与列表中的正常条目外观一致</div>
 </div>
 
 </div>
 
-<!-- Bottom nav -->
-<div style="margin-top:40px;padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,0.04);color:#62666d;font-size:12px;">
-<a href="https://test.justmoyu.xyz/early-sleep/" style="color:#7170ff;text-decoration:none;">← 返回设计稿总览</a> · 
-<a href="https://test.justmoyu.xyz/early-sleep/001-dark-precision/" style="color:#7170ff;text-decoration:none;">方案 A</a> · 
-<a href="https://test.justmoyu.xyz/early-sleep/002-warm-night/" style="color:#7170ff;text-decoration:none;">方案 B</a> · 
-<a href="https://test.justmoyu.xyz/early-sleep/003-nature-calm/" style="color:#7170ff;text-decoration:none;">方案 C</a> · 
-<a href="https://test.justmoyu.xyz/early-sleep/004-minimal-light/" style="color:#7170ff;text-decoration:none;">方案 D</a>
+<!-- H3: 备注功能 -->
+<div class="section-title">📝 备注功能 · 分析时考虑上下文</div>
+<div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
+
+<div style="flex:1;min-width:280px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:6px;">睡觉前</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:10px;">点"准备睡觉"时可选填写备注</div>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;">
+<div style="font-size:10px;color:#4a4a5a;margin-bottom:4px;">📝 今晚有什么特殊情况？</div>
+<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:5px;padding:8px 10px;font-size:11px;color:#4a4a5a;">加班到 10 点，刚到家...</div>
+</div>
+</div>
+
+<div style="flex:1;min-width:280px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:6px;">分析时</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:10px;">系统如何处理备注</div>
+<div style="display:flex;flex-direction:column;gap:6px;">
+<div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.08);border-radius:8px;padding:8px 10px;font-size:11px;color:#10b981;">✅ 连续天数不断 · 有备注的晚睡不计入"熬夜"</div>
+<div style="background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.08);border-radius:8px;padding:8px 10px;font-size:11px;color:#10b981;">✅ 宵禁统计分析时，可选择"排除备注日"</div>
+<div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.08);border-radius:8px;padding:8px 10px;font-size:11px;color:#fbbf24;">🟡 仍然记录实际数据，但标签为"有备注"</div>
+<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:8px 10px;font-size:11px;color:#4a4a5a;">📊 周报会显示："本周 3 天有备注（加班/应酬）"</div>
+</div>
+</div>
+
+<div style="flex:1;min-width:280px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;">
+<div style="font-size:14px;font-weight:600;margin-bottom:6px;">日历上</div>
+<div style="font-size:11px;color:#62666d;margin-bottom:10px;">颜色区分显示</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:10px;">
+<span style="color:#4a4a5a;font-size:8px;">一</span><span style="color:#4a4a5a;font-size:8px;">二</span><span style="color:#4a4a5a;font-size:8px;">三</span><span style="color:#4a4a5a;font-size:8px;">四</span><span style="color:#4a4a5a;font-size:8px;">五</span><span style="color:#4a4a5a;font-size:8px;">六</span><span style="color:#4a4a5a;font-size:8px;">日</span>
+<div style="background:rgba(16,185,129,0.12);color:#10b981;border-radius:50%;">1</div>
+<div style="background:rgba(16,185,129,0.12);color:#10b981;border-radius:50%;">2</div>
+<div style="background:rgba(251,191,36,0.12);color:#fbbf24;border-radius:50%;">3</div>
+<div style="background:rgba(248,113,113,0.12);color:#f87171;border-radius:50%;">4</div>
+<div style="background:rgba(16,185,129,0.12);color:#10b981;border-radius:50%;">5</div>
+<div style="background:rgba(16,185,129,0.12);color:#10b981;border-radius:50%;">6</div>
+<div style="background:rgba(16,185,129,0.12);color:#10b981;border-radius:50%;">7</div>
+</div>
+<div style="display:flex;gap:8px;font-size:9px;color:#4a4a5a;justify-content:center;margin-top:6px;">
+<span>🟢 达标</span>
+<span style="color:#fbbf24;">🟡 有备注</span>
+<span>🔴 熬夜</span>
+</div>
 </div>
 
 </div>
+
+<div style="text-align:center;margin-top:40px;padding:20px;border-top:1px solid rgba(255,255,255,0.04);color:#4a4a5a;font-size:11px;">
+<a href="https://test.justmoyu.xyz/early-sleep/001-dark-precision/" style="color:#7170ff;">方案 A</a> ·
+<a href="https://test.justmoyu.xyz/early-sleep/002-warm-night/" style="color:#7170ff;">方案 B</a> ·
+<a href="https://test.justmoyu.xyz/early-sleep/003-nature-calm/" style="color:#7170ff;">方案 C</a> ·
+<a href="https://test.justmoyu.xyz/early-sleep/004-minimal-light/" style="color:#7170ff;">方案 D</a>
+</div>
+
 </body>
 </html>
