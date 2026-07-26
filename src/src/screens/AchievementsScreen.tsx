@@ -1,14 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
+import { useThemedStyles } from '../theme/useThemedStyles';
+import { getStreak } from '../data/database';
 
 const badges = [
-  { icon: '🔥', name: '连续3天', unlocked: true },
-  { icon: '🌿', name: '连续7天', unlocked: false },
-  { icon: '🌳', name: '连续14天', unlocked: false },
-  { icon: '📵', name: '宵禁铁壁', unlocked: true },
-  { icon: '💤', name: '黄金8h', unlocked: false },
-  { icon: '👑', name: '百日筑基', unlocked: false },
+  { icon: '🔥', name: '连续3天', min: 3 },
+  { icon: '🌿', name: '连续7天', min: 7 },
+  { icon: '🌳', name: '连续14天', min: 14 },
+  { icon: '📵', name: '宵禁铁壁', min: 7 },
+  { icon: '💤', name: '黄金8h', min: 14 },
+  { icon: '👑', name: '百日筑基', min: 100 },
 ];
 
 const companionEmoji = (type: string, stage: number) => {
@@ -25,44 +27,65 @@ const companionEmoji = (type: string, stage: number) => {
   return stages[Math.min(stage, stages.length - 1)];
 };
 
+const stageNames = ['种子发芽中', '茁壮成长', '郁郁葱葱', '开花结果', '完美形态'];
+
 export default function AchievementsScreen() {
   const { theme } = useTheme();
+  const s = useThemedStyles((t) => ({
+    container: { flex: 1, backgroundColor: t.theme.colors.background },
+    scroll: { padding: 20, paddingBottom: 80 },
+    title: { fontSize: 18, fontWeight: '600', color: t.theme.colors.text, marginBottom: 16 },
+    companionCard: { borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 20, backgroundColor: t.theme.colors.surface },
+    companionEmoji: { fontSize: 48 },
+    companionLabel: { fontSize: 13, color: t.theme.colors.textSecondary, marginVertical: 6 },
+    progressBar: { height: 4, backgroundColor: t.theme.colors.surfaceBorder, borderRadius: 2, width: '100%', overflow: 'hidden', marginVertical: 6 },
+    progressFill: { height: '100%', borderRadius: 2, backgroundColor: t.theme.colors.primary },
+    progressLabel: { fontSize: 10, color: t.theme.colors.textSecondary },
+    sectionTitle: { fontSize: 11, color: t.theme.colors.textSecondary, fontWeight: '600', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
+    badgeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
+    badgeItem: { width: '30%', alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, backgroundColor: t.theme.colors.surface, borderColor: t.theme.colors.surfaceBorder },
+    badgeIcon: { fontSize: 24 },
+    badgeName: { fontSize: 9, color: t.theme.colors.textSecondary, textAlign: 'center', marginTop: 4 },
+    ad: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8 },
+    adBadge: { fontSize: 7, color: t.theme.colors.textSecondary },
+    adText: { flex: 1, fontSize: 11, color: t.theme.colors.textSecondary },
+    adCta: { fontSize: 10, color: t.theme.colors.primary, fontWeight: '600' },
+  }));
+
+  const [streak, setStreak] = useState({ current: 0, longest: 0, total: 0, curfewRate: 0 });
+  const loadData = useCallback(async () => { setStreak(await getStreak()); }, []);
+  useEffect(() => { loadData(); }, [loadData]);
+
   const companionType = theme.companion.type;
-  const stage = theme.companion.currentStage;
+  const stage = Math.min(Math.floor(streak.current / 3), 4);
 
   return (
-    <View style={[s.container, { backgroundColor: theme.colors.background }]}>
+    <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={[s.title, { color: theme.colors.text }]}>🏆 成就</Text>
+        <Text style={s.title}>🏆 成就</Text>
 
-        {/* Companion */}
-        <View style={[s.companionCard, { backgroundColor: theme.colors.surface, borderColor: theme.colors.surfaceBorder }]}>
+        <View style={s.companionCard}>
           <Text style={s.companionEmoji}>{companionEmoji(companionType, stage)}</Text>
-          <Text style={[s.companionLabel, { color: theme.colors.textSecondary }]}>
-            {['种子发芽中', '茁壮成长', '郁郁葱葱', '开花结果', '完美形态'][stage] || '种子发芽中'}
-          </Text>
+          <Text style={s.companionLabel}>{stageNames[stage]}</Text>
           <View style={s.progressBar}>
-            <View style={[s.progressFill, { width: `${(stage / 4) * 100}%`, backgroundColor: theme.colors.primary }]} />
+            <View style={[s.progressFill, { width: `${Math.min((streak.current / (Math.max(stage, 1) * 3)) * 100, 100)}%` }]} />
           </View>
-          <Text style={s.progressLabel}>连续 {(stage + 1) * 3}/{(stage + 2) * 3} 天</Text>
+          <Text style={s.progressLabel}>连续 {streak.current} / {Math.max(stage + 1, 1) * 3} 天</Text>
         </View>
 
-        {/* Badges */}
         <Text style={s.sectionTitle}>徽章</Text>
         <View style={s.badgeGrid}>
-          {badges.map((b, i) => (
-            <View key={i} style={[s.badgeItem, {
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.surfaceBorder,
-              opacity: b.unlocked ? 1 : 0.35,
-            }]}>
-              <Text style={[s.badgeIcon, !b.unlocked && { opacity: 0.3 }]}>{b.icon}</Text>
-              <Text style={s.badgeName}>{b.name}</Text>
-            </View>
-          ))}
+          {badges.map((b, i) => {
+            const unlocked = streak.current >= b.min;
+            return (
+              <View key={i} style={[s.badgeItem, { opacity: unlocked ? 1 : 0.35 }]}>
+                <Text style={[s.badgeIcon, !unlocked && { opacity: 0.3 }]}>{b.icon}</Text>
+                <Text style={s.badgeName}>{b.name}</Text>
+              </View>
+            );
+          })}
         </View>
 
-        {/* Ad */}
         <View style={s.ad}>
           <Text style={s.adBadge}>广告</Text>
           <Text style={{ fontSize: 14 }}>🎬</Text>
@@ -73,30 +96,3 @@ export default function AchievementsScreen() {
     </View>
   );
 }
-
-const s = StyleSheet.create({
-  container: { flex: 1 },
-  scroll: { padding: 20, paddingBottom: 80 },
-  title: { fontSize: 18, fontWeight: '600', marginBottom: 16 },
-  companionCard: {
-    borderWidth: 1, borderRadius: 14, padding: 20, alignItems: 'center', marginBottom: 20,
-  },
-  companionEmoji: { fontSize: 48 },
-  companionLabel: { fontSize: 13, marginVertical: 6 },
-  progressBar: { height: 4, backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 2, width: '100%', overflow: 'hidden', marginVertical: 6 },
-  progressFill: { height: '100%', borderRadius: 2 },
-  progressLabel: { fontSize: 10, color: '#4a4a5a' },
-  sectionTitle: { fontSize: 11, color: '#4a4a5a', fontWeight: '600', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
-  badgeGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 20 },
-  badgeItem: { width: '30%', alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, gap: 4 },
-  badgeIcon: { fontSize: 24 },
-  badgeName: { fontSize: 9, color: '#4a4a5a', textAlign: 'center' },
-  ad: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.02)',
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)', borderRadius: 10,
-    padding: 12, gap: 8,
-  },
-  adBadge: { fontSize: 7, color: '#4a4a5a' },
-  adText: { flex: 1, fontSize: 11, color: '#8a8f98' },
-  adCta: { fontSize: 10, color: '#7170ff', fontWeight: '600' },
-});
