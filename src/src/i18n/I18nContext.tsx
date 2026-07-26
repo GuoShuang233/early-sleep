@@ -16,8 +16,13 @@ const STORAGE_KEY = '@earlysleep_lang';
 
 function getSystemLang(): Lang {
   // @ts-ignore - RN has this
-  const locale = (global as any).nativeExtensions?.locale || 'en';
+  const raw = (global as any).nativeExtensions?.locale || 'en';
+  const locale = String(raw);
   const code = locale.slice(0, 2);
+  // Check for Traditional Chinese
+  const full = locale.slice(0, 5).toLowerCase();
+  if (full.startsWith('zh-hk') || full.startsWith('zh-tw') || full.startsWith('zh-mo')) return 'zh-Hant';
+  if (code === 'zh') return 'zh';
   return SUPPORTED_LANGS.find((l) => l.code === code)?.code || 'en';
 }
 

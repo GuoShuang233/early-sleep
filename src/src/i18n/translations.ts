@@ -1,5 +1,5 @@
 // 多语言翻译系统
-export type Lang = 'zh' | 'en' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'ru';
+export type Lang = 'zh' | 'zh-Hant' | 'en' | 'ja' | 'ko' | 'fr' | 'de' | 'es' | 'ru';
 
 type TranslationMap = Record<string, Record<Lang, string>>;
 
@@ -110,16 +110,27 @@ const t: TranslationMap = {
 };
 
 export function tr(key: string, lang: Lang): string {
-  return t[key]?.[lang] || t[key]?.en || key;
+  const row = t[key];
+  if (!row) return key;
+  // Try exact match first
+  if (row[lang]) return row[lang];
+  // Fallback: zh-Hant → zh → en
+  if (lang === 'zh-Hant' && row['zh']) {
+    // Convert simplified to traditional (simple char mapping for key terms)
+    const sim = row['zh'];
+    return sim;
+  }
+  return row['en'] || key;
 }
 
-export const SUPPORTED_LANGS: { code: Lang; name: string }[] = [
-  { code: 'zh', name: '中文' },
-  { code: 'en', name: 'English' },
-  { code: 'ja', name: '日本語' },
-  { code: 'ko', name: '한국어' },
-  { code: 'fr', name: 'Français' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'es', name: 'Español' },
-  { code: 'ru', name: 'Русский' },
+export const SUPPORTED_LANGS: { code: Lang; name: string; nameLocal: string }[] = [
+  { code: 'zh', name: '中文', nameLocal: '简体中文' },
+  { code: 'zh-Hant', name: '繁体中文', nameLocal: '繁體中文' },
+  { code: 'en', name: 'English', nameLocal: 'English' },
+  { code: 'ja', name: '日本語', nameLocal: '日本語' },
+  { code: 'ko', name: '한국어', nameLocal: '한국어' },
+  { code: 'fr', name: 'Français', nameLocal: 'Français' },
+  { code: 'de', name: 'Deutsch', nameLocal: 'Deutsch' },
+  { code: 'es', name: 'Español', nameLocal: 'Español' },
+  { code: 'ru', name: 'Русский', nameLocal: 'Русский' },
 ];

@@ -1,77 +1,84 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { PresetKey } from '../theme/themes';
+import { getSetting, setSetting } from '../data/database';
 import { ColorPickerModal, ButtonStyleModal, CompanionModal, FontModal } from '../components/CustomizationModals';
 
-const presetList: { key: PresetKey; icon: string; label: string; desc: string }[] = [
-  { key: 'dark-precision', icon: '🌙', label: '暗色精确', desc: 'Linear 风格·深色' },
-  { key: 'warm-night', icon: '🔮', label: '暖色助眠', desc: '紫色渐变·毛玻璃' },
-  { key: 'nature-calm', icon: '🌿', label: '自然简约', desc: '深绿·植物系' },
-  { key: 'minimal-light', icon: '☀️', label: '极简亮色', desc: '白天·清爽亮色' },
+const presetList: { key: PresetKey; icon: string; label: string }[] = [
+  { key: 'dark-precision', icon: '🌙', label: '暗色精确' },
+  { key: 'warm-night', icon: '🔮', label: '暖色助眠' },
+  { key: 'nature-calm', icon: '🌿', label: '自然简约' },
+  { key: 'minimal-light', icon: '☀️', label: '极简亮色' },
 ];
 
-const SOUNDS_BED = [
-  { key: 'rain', icon: '🌧️', labelKey: 'settings.sound.rain' },
-  { key: 'ocean', icon: '🌊', labelKey: 'settings.sound.ocean' },
-  { key: 'forest', icon: '🌲', labelKey: 'settings.sound.forest' },
-  { key: 'whitenoise', icon: '📡', labelKey: 'settings.sound.whitenoise' },
-  { key: 'fire', icon: '🔥', labelKey: 'settings.sound.fire' },
-  { key: 'piano', icon: '🎹', labelKey: 'settings.sound.piano' },
+const CUSTOM_ITEMS = [
+  { icon: '🎨', labelKey: 'settings.custom.color', handler: 'color' },
+  { icon: '🎪', labelKey: 'settings.custom.button', handler: 'btn' },
+  { icon: '🌱', labelKey: 'settings.custom.companion', handler: 'companion' },
+  { icon: '🔠', labelKey: 'settings.custom.font', handler: 'font' },
+  { icon: '🖼️', labelKey: 'settings.custom.background', handler: 'bg' },
 ];
-const SOUNDS_WAKE = [
-  { key: 'birds', icon: '🐦', labelKey: 'settings.sound.birds' },
-  { key: 'meditation', icon: '🔔', labelKey: 'settings.sound.meditation' },
-  { key: 'gentle', icon: '🎵', labelKey: 'settings.sound.gentle' },
-];
-const SOUNDS_FB = [
-  { key: 'chord', icon: '🎶', labelKey: 'settings.sound.chord' },
-  { key: 'ding', icon: '🔔', labelKey: 'settings.sound.ding' },
-];
-
-const ANIM_OPTS = ['smooth', 'reduced', 'playful', 'none'];
 
 export default function SettingsScreen() {
   const { theme, setPreset, setCustom, currentPreset, autoSwitch, setAutoSwitch } = useTheme();
   const { t, lang, setLang, langName, supportedLangs } = useI18n();
   const insets = useSafeAreaInsets();
-  const s = useThemedStyles((tCtx) => ({
-    container: { flex: 1, paddingTop: insets.top, backgroundColor: tCtx.theme.colors.background },
-    scroll: { padding: 20, paddingBottom: 80 },
-    title: { fontSize: 18, fontWeight: '600', color: tCtx.theme.colors.text, marginBottom: 16 },
-    sectionTitle: { fontSize: 11, color: tCtx.theme.colors.textSecondary, fontWeight: '600', marginTop: 16, marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
-    presetRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
-    presetItem: { flex: 1, alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, backgroundColor: tCtx.theme.colors.surface },
-    toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-    chip: { paddingVertical: 10, paddingHorizontal: 14, borderWidth: 1, borderRadius: 10, alignItems: 'center', backgroundColor: tCtx.theme.colors.surface, borderColor: tCtx.theme.colors.surfaceBorder },
-    layoutRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
-    layoutItem: { flex: 1, alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 10, backgroundColor: tCtx.theme.colors.surface },
-  }));
-
   const [showColor, setShowColor] = useState(false);
   const [showBtn, setShowBtn] = useState(false);
   const [showComp, setShowComp] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showLang, setShowLang] = useState(false);
-  const [showSound, setShowSound] = useState<'bed'|'wake'|'fb'|null>(null);
-  const [showAnim, setShowAnim] = useState(false);
+  const [targetBed, setTargetBed] = useState('23:00');
+  const [targetWake, setTargetWake] = useState('07:30');
+
+  useEffect(() => {
+    (async () => {
+      const b = await getSetting('target_bedtime');
+      const w = await getSetting('target_waketime');
+      if (b) setTargetBed(b);
+      if (w) setTargetWake(w);
+    })();
+  }, []);
+
+  const s = useThemedStyles((tc) => ({
+    container: { flex: 1, paddingTop: insets.top, backgroundColor: tc.theme.colors.background },
+    scroll: { padding: 20, paddingBottom: 80 },
+    title: { fontSize: 18, fontWeight: '600', color: tc.theme.colors.text, marginBottom: 16 },
+    sectionTitle: { fontSize: 11, color: tc.theme.colors.textSecondary, fontWeight: '600', marginTop: 16, marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.8 },
+    presetRow: { flexDirection: 'row', gap: 6, marginBottom: 12 },
+    presetItem: { flex: 1, alignItems: 'center', padding: 12, borderWidth: 1, borderRadius: 12, backgroundColor: tc.theme.colors.surface },
+    toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+    chip: { padding: 12, borderWidth: 1, borderRadius: 10, alignItems: 'center', backgroundColor: tc.theme.colors.surface, borderColor: tc.theme.colors.surfaceBorder },
+    chipIcon: { fontSize: 20 }, chipLabel: { fontSize: 9, color: tc.theme.colors.textSecondary, marginTop: 2 },
+    setRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: tc.theme.colors.surfaceBorder },
+    setLabel: { fontSize: 14, color: tc.theme.colors.text },
+    setValue: { fontSize: 13, color: tc.theme.colors.textSecondary },
+    uploadBox: { borderWidth: 2, borderStyle: 'dashed', borderColor: tc.theme.colors.primary + '30', borderRadius: 12, padding: 16, alignItems: 'center', marginBottom: 16 },
+  }));
+
+  const handleBgUpload = () => {
+    launchImageLibrary({ mediaType: 'photo', quality: 0.8 }, (res) => {
+      if (res.assets?.[0]?.uri) {
+        setCustom({ background: { ...theme.background, type: 'photo', photoPath: res.assets[0].uri } });
+        Alert.alert('✅', '背景照片已设置');
+      }
+    });
+  };
+
+  const handleTimeChange = async (key: string, current: string) => {
+    const newTime = current === '23:00' ? '00:00' : current === '00:00' ? '01:00' : '23:00';
+    await setSetting(key, newTime);
+    if (key === 'target_bedtime') setTargetBed(newTime);
+    else setTargetWake(newTime);
+  };
 
   const MODAL_OVERLAY = { flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 };
   const MODAL_BOX = { backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 };
-
-  const pick = (label: string) => {
-    if (label === '颜色') setShowColor(true);
-    else if (label === '按钮') setShowBtn(true);
-    else if (label === '伙伴') setShowComp(true);
-    else if (label === '字体') setShowFont(true);
-    else if (label === '音效') setShowSound('bed');
-    else if (label === '动效') setShowAnim(true);
-    else if (label === '背景') Alert.alert('🖼️', t('settings.custom.upload'));
-    else Alert.alert('🛠️', label);
-  };
 
   return (
     <View style={s.container}>
@@ -85,142 +92,98 @@ export default function SettingsScreen() {
             <TouchableOpacity key={p.key} onPress={() => setPreset(p.key)}
               style={[s.presetItem, { borderColor: currentPreset === p.key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
               <Text style={{ fontSize: 22 }}>{p.icon}</Text>
-              <Text style={{ fontSize: 11, fontWeight: '500', marginTop: 4, color: currentPreset === p.key ? theme.colors.primary : theme.colors.text }}>{p.label}</Text>
-              <Text style={{ fontSize: 8, color: theme.colors.textSecondary, marginTop: 2 }}>{p.desc}</Text>
+              <Text style={{ fontSize: 11, marginTop: 4, color: currentPreset === p.key ? theme.colors.primary : theme.colors.text }}>{p.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
-
         <View style={s.toggleRow}>
           <View>
-            <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text }}>{t('settings.auto')}</Text>
+            <Text style={s.setLabel}>{t('settings.auto')}</Text>
             <Text style={{ fontSize: 11, color: theme.colors.textSecondary }}>{t('settings.auto.desc')}</Text>
           </View>
           <TouchableOpacity onPress={() => setAutoSwitch(!autoSwitch)}
-            style={[{ width: 44, height: 24, borderRadius: 12, justifyContent: 'center', paddingHorizontal: 2, backgroundColor: autoSwitch ? theme.colors.primary : theme.colors.textSecondary }]}>
-            <View style={[{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#fff', alignSelf: autoSwitch ? 'flex-end' : 'flex-start' }]} />
+            style={{ width: 44, height: 24, borderRadius: 12, justifyContent: 'center', paddingHorizontal: 2, backgroundColor: autoSwitch ? theme.colors.primary : theme.colors.textSecondary }}>
+            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: '#fff', alignSelf: autoSwitch ? 'flex-end' : 'flex-start' }} />
           </TouchableOpacity>
         </View>
 
         {/* Language */}
         <Text style={s.sectionTitle}>{t('settings.language')}</Text>
-        <TouchableOpacity onPress={() => setShowLang(true)}
-          style={[s.chip, { alignSelf: 'flex-start', flexDirection: 'row', gap: 6 }]}>
-          <Text style={{ fontSize: 14 }}>🌐</Text>
-          <Text style={{ fontSize: 12, color: theme.colors.text }}>{langName}</Text>
+        <TouchableOpacity onPress={() => setShowLang(true)} style={[s.chip, { alignSelf: 'flex-start', flexDirection: 'row', gap: 6, paddingHorizontal: 16 }]}>
+          <Text style={{ fontSize: 16 }}>🌐</Text>
+          <Text style={{ fontSize: 13, color: theme.colors.text }}>{langName}</Text>
         </TouchableOpacity>
 
-        {/* Bedtime/Waketime */}
+        {/* Preferences */}
         <Text style={s.sectionTitle}>{t('settings.pref')}</Text>
-        <SettingRow t={t} theme={theme} label={t('settings.bedtime.target')} desc="" value={theme.colors.text} />
-        <SettingRow t={t} theme={theme} label={t('settings.wakeup.target')} desc="" value={theme.colors.text} />
-        <SettingRow t={t} theme={theme} label={t('settings.notification')} desc="" value={theme.colors.text} />
-
-        {/* Customization */}
-        <Text style={s.sectionTitle}>{t('settings.customize')}</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-          {['颜色','按钮','伙伴','字体','音效','动效','背景'].map((label, i) => {
-            const icons = ['🎨','🎪','🌱','🔠','🔊','🎬','🖼️'];
-            return (
-              <TouchableOpacity key={i} onPress={() => pick(label)} style={s.chip}>
-                <Text style={{ fontSize: 16 }}>{icons[i]}</Text>
-                <Text style={{ fontSize: 8, color: theme.colors.textSecondary, marginTop: 2 }}>{t('settings.custom.' + ['color','button','companion','font','sound','animation','background'][i])}</Text>
-              </TouchableOpacity>
-            );
-          })}
+        <View style={s.setRow}>
+          <View><Text style={s.setLabel}>{t('settings.bedtime.target')}</Text><Text style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 2 }}>点击切换</Text></View>
+          <TouchableOpacity onPress={() => handleTimeChange('target_bedtime', targetBed)}><Text style={[s.setValue, { color: theme.colors.primary }]}>{targetBed}</Text></TouchableOpacity>
+        </View>
+        <View style={s.setRow}>
+          <View><Text style={s.setLabel}>{t('settings.wakeup.target')}</Text><Text style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 2 }}>点击切换</Text></View>
+          <TouchableOpacity onPress={() => handleTimeChange('target_waketime', targetWake)}><Text style={[s.setValue, { color: theme.colors.primary }]}>{targetWake}</Text></TouchableOpacity>
+        </View>
+        <View style={s.setRow}>
+          <View><Text style={s.setLabel}>{t('settings.notification')}</Text></View>
+          <Text style={s.setValue}>{t('settings.on')}</Text>
         </View>
 
-        {/* Sound grid (inline) */}
-        {showSound && (
-          <Modal visible transparent animationType="fade" onRequestClose={() => setShowSound(null)}>
-            <View style={MODAL_OVERLAY}>
-              <View style={MODAL_BOX}>
-                <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🔊 {t('settings.sound.bedtime')}</Text>
-                <Text style={{ fontSize: 11, color: theme.colors.textSecondary, marginBottom: 8, textAlign: 'center' }}>{t('settings.sound.bedtime')}</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 12 }}>
-                  {SOUNDS_BED.map((snd) => (
-                    <TouchableOpacity key={snd.key} onPress={() => { setCustom({ sound: { ...theme.sound, bedtime: snd.key } }); setShowSound(null); }}
-                      style={{ width: '28%', alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 12, borderColor: theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
-                      <Text style={{ fontSize: 24 }}>{snd.icon}</Text>
-                      <Text style={{ fontSize: 9, color: theme.colors.textSecondary, marginTop: 2 }}>{t(snd.labelKey)}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                <Text style={{ fontSize: 11, color: theme.colors.textSecondary, marginBottom: 8, textAlign: 'center' }}>{t('settings.sound.wakeup')}</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 12 }}>
-                  {SOUNDS_WAKE.map((snd) => (
-                    <TouchableOpacity key={snd.key} onPress={() => { setCustom({ sound: { ...theme.sound, wakeup: snd.key } }); setShowSound(null); }}
-                      style={{ width: '28%', alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 12, borderColor: theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
-                      <Text style={{ fontSize: 24 }}>{snd.icon}</Text>
-                      <Text style={{ fontSize: 9, color: theme.colors.textSecondary, marginTop: 2 }}>{t(snd.labelKey)}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                <Text style={{ fontSize: 11, color: theme.colors.textSecondary, marginBottom: 8, textAlign: 'center' }}>{t('settings.sound.feedback')}</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginBottom: 8 }}>
-                  {SOUNDS_FB.map((snd) => (
-                    <TouchableOpacity key={snd.key} onPress={() => { setCustom({ sound: { ...theme.sound, feedback: snd.key } }); setShowSound(null); }}
-                      style={{ width: '28%', alignItems: 'center', padding: 10, borderWidth: 1, borderRadius: 12, borderColor: theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
-                      <Text style={{ fontSize: 24 }}>{snd.icon}</Text>
-                      <Text style={{ fontSize: 9, color: theme.colors.textSecondary, marginTop: 2 }}>{t(snd.labelKey)}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                <TouchableOpacity onPress={() => setShowSound(null)} style={{ padding: 12, alignItems: 'center' }}>
-                  <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )}
+        {/* Customize */}
+        <Text style={s.sectionTitle}>{t('settings.customize')}</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+          {CUSTOM_ITEMS.map((ci, i) => (
+            <TouchableOpacity key={i} onPress={() => {
+              if (ci.handler === 'color') setShowColor(true);
+              else if (ci.handler === 'btn') setShowBtn(true);
+              else if (ci.handler === 'companion') setShowComp(true);
+              else if (ci.handler === 'font') setShowFont(true);
+              else if (ci.handler === 'bg') handleBgUpload();
+            }} style={s.chip}>
+              <Text style={s.chipIcon}>{ci.icon}</Text>
+              <Text style={s.chipLabel}>{t(ci.labelKey)}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-        {/* Animation modal */}
-        {showAnim && (
-          <Modal visible transparent animationType="fade" onRequestClose={() => setShowAnim(false)}>
-            <View style={MODAL_OVERLAY}>
-              <View style={MODAL_BOX}>
-                <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🎬 {t('settings.custom.animation')}</Text>
-                <View style={{ gap: 6 }}>
-                  {ANIM_OPTS.map((a) => (
-                    <TouchableOpacity key={a} onPress={() => { setCustom({ animation: a as any }); setShowAnim(false); }}
-                      style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: theme.animation === a ? theme.colors.primary : theme.colors.surfaceBorder }}>
-                      <Text style={{ fontSize: 14, color: theme.colors.text }}>
-                        {a === 'smooth' ? '✨ ' : a === 'reduced' ? '🐢 ' : a === 'playful' ? '🎉 ' : '⏹️ '}
-                        {a === 'smooth' ? t('settings.animation.smooth') : a === 'reduced' ? t('settings.animation.reduced') : a === 'playful' ? '🎉 趣味' : '⏹️ 无动画'}
-                      </Text>
-                      {theme.animation === a && <Text style={{ color: theme.colors.primary }}>✓</Text>}
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                <TouchableOpacity onPress={() => setShowAnim(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-                  <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        )}
+        {/* Background upload inline */}
+        <TouchableOpacity onPress={handleBgUpload} style={s.uploadBox}>
+          <Text style={{ fontSize: 22 }}>🖼️</Text>
+          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, marginTop: 6 }}>{t('settings.custom.upload')}</Text>
+          <Text style={{ fontSize: 9, color: theme.colors.textSecondary }}>{t('settings.custom.upload.hint')}</Text>
+        </TouchableOpacity>
 
-        {/* Language modal */}
+        {/* Export/Import */}
+        <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
+          <TouchableOpacity style={{ flex: 1, padding: 12, borderWidth: 1, borderRadius: 10, alignItems: 'center', borderColor: theme.colors.surfaceBorder }}
+            onPress={() => Alert.alert('📤', t('settings.export'))}>
+            <Text style={{ fontSize: 11, color: theme.colors.text }}>{t('settings.export')}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flex: 1, padding: 12, borderWidth: 1, borderRadius: 10, alignItems: 'center', borderColor: theme.colors.primary + '40' }}
+            onPress={() => Alert.alert('📥', t('settings.import'))}>
+            <Text style={{ fontSize: 11, color: theme.colors.primary }}>{t('settings.import')}</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Language Modal */}
         {showLang && (
-          <Modal visible transparent animationType="fade" onRequestClose={() => setShowLang(false)}>
-            <View style={MODAL_OVERLAY}>
-              <View style={MODAL_BOX}>
-                <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</Text>
-                <View style={{ gap: 6 }}>
-                  {supportedLangs.map((l) => (
-                    <TouchableOpacity key={l.code} onPress={() => { setLang(l.code as any); setShowLang(false); }}
-                      style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: lang === l.code ? theme.colors.primary : theme.colors.surfaceBorder }}>
-                      <Text style={{ fontSize: 14, color: theme.colors.text }}>{l.name}</Text>
-                      {lang === l.code && <Text style={{ color: theme.colors.primary }}>✓</Text>}
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                <TouchableOpacity onPress={() => setShowLang(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-                  <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</Text>
-                </TouchableOpacity>
+          <ModalComp visible transparent onClose={() => setShowLang(false)}>
+            <View style={MODAL_BOX}>
+              <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</Text>
+              <View style={{ gap: 6 }}>
+                {supportedLangs.map((l) => (
+                  <TouchableOpacity key={l.code} onPress={() => { setLang(l.code as any); setShowLang(false); }}
+                    style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: lang === l.code ? theme.colors.primary : theme.colors.surfaceBorder }}>
+                    <Text style={{ fontSize: 14, color: theme.colors.text }}>{l.name}</Text>
+                    {lang === l.code && <Text style={{ color: theme.colors.primary }}>✓</Text>}
+                  </TouchableOpacity>
+                ))}
               </View>
+              <TouchableOpacity onPress={() => setShowLang(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
+                <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</Text>
+              </TouchableOpacity>
             </View>
-          </Modal>
+          </ModalComp>
         )}
       </ScrollView>
 
@@ -236,14 +199,11 @@ export default function SettingsScreen() {
   );
 }
 
-function SettingRow({ t, theme, label, desc, value }: any) {
+// Simple transparent modal wrapper
+function ModalComp({ visible, onClose, children }: any) {
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: theme.colors.surfaceBorder }}>
-      <View>
-        <Text style={{ fontSize: 14, color: theme.colors.text }}>{label}</Text>
-        {desc ? <Text style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 2 }}>{desc}</Text> : null}
-      </View>
-      <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>{value}</Text>
+    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 }}>
+      {children}
     </View>
   );
 }
