@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, TouchableOpacity, Text } from 'react-native'
+import { View, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -53,7 +53,8 @@ export default function TimePicker({ value, onChange, onClose }: {
   );
 
   return (
-    <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
+    <Modal visible transparent animationType="none" onRequestClose={onClose}>
+      <View style={{ flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
       <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
         <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>选择时间</T>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 20, marginBottom: 16 }}>
@@ -69,6 +70,7 @@ export default function TimePicker({ value, onChange, onClose }: {
           <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>取消</T>
         </TouchableOpacity>
       </View>
-    </View>
+      </View>
+    </Modal>
   );
 }

@@ -141,7 +141,7 @@ export function FontModal({ visible, onClose, onSelect, currentFont, onSizeSelec
             {FONTS.map((f) => (
               <TouchableOpacity key={f.key} onPress={() => onSelect(f.key)}
                 style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: currentFont === f.key ? theme.colors.primary : theme.colors.surfaceBorder }}>
-                <T style={{ fontSize: 14, color: theme.colors.text, fontFamily: f.family }}>{f.preview}</T>
+                <Text style={{ fontSize: 14, color: theme.colors.text, fontFamily: f.family }}>{f.preview}</Text>
                 {currentFont === f.key && <T style={{ color: theme.colors.primary }}>✓</T>}
               </TouchableOpacity>
             ))}
