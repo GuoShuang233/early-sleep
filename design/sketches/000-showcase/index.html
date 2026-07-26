@@ -60,10 +60,8 @@ h1{text-align:center;font-size:30px;font-weight:700;letter-spacing:-0.3px;margin
 .pet-stage{display:flex;justify-content:center;gap:16px;padding:8px 0}
 .pet-stage span{text-align:center;font-size:20px;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04)}
 .pet-stage .current{border-color:#7170ff;background:rgba(113,112,255,0.08)}
-.sound-row{display:flex;gap:6px;overflow-x:auto;padding:4px 0}
-.sound-chip{flex-shrink:0;padding:8px 14px;border-radius:20px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);font-size:11px;cursor:pointer}
-.sound-chip.active{background:rgba(113,112,255,0.08);border-color:#7170ff;color:#7170ff}
 .btn-preview{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.export-row{display:flex;gap:8px;margin:6px 0}
 .btn-demo{padding:10px 18px;border:none;border-radius:8px;font-size:12px;font-weight:500;font-family:inherit;cursor:pointer}
 .btn-demo.rounded{border-radius:12px;background:#7170ff;color:white}
 .btn-demo.pill{border-radius:24px;background:#7170ff;color:white}
@@ -319,21 +317,21 @@ h1{text-align:center;font-size:30px;font-weight:700;letter-spacing:-0.3px;margin
 <!-- 5. Sound -->
 <div class="custom-card">
 <div class="cc-title">🔊 氛围声</div>
-<div class="cc-desc">睡前助眠、起床唤醒、打卡反馈</div>
+<div class="cc-desc">睡前助眠 · 起床唤醒 · 打卡反馈</div>
 <div style="font-size:9px;color:#4a4a5a;margin-bottom:4px;">🌙 睡前</div>
-<div class="sound-row">
-<div class="sound-chip active">🌧️ 雨声</div>
-<div class="sound-chip">🌊 海浪</div>
-<div class="sound-chip">🌲 森林</div>
-<div class="sound-chip">🤍 白噪音</div>
-<div class="sound-chip">🔥 篝火</div>
-<div class="sound-chip">🎹 钢琴</div>
+<div class="cc-colors" style="gap:4px;">
+<div class="cc-chip active" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🌧️</span><span class="chip-label">雨声</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🌊</span><span class="chip-label">海浪</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🌲</span><span class="chip-label">森林</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🤍</span><span class="chip-label">白噪音</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🔥</span><span class="chip-label">篝火</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;min-width:60px;"><span class="chip-icon">🎹</span><span class="chip-label">钢琴</span></div>
 </div>
-<div style="font-size:9px;color:#4a4a5a;margin-bottom:4px;margin-top:6px;">☀️ 起床</div>
-<div class="sound-row">
-<div class="sound-chip active">🐦 鸟鸣</div>
-<div class="sound-chip">🔔 渐进铃</div>
-<div class="sound-chip">🔮 冥想钟</div>
+<div style="font-size:9px;color:#4a4a5a;margin:6px 0 4px;">☀️ 起床</div>
+<div class="cc-colors" style="gap:4px;">
+<div class="cc-chip active" style="flex:1;padding:6px 4px;"><span class="chip-icon">🐦</span><span class="chip-label">鸟鸣</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;"><span class="chip-icon">🔔</span><span class="chip-label">渐进铃</span></div>
+<div class="cc-chip" style="flex:1;padding:6px 4px;"><span class="chip-icon">🔮</span><span class="chip-label">冥想钟</span></div>
 </div>
 </div>
 
