@@ -117,14 +117,25 @@ const FONTS = [
   { key: 'mono', label: '等宽', preview: '等宽字体 1234', family: 'monospace' as any },
 ];
 
-export function FontModal({ visible, onClose, onSelect, currentFont }: any) {
+export function FontModal({ visible, onClose, onSelect, currentFont, onSizeSelect, currentSize }: any) {
   const { theme } = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={OVERLAY}>
         <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
           <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>🔠 字体</Text>
-          <Text style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>字体大小跟随系统设置</Text>
+          <Text style={{ fontSize: 11, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 8 }}>字体大小</Text>
+          <View style={{ flexDirection: 'row', gap: 6, marginBottom: 12, justifyContent: 'center' }}>
+            {['small','medium','large'].map((sz) => {
+              const szLabels: Record<string,string> = { small:'小', medium:'中', large:'大' };
+              return (
+                <TouchableOpacity key={sz} onPress={() => onSizeSelect && onSizeSelect(sz)}
+                  style={{ paddingVertical: 8, paddingHorizontal: 16, borderWidth: 1, borderRadius: 8, borderColor: currentSize === sz ? theme.colors.primary : theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
+                  <Text style={{ fontSize: sz === 'small' ? 12 : sz === 'medium' ? 14 : 16, color: currentSize === sz ? theme.colors.primary : theme.colors.text }}>{szLabels[sz]}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
           <View style={{ gap: 6 }}>
             {FONTS.map((f) => (
               <TouchableOpacity key={f.key} onPress={() => onSelect(f.key)}

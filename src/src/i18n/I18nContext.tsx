@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { I18nManager, Platform, NativeModules } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Lang, tr, SUPPORTED_LANGS } from './translations';
 
@@ -11,19 +12,30 @@ interface I18nContextType {
 }
 
 const I18nContext = createContext<I18nContextType>(null!);
-
 const STORAGE_KEY = '@earlysleep_lang';
 
 function getSystemLang(): Lang {
-  // @ts-ignore - RN has this
-  const raw = (global as any).nativeExtensions?.locale || 'en';
-  const locale = String(raw);
-  const code = locale.slice(0, 2);
-  // Check for Traditional Chinese
-  const full = locale.slice(0, 5).toLowerCase();
-  if (full.startsWith('zh-hk') || full.startsWith('zh-tw') || full.startsWith('zh-mo')) return 'zh-Hant';
-  if (code === 'zh') return 'zh';
-  return SUPPORTED_LANGS.find((l) => l.code === code)?.code || 'en';
+  try {
+    let locale = 'en';
+    if (Platform.OS === 'android') {
+      // RN 0.86: I18nManager.localeIdentifier
+      const im = NativeModules.I18nManager;
+      if (im?.localeIdentifier) locale = im.localeIdentifier;
+      else if (NativeModules.SettingsManager?.settings?.DeviceLanguage)
+        locale = NativeModules.SettingsManager.settings.DeviceLanguage;
+    } else {
+      const sm = NativeModules.SettingsManager?.settings;
+      locale = sm?.AppleLocale || sm?.AppleLanguages?.[0] || 'en';
+    }
+    locale = String(locale);
+    const full = locale.slice(0, 5).toLowerCase();
+    if (full.startsWith('zh-hk') || full.startsWith('zh-tw') || full.startsWith('zh-mo')) return 'zh-Hant';
+    if (locale.slice(0, 2) === 'zh') return 'zh';
+    const code = locale.slice(0, 2);
+    return SUPPORTED_LANGS.find((l) => l.code === code)?.code || 'en';
+  } catch {
+    return 'en';
+  }
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -34,12 +46,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     (async () => {
       try {
         const saved = await AsyncStorage.getItem(STORAGE_KEY);
-        if (saved) {
-          setLangState(saved as Lang);
-        } else {
-          setLangState(getSystemLang());
-        }
-      } catch { setLangState(getSystemLang()); }
+        setLangState((saved as Lang) || getSystemLang());
+      } catch {
+        setLangState(getSystemLang());
+      }
       setLoaded(true);
     })();
   }, []);
