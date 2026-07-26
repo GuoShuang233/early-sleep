@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground } from 'react-native'
+import { T } from '../theme/T';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
@@ -100,71 +101,71 @@ export default function HomeScreen() {
   return (
     <Wrapper {...wrapProps}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={[s.greeting, activeFont && { fontFamily: activeFont }]}>{t('home.greeting.night')}</Text>
-        <Text style={s.targetText}>{t('home.target')} {targetBedtime}</Text>
+        <T style={[s.greeting, activeFont && { fontFamily: activeFont }]}>{t('home.greeting.night')}</T>
+        <T style={s.targetText}>{t('home.target')} {targetBedtime}</T>
 
         <View style={s.streakRow}>
-          <View style={s.streakItem}><Text style={[s.streakNum, { color: theme.colors.primary }]}>{streak.current}</Text><Text style={s.streakLabel}>{t('home.streak')}</Text></View>
-          <View style={s.streakItem}><Text style={[s.streakNum, { color: theme.colors.warning }]}>{streak.curfewRate}%</Text><Text style={s.streakLabel}>{t('home.curfew.rate')}</Text></View>
-          <View style={s.streakItem}><Text style={[s.streakNum, { color: theme.colors.success }]}>--</Text><Text style={s.streakLabel}>{t('home.sleep')}</Text></View>
+          <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.primary }]}>{streak.current}</T><T style={s.streakLabel}>{t('home.streak')}</T></View>
+          <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.warning }]}>{streak.curfewRate}%</T><T style={s.streakLabel}>{t('home.curfew.rate')}</T></View>
+          <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.success }]}>--</T><T style={s.streakLabel}>{t('home.sleep')}</T></View>
         </View>
 
         {!todayLog?.bedtime && (
           <TouchableOpacity onPress={() => setShowBedtimeModal(true)} activeOpacity={0.8}
             style={{ backgroundColor: theme.colors.primary, padding: 16, alignItems: 'center', borderRadius: br, ...bExtra, shadowColor: theme.colors.primary, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8 }}>
-            <Text style={{ color: '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</Text>
-            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</Text>
+            <T style={{ color: '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</T>
+            <T style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</T>
           </TouchableOpacity>
         )}
         {todayLog?.bedtime && !todayLog?.waketime && (
           <TouchableOpacity onPress={handleWakeup} activeOpacity={0.8}
             style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: br, ...bExtra, padding: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
-            <Text style={{ color: theme.colors.text, fontSize: 16, fontWeight: '500' }}>{t('home.wakeup')}</Text>
+            <T style={{ color: theme.colors.text, fontSize: 16, fontWeight: '500' }}>{t('home.wakeup')}</T>
           </TouchableOpacity>
         )}
         {todayLog?.bedtime && todayLog?.waketime && (
           <View style={{ backgroundColor: theme.colors.success + '14', borderWidth: 1, borderColor: theme.colors.success + '25', borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 16 }}>
-            <Text style={{ color: theme.colors.success, fontSize: 16, fontWeight: '600' }}>{t('home.completed')}</Text>
-            <Text style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: 4 }}>{t('report.bedtime')} {todayLog.bedtime} · {t('report.wakeup')} {todayLog.waketime}</Text>
+            <T style={{ color: theme.colors.success, fontSize: 16, fontWeight: '600' }}>{t('home.completed')}</T>
+            <T style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: 4 }}>{t('report.bedtime')} {todayLog.bedtime} · {t('report.wakeup')} {todayLog.waketime}</T>
           </View>
         )}
 
         {recentLogs.length > 0 && (
           <View style={s.card}>
-            <Text style={s.cardTitle}>{t('home.recent')}</Text>
+            <T style={s.cardTitle}>{t('home.recent')}</T>
             {recentLogs.map((log, i) => (
               <View key={i} style={s.logEntry}>
                 <View style={[s.logDot, { backgroundColor: log.phone_curfew_kept ? theme.colors.success : theme.colors.warning }]} />
                 <View style={s.logInfo}>
-                  <Text style={s.logLabel}>{log.log_date}</Text>
-                  <Text style={s.logTime}>{log.bedtime || '--'} → {log.waketime || '--'}{log.note ? ` · ${log.note}` : ''}</Text>
+                  <T style={s.logLabel}>{log.log_date}</T>
+                  <T style={s.logTime}>{log.bedtime || '--'} → {log.waketime || '--'}{log.note ? ` · ${log.note}` : ''}</T>
                 </View>
-                {log.phone_curfew_kept ? <Text style={s.logCheck}>✅</Text> : null}
+                {log.phone_curfew_kept ? <T style={s.logCheck}>✅</T> : null}
               </View>
             ))}
           </View>
         )}
 
         <View style={s.adBanner}>
-          <Text style={s.adBadge}>广告</Text>
-          <Text style={{ fontSize: 14 }}>🛏️</Text>
-          <Text style={s.adText}>{t('calendar.ad')}</Text>
-          <Text style={s.adCta}>{t('home.detail')}</Text>
+          <T style={s.adBadge}>广告</T>
+          <T style={{ fontSize: 14 }}>🛏️</T>
+          <T style={s.adText}>{t('calendar.ad')}</T>
+          <T style={s.adCta}>{t('home.detail')}</T>
         </View>
       </ScrollView>
 
       <Modal visible={showBedtimeModal} transparent animationType="fade">
         <View style={s.modalOverlay}>
           <View style={s.modalContent}>
-            <Text style={{ fontSize: 22, fontWeight: '700', textAlign: 'center', color: theme.colors.text, marginBottom: 8 }}>{t('home.bedtime')}</Text>
-            <Text style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: 20 }}>{t('home.modal.desc')}</Text>
+            <T style={{ fontSize: 22, fontWeight: '700', textAlign: 'center', color: theme.colors.text, marginBottom: 8 }}>{t('home.bedtime')}</T>
+            <T style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: 20 }}>{t('home.modal.desc')}</T>
             <TextInput style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, fontSize: 14, color: theme.colors.text, marginBottom: 16 }}
               placeholder={t('home.note.placeholder')} placeholderTextColor={theme.colors.textSecondary} value={note} onChangeText={setNote} />
             <TouchableOpacity onPress={handleBedtime} style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-              <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</Text>
+              <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</T>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowBedtimeModal(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-              <Text style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('home.cancel')}</Text>
+              <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('home.cancel')}</T>
             </TouchableOpacity>
           </View>
         </View>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native'
+import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
@@ -72,53 +73,53 @@ export default function ReportScreen() {
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
         <View style={s.header}>
-          <Text style={s.headerIcon}>☀️</Text>
-          <Text style={s.headerTitle}>早上好</Text>
+          <T style={s.headerIcon}>☀️</T>
+          <T style={s.headerTitle}>早上好</T>
         </View>
 
         {stats.map((st, i) => (
           <View key={i} style={s.statRow}>
-            <Text style={s.statLabel}>{st.icon} {st.label}</Text>
-            <Text style={s.statValue}>{st.value}</Text>
+            <T style={s.statLabel}>{st.icon} {st.label}</T>
+            <T style={s.statValue}>{st.value}</T>
           </View>
         ))}
 
         {todayLog?.note && (
           <View style={s.noteBox}>
-            <Text style={s.noteIcon}>📝</Text>
-            <Text style={s.noteText}>{todayLog.note}</Text>
+            <T style={s.noteIcon}>📝</T>
+            <T style={s.noteText}>{todayLog.note}</T>
           </View>
         )}
 
         {/* Week Calendar */}
-        <Text style={s.sectionTitle}>📅 本周</Text>
+        <T style={s.sectionTitle}>📅 本周</T>
         <View style={s.weekRow}>
           {weekDays.map((w, i) => (
             <View key={i} style={s.weekItem}>
-              <Text style={s.weekDay}>{w.day}</Text>
+              <T style={s.weekDay}>{w.day}</T>
               <View style={[s.weekDot, { backgroundColor: ['#4a4a5a', theme.colors.warning, theme.colors.success][w.status] }]} />
-              <Text style={s.weekLabel}>{['--', '晚睡', '达标'][w.status]}</Text>
+              <T style={s.weekLabel}>{['--', '晚睡', '达标'][w.status]}</T>
             </View>
           ))}
         </View>
 
         {/* Streak */}
-        <Text style={s.sectionTitle}>🏆 统计</Text>
-        <View style={s.statRow}><Text style={s.statLabel}>🔥 连续天数</Text><Text style={s.statValue}>{streak.current}</Text></View>
-        <View style={s.statRow}><Text style={s.statLabel}>📈 最长连续</Text><Text style={s.statValue}>{streak.longest}</Text></View>
-        <View style={s.statRow}><Text style={s.statLabel}>📊 宵禁达标率</Text><Text style={s.statValue}>{streak.curfewRate}%</Text></View>
-        <View style={s.statRow}><Text style={s.statLabel}>📋 总记录天数</Text><Text style={s.statValue}>{streak.total}</Text></View>
+        <T style={s.sectionTitle}>🏆 统计</T>
+        <View style={s.statRow}><T style={s.statLabel}>🔥 连续天数</T><T style={s.statValue}>{streak.current}</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>📈 最长连续</T><T style={s.statValue}>{streak.longest}</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>📊 宵禁达标率</T><T style={s.statValue}>{streak.curfewRate}%</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>📋 总记录天数</T><T style={s.statValue}>{streak.total}</T></View>
 
         {/* Advice */}
         <View style={s.advice}>
-          <Text style={s.adviceText}>💡 打卡后又刷了半小时。今晚试试打卡后直接放客厅充电？</Text>
+          <T style={s.adviceText}>💡 打卡后又刷了半小时。今晚试试打卡后直接放客厅充电？</T>
         </View>
 
         <View style={s.ad}>
-          <Text style={s.adBadge}>广告</Text>
-          <Text style={{ fontSize: 14 }}>🎬</Text>
-          <Text style={s.adText}>夜间助眠音乐·免费试听</Text>
-          <Text style={s.adCta}>播放</Text>
+          <T style={s.adBadge}>广告</T>
+          <T style={{ fontSize: 14 }}>🎬</T>
+          <T style={s.adText}>夜间助眠音乐·免费试听</T>
+          <T style={s.adCta}>播放</T>
         </View>
       </ScrollView>
     </View>

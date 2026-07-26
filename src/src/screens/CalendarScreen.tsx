@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
@@ -80,11 +81,11 @@ export default function CalendarScreen() {
         {/* Month Navigation */}
         <View style={s.header}>
           <TouchableOpacity style={s.headerBtn} onPress={() => { if (month === 0) { setYear(y => y - 1); setMonth(11); } else setMonth(m => m - 1); }}>
-            <Text style={s.headerBtnText}>←</Text>
+            <T style={s.headerBtnText}>←</T>
           </TouchableOpacity>
-          <Text style={s.headerTitle}>{year}年 {MONTHS[month]}</Text>
+          <T style={s.headerTitle}>{year}年 {MONTHS[month]}</T>
           <TouchableOpacity style={s.headerBtn} onPress={() => { if (month === 11) { setYear(y => y + 1); setMonth(0); } else setMonth(m => m + 1); }}>
-            <Text style={s.headerBtnText}>→</Text>
+            <T style={s.headerBtnText}>→</T>
           </TouchableOpacity>
         </View>
 
@@ -92,7 +93,7 @@ export default function CalendarScreen() {
         <View style={s.dayHeaderRow}>
           {DAYS.map((d, i) => (
             <View key={i} style={s.dayHeader}>
-              <Text style={s.dayHeaderText}>{d}</Text>
+              <T style={s.dayHeaderText}>{d}</T>
             </View>
           ))}
         </View>
@@ -110,7 +111,7 @@ export default function CalendarScreen() {
                   key={di}
                   style={[s.dayCell, isSelected && s.selectedDay]}
                   onPress={() => handleDayPress(day)}>
-                  <Text style={[s.dayNum, { opacity: day <= daysInMonth ? 1 : 0.3 }]}>{day}</Text>
+                  <T style={[s.dayNum, { opacity: day <= daysInMonth ? 1 : 0.3 }]}>{day}</T>
                   {dotColor && <View style={[s.dayDot, { backgroundColor: dotColor }]} />}
                 </TouchableOpacity>
               );
@@ -121,25 +122,25 @@ export default function CalendarScreen() {
         {/* Selected Day Detail */}
         {selectedLog && (
           <View style={s.detailCard}>
-            <Text style={s.detailTitle}>{selectedDate}</Text>
-            <View style={s.detailRow}><Text style={s.detailLabel}>🌙 就寝</Text><Text style={s.detailValue}>{selectedLog.bedtime || '--'}</Text></View>
-            <View style={s.detailRow}><Text style={s.detailLabel}>☀️ 起床</Text><Text style={s.detailValue}>{selectedLog.waketime || '--'}</Text></View>
-            <View style={s.detailRow}><Text style={s.detailLabel}>📵 宵禁</Text><Text style={s.detailValue}>{selectedLog.phone_curfew_kept ? '✅ 达标' : '❌ 违规'}</Text></View>
-            {selectedLog.note && <Text style={s.noteText}>📝 {selectedLog.note}</Text>}
+            <T style={s.detailTitle}>{selectedDate}</T>
+            <View style={s.detailRow}><T style={s.detailLabel}>🌙 就寝</T><T style={s.detailValue}>{selectedLog.bedtime || '--'}</T></View>
+            <View style={s.detailRow}><T style={s.detailLabel}>☀️ 起床</T><T style={s.detailValue}>{selectedLog.waketime || '--'}</T></View>
+            <View style={s.detailRow}><T style={s.detailLabel}>📵 宵禁</T><T style={s.detailValue}>{selectedLog.phone_curfew_kept ? '✅ 达标' : '❌ 违规'}</T></View>
+            {selectedLog.note && <T style={s.noteText}>📝 {selectedLog.note}</T>}
           </View>
         )}
         {selectedDate && !selectedLog && (
           <View style={s.detailCard}>
-            <Text style={s.detailTitle}>{selectedDate}</Text>
-            <Text style={s.emptyText}>当日无记录</Text>
+            <T style={s.detailTitle}>{selectedDate}</T>
+            <T style={s.emptyText}>当日无记录</T>
           </View>
         )}
 
         <View style={s.ad}>
-          <Text style={s.adBadge}>广告</Text>
-          <Text style={{ fontSize: 14 }}>🛏️</Text>
-          <Text style={s.adText}>泰国乳胶枕·限时7折</Text>
-          <Text style={s.adCta}>了解</Text>
+          <T style={s.adBadge}>广告</T>
+          <T style={{ fontSize: 14 }}>🛏️</T>
+          <T style={s.adText}>泰国乳胶枕·限时7折</T>
+          <T style={s.adCta}>了解</T>
         </View>
       </ScrollView>
     </View>

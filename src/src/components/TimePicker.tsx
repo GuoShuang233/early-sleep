@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Text } from 'react-native'
+import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
@@ -34,11 +35,11 @@ export default function TimePicker({ value, onChange, onClose }: {
         }}>
         {items.map((item, i) => (
           <View key={i} style={{ height: ITEM_HEIGHT, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{
+            <T style={{
               fontSize: i === sel ? 20 : 14,
               fontWeight: i === sel ? '700' : '400',
               color: i === sel ? theme.colors.text : theme.colors.textSecondary,
-            }}>{item}</Text>
+            }}>{item}</T>
           </View>
         ))}
       </ScrollView>
@@ -54,18 +55,18 @@ export default function TimePicker({ value, onChange, onClose }: {
   return (
     <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
       <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
-        <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>选择时间</Text>
+        <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>选择时间</T>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 20, marginBottom: 16 }}>
           {renderCol(HOURS, selH, setSelH)}
-          <Text style={{ fontSize: 24, color: theme.colors.text, marginTop: -CONTAINER_HEIGHT/2 + ITEM_HEIGHT*2 }}>:</Text>
+          <T style={{ fontSize: 24, color: theme.colors.text, marginTop: -CONTAINER_HEIGHT/2 + ITEM_HEIGHT*2 }}>:</T>
           {renderCol(MINUTES, selM, setSelM)}
         </View>
         <TouchableOpacity onPress={() => onChange(`${String(selH).padStart(2,'0')}:${String(selM).padStart(2,'0')}`)}
           style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-          <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>确认</Text>
+          <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>确认</T>
         </TouchableOpacity>
         <TouchableOpacity onPress={onClose} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-          <Text style={{ color: theme.colors.textSecondary, fontSize: 14 }}>取消</Text>
+          <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>取消</T>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native'
+import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
@@ -75,35 +76,35 @@ export default function AchievementsScreen() {
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={s.title}>🏆 成就</Text>
+        <T style={s.title}>🏆 成就</T>
 
         <View style={s.companionCard}>
-          <Text style={s.companionEmoji}>{companionEmoji(companionType, stage)}</Text>
-          <Text style={s.companionLabel}>{names[stage]}</Text>
+          <T style={s.companionEmoji}>{companionEmoji(companionType, stage)}</T>
+          <T style={s.companionLabel}>{names[stage]}</T>
           <View style={s.progressBar}>
             <View style={[s.progressFill, { width: `${Math.min((streak.current / (Math.max(stage, 1) * 3)) * 100, 100)}%` }]} />
           </View>
-          <Text style={s.progressLabel}>连续 {streak.current} / {Math.max(stage + 1, 1) * 3} 天</Text>
+          <T style={s.progressLabel}>连续 {streak.current} / {Math.max(stage + 1, 1) * 3} 天</T>
         </View>
 
-        <Text style={s.sectionTitle}>徽章</Text>
+        <T style={s.sectionTitle}>徽章</T>
         <View style={s.badgeGrid}>
           {badges.map((b, i) => {
             const unlocked = streak.current >= b.min;
             return (
               <View key={i} style={[s.badgeItem, { opacity: unlocked ? 1 : 0.35 }]}>
-                <Text style={[s.badgeIcon, !unlocked && { opacity: 0.3 }]}>{b.icon}</Text>
-                <Text style={s.badgeName}>{b.name}</Text>
+                <T style={[s.badgeIcon, !unlocked && { opacity: 0.3 }]}>{b.icon}</T>
+                <T style={s.badgeName}>{b.name}</T>
               </View>
             );
           })}
         </View>
 
         <View style={s.ad}>
-          <Text style={s.adBadge}>广告</Text>
-          <Text style={{ fontSize: 14 }}>🎬</Text>
-          <Text style={s.adText}>夜间助眠音乐·免费试听</Text>
-          <Text style={s.adCta}>播放</Text>
+          <T style={s.adBadge}>广告</T>
+          <T style={{ fontSize: 14 }}>🎬</T>
+          <T style={s.adText}>夜间助眠音乐·免费试听</T>
+          <T style={s.adCta}>播放</T>
         </View>
       </ScrollView>
     </View>

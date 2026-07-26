@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, Modal } from 'react-native'
+import { T } from '../theme/T';
 import { launchImageLibrary } from 'react-native-image-picker';
 import TimePicker from '../components/TimePicker';
 import { useTheme } from '../theme/ThemeContext';
@@ -71,10 +72,10 @@ export default function SettingsScreen() {
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <Text style={s.title}>{t('settings.title')}</Text>
+        <T style={s.title}>{t('settings.title')}</T>
 
         {/* Theme Presets */}
-        <Text style={s.sectionTitle}>{t('settings.theme')}</Text>
+        <T style={s.sectionTitle}>{t('settings.theme')}</T>
         <View style={s.presetRow}>
           {(['dark-precision','warm-night','nature-calm','minimal-light'] as PresetKey[]).map((key) => {
             const icons: Record<string,string> = {'dark-precision':'🌙','warm-night':'🔮','nature-calm':'🌿','minimal-light':'☀️'};
@@ -82,8 +83,8 @@ export default function SettingsScreen() {
             return (
               <TouchableOpacity key={key} onPress={() => setPreset(key)}
                 style={[s.presetItem, { borderColor: currentPreset === key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
-                <Text style={{ fontSize: 22 }}>{icons[key]}</Text>
-                <Text style={{ fontSize: 11, marginTop: 4, color: currentPreset === key ? theme.colors.primary : theme.colors.text }}>{labels[key]}</Text>
+                <T style={{ fontSize: 22 }}>{icons[key]}</T>
+                <T style={{ fontSize: 11, marginTop: 4, color: currentPreset === key ? theme.colors.primary : theme.colors.text }}>{labels[key]}</T>
               </TouchableOpacity>
             );
           })}
@@ -92,8 +93,8 @@ export default function SettingsScreen() {
         {/* Auto switch */}
         <View style={s.toggleRow}>
           <View>
-            <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text }}>{t('settings.auto')}</Text>
-            <Text style={{ fontSize: 11, color: theme.colors.textSecondary }}>{t('settings.auto.desc')}</Text>
+            <T style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text }}>{t('settings.auto')}</T>
+            <T style={{ fontSize: 11, color: theme.colors.textSecondary }}>{t('settings.auto.desc')}</T>
           </View>
           <TouchableOpacity onPress={() => setAutoSwitch(!autoSwitch)}
             style={{ width: 44, height: 24, borderRadius: 12, justifyContent: 'center', paddingHorizontal: 2, backgroundColor: autoSwitch ? theme.colors.primary : theme.colors.textSecondary }}>
@@ -102,34 +103,34 @@ export default function SettingsScreen() {
         </View>
 
         {/* Language */}
-        <Text style={s.sectionTitle}>{t('settings.language')}</Text>
+        <T style={s.sectionTitle}>{t('settings.language')}</T>
         <TouchableOpacity onPress={() => setShowLang(true)}
           style={[s.chip, { alignSelf: 'flex-start', flexDirection: 'row', gap: 6, paddingHorizontal: 16 }]}>
-          <Text style={{ fontSize: 16 }}>🌐</Text>
-          <Text style={{ fontSize: 13, color: theme.colors.text }}>{langName}</Text>
+          <T style={{ fontSize: 16 }}>🌐</T>
+          <T style={{ fontSize: 13, color: theme.colors.text }}>{langName}</T>
         </TouchableOpacity>
 
         {/* Preferences (times) */}
-        <Text style={s.sectionTitle}>{t('settings.pref')}</Text>
+        <T style={s.sectionTitle}>{t('settings.pref')}</T>
         <View style={s.setRow}>
-          <Text style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.bedtime.target')}</Text>
+          <T style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.bedtime.target')}</T>
           <TouchableOpacity onPress={() => openTime('bed')}>
-            <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '500' }}>{targetBed}</Text>
+            <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '500' }}>{targetBed}</T>
           </TouchableOpacity>
         </View>
         <View style={s.setRow}>
-          <Text style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.wakeup.target')}</Text>
+          <T style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.wakeup.target')}</T>
           <TouchableOpacity onPress={() => openTime('wake')}>
-            <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '500' }}>{targetWake}</Text>
+            <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '500' }}>{targetWake}</T>
           </TouchableOpacity>
         </View>
         <View style={s.setRow}>
-          <Text style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.notification')}</Text>
-          <Text style={{ fontSize: 13, color: theme.colors.textSecondary }}>{t('settings.on')}</Text>
+          <T style={{ fontSize: 14, color: theme.colors.text }}>{t('settings.notification')}</T>
+          <T style={{ fontSize: 13, color: theme.colors.textSecondary }}>{t('settings.on')}</T>
         </View>
 
         {/* Customize */}
-        <Text style={s.sectionTitle}>{t('settings.customize')}</Text>
+        <T style={s.sectionTitle}>{t('settings.customize')}</T>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
           {CUSTOM.map((ci, i) => (
             <TouchableOpacity key={i} onPress={() => {
@@ -139,8 +140,8 @@ export default function SettingsScreen() {
               else if (ci.handler === 'font') setShowFont(true);
               else if (ci.handler === 'bg') handleBg();
             }} style={s.chip}>
-              <Text style={s.chipIcon}>{ci.icon}</Text>
-              <Text style={s.chipLabel}>{t(ci.label)}</Text>
+              <T style={s.chipIcon}>{ci.icon}</T>
+              <T style={s.chipLabel}>{t(ci.label)}</T>
             </TouchableOpacity>
           ))}
         </View>
@@ -149,11 +150,11 @@ export default function SettingsScreen() {
         {theme.background.type === 'photo' && theme.background.photoPath ? (
           <TouchableOpacity onPress={handleBg} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={{ fontSize: 16 }}>🖼️</Text>
-              <Text style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</Text>
+              <T style={{ fontSize: 16 }}>🖼️</T>
+              <T style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</T>
             </View>
             <TouchableOpacity onPress={resetBackground} style={{ padding: 4 }}>
-              <Text style={{ fontSize: 11, color: theme.colors.error || '#f87171' }}>恢复默认</Text>
+              <T style={{ fontSize: 11, color: theme.colors.error || '#f87171' }}>恢复默认</T>
             </TouchableOpacity>
           </TouchableOpacity>
         ) : null}
@@ -163,18 +164,18 @@ export default function SettingsScreen() {
       <Modal visible={showLang} transparent animationType="fade" onRequestClose={() => setShowLang(false)}>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'center', padding: 20 }}>
           <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
-            <Text style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</Text>
+            <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('settings.language')}</T>
             <View style={{ gap: 6 }}>
               {supportedLangs.map((l) => (
                 <TouchableOpacity key={l.code} onPress={() => { setLang(l.code as any); setShowLang(false); }}
                   style={{ padding: 14, borderWidth: 1, borderRadius: 10, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.colors.surface, borderColor: lang === l.code ? theme.colors.primary : theme.colors.surfaceBorder }}>
-                  <Text style={{ fontSize: 14, color: theme.colors.text }}>{l.name}</Text>
-                  {lang === l.code && <Text style={{ color: theme.colors.primary }}>✓</Text>}
+                  <T style={{ fontSize: 14, color: theme.colors.text }}>{l.name}</T>
+                  {lang === l.code && <T style={{ color: theme.colors.primary }}>✓</T>}
                 </TouchableOpacity>
               ))}
             </View>
             <TouchableOpacity onPress={() => setShowLang(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-              <Text style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</Text>
+              <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('home.cancel')}</T>
             </TouchableOpacity>
           </View>
         </View>

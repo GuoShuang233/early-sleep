@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatusBar, Text } from 'react-native';
+import { T } from './src/theme/T';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -36,7 +37,7 @@ function AppNavigator() {
           tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
           tabBarIcon: ({ focused }) => {
             const icons: Record<string, string> = { home: '🌙', calendar: '📅', report: '📊', goal: '🏆', settings: '⚙️' };
-            return <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.6 }}>{icons[route.name] || '🌙'}</Text>;
+            return <T style={{ fontSize: 22, opacity: focused ? 1 : 0.6 }}>{icons[route.name] || '🌙'}</T>;
           },
           tabBarLabel: TAB_LABELS[route.name] || route.name,
         })}>
