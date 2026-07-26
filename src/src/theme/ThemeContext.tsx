@@ -75,8 +75,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return { ...base, ...customOverrides };
   }, [currentPreset, customOverrides]);
 
-  const hour = new Date().getHours();
-  const isDark = hour < 6 || hour >= 18;
+  // Compute isDark from the theme, not the clock
+  const bgColor = theme.colors.background;
+  // Simple luminance check: if the theme background is dark, it's a dark theme
+  const isDark = !bgColor.startsWith('#f') && !bgColor.startsWith('#e') && !bgColor.startsWith('#d');
 
   return (
     <ThemeContext.Provider
