@@ -18,14 +18,16 @@ function getSystemLang(): Lang {
   try {
     let locale = 'en';
     if (Platform.OS === 'android') {
-      // RN 0.86: I18nManager.localeIdentifier
       const im = NativeModules.I18nManager;
-      if (im?.localeIdentifier) locale = im.localeIdentifier;
-      else if (NativeModules.SettingsManager?.settings?.DeviceLanguage)
-        locale = NativeModules.SettingsManager.settings.DeviceLanguage;
+      if (im?.getConstants) locale = im.getConstants().localeIdentifier || locale;
+      else if (im?.localeIdentifier) locale = im.localeIdentifier;
+      // Fallback to SettingsManager
+      if (!locale || locale === 'en') {
+        locale = NativeModules.SettingsManager?.settings?.DeviceLanguage || 'en';
+      }
     } else {
-      const sm = NativeModules.SettingsManager?.settings;
-      locale = sm?.AppleLocale || sm?.AppleLanguages?.[0] || 'en';
+      const s = NativeModules.SettingsManager?.settings;
+      locale = s?.AppleLocale || s?.AppleLanguages?.[0] || 'en';
     }
     locale = String(locale);
     const full = locale.slice(0, 5).toLowerCase();

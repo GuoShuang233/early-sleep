@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { launchImageLibrary } from 'react-native-image-picker';
+import TimePicker from '../components/TimePicker';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,7 +29,6 @@ export default function SettingsScreen() {
   const [showFont, setShowFont] = useState(false);
   const [showLang, setShowLang] = useState(false);
   const [showTime, setShowTime] = useState(false);
-  const [timeDate, setTimeDate] = useState(new Date());
   const [timeTarget, setTimeTarget] = useState<'bed'|'wake'>('bed');
   const [targetBed, setTargetBed] = useState('23:00');
   const [targetWake, setTargetWake] = useState('07:30');
@@ -66,18 +65,10 @@ export default function SettingsScreen() {
   };
 
   const openTime = (which: 'bed'|'wake') => {
-    const [h, m] = (which === 'bed' ? targetBed : targetWake).split(':').map(Number);
-    const d = new Date(); d.setHours(h, m, 0, 0);
-    setTimeDate(d); setTimeTarget(which); setShowTime(true);
+    setTimeTarget(which); setShowTime(true);
   };
 
-  const onTimeChange = (_: any, date?: Date) => {
-    if (!date) return;
-    const val = String(date.getHours()).padStart(2,'0') + ':' + String(date.getMinutes()).padStart(2,'0');
-    if (timeTarget === 'bed') { setSetting('target_bedtime', val); setTargetBed(val); }
-    else { setSetting('target_waketime', val); setTargetWake(val); }
-    setShowTime(false);
-  };
+  const formatTime = (val: string) => val;
 
   const MODAL_OVERLAY = { flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 };
 
@@ -189,13 +180,14 @@ export default function SettingsScreen() {
 
       {/* Time picker (native wheel) */}
       {showTime && (
-        <DateTimePicker
-          value={timeDate}
-          mode="time"
-          is24Hour
-          display="spinner"
-          onChange={onTimeChange}
-          themeVariant={theme.colors.background === '#ffffff' ? 'light' : 'dark'}
+        <TimePicker
+          value={timeTarget === 'bed' ? targetBed : targetWake}
+          onChange={(val: string) => {
+            if (timeTarget === 'bed') { setSetting('target_bedtime', val); setTargetBed(val); }
+            else { setSetting('target_waketime', val); setTargetWake(val); }
+            setShowTime(false);
+          }}
+          onClose={() => setShowTime(false)}
         />
       )}
 

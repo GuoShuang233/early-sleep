@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -70,7 +71,8 @@ export default function HomeScreen() {
     setTodayLog(log); setStreak(st); setRecentLogs(recent);
     if (target) setTargetBedtime(target);
   }, []);
-  useEffect(() => { loadData(); }, [loadData]);
+
+  useFocusEffect(loadData);
 
   const handleBedtime = async () => {
     const today = new Date().toISOString().slice(0, 10);
