@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput,
+  View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert,
 } from 'react-native';
 import { useTheme } from '../theme/ThemeContext';
 
@@ -11,6 +11,18 @@ export default function HomeScreen() {
   const [avgSleep] = useState('7h');
 
   const s = styles;
+
+  const handleBedtime = () => {
+    Alert.alert('🌙 准备睡觉', '打卡功能待实现\n（需接入本地数据库）');
+  };
+
+  const handleWakeup = () => {
+    Alert.alert('☀️ 起床了', '打卡功能待实现\n（需接入本地数据库）');
+  };
+
+  const handleDetail = () => {
+    Alert.alert('📋 昨晚详情', '完整报告功能待实现');
+  };
 
   return (
     <View style={styles.container}>
@@ -36,12 +48,12 @@ export default function HomeScreen() {
         </View>
 
         {/* Action Buttons */}
-        <TouchableOpacity style={[styles.btnSleep, getBtnStyle(theme)]}>
+        <TouchableOpacity style={styles.btnSleep} onPress={handleBedtime} activeOpacity={0.8}>
           <Text style={styles.btnSleepText}>🌙 准备睡觉</Text>
           <Text style={styles.btnSleepSub}>放下手机</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.btnWake}>
+        <TouchableOpacity style={styles.btnWake} onPress={handleWakeup} activeOpacity={0.8}>
           <Text style={styles.btnWakeText}>☀️ 我起床了</Text>
         </TouchableOpacity>
 
@@ -49,7 +61,9 @@ export default function HomeScreen() {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>昨晚</Text>
-            <Text style={styles.cardLink}>详情 →</Text>
+            <TouchableOpacity onPress={handleDetail}>
+              <Text style={styles.cardLink}>详情 →</Text>
+            </TouchableOpacity>
           </View>
           <LogRow dotColor={theme.colors.primary} label="就寝" time="23:15" check />
           <LogRow dotColor={theme.colors.success} label="起床" time="07:30" check />
@@ -83,16 +97,6 @@ function LogRow({ dotColor, label, time, check }: {
   );
 }
 
-function getBtnStyle(theme: any) {
-  switch (theme.button.style) {
-    case 'pill': return { borderRadius: 24 };
-    case 'sharp': return { borderRadius: 0 };
-    case 'glow': return { boxShadow: `0 0 20px ${theme.colors.primary}40` };
-    case 'outlined': return { backgroundColor: 'transparent', borderWidth: 2, borderColor: theme.colors.primary };
-    case '3d': return { boxShadow: `0 4px 0 ${theme.colors.primary}80` };
-    default: return { borderRadius: 14 };
-  }
-}
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#08090a' },

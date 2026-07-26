@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { ThemeProvider, useTheme } from './src/theme/ThemeContext';
@@ -10,26 +10,12 @@ import SettingsScreen from './src/screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
-function TabIcon({ label, focused }: { label: string; focused: boolean }) {
-  const icons: Record<string, string> = {
-    Home: '🌙',
-    Report: '📊',
-    Achievements: '🏆',
-    Settings: '⚙️',
-  };
-  return (
-    <React.Fragment>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="#08090a"
-      />
-      <React.Fragment>
-        {/* Using Text for icons since we can't use emoji in RN without Text */}
-        <>{/* Icons rendered in tabBarIcon */}</>
-      </React.Fragment>
-    </React.Fragment>
-  );
-}
+const TAB_ICONS: Record<string, string> = {
+  Home: '🌙',
+  Report: '📊',
+  Achievements: '🏆',
+  Settings: '⚙️',
+};
 
 function AppNavigator() {
   const { theme } = useTheme();
@@ -44,15 +30,22 @@ function AppNavigator() {
           borderTopWidth: 1,
           height: 64,
           paddingBottom: 8,
-          paddingTop: 6,
+          paddingTop: 8,
         },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textSecondary,
         tabBarLabelStyle: {
-          fontSize: 9,
-          fontWeight: '500',
+          fontSize: 11,
+          fontWeight: '600',
         },
-        tabBarIcon: () => null,
+        tabBarIcon: ({ focused }) => {
+          const icon = TAB_ICONS[route.name] || '🌙';
+          return (
+            <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.6 }}>
+              {icon}
+            </Text>
+          );
+        },
       })}>
       <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: '首页' }} />
       <Tab.Screen name="Report" component={ReportScreen} options={{ tabBarLabel: '报告' }} />
