@@ -9,12 +9,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { PresetKey } from '../theme/themes';
 import { getSetting, setSetting } from '../data/database';
-import { ColorPickerModal, ButtonStyleModal, CompanionModal, FontModal } from '../components/CustomizationModals';
+import { ColorPickerModal, CompanionModal } from '../components/CustomizationModals';
 
 const CUSTOM = [
   { icon: '🎨', label: 'settings.custom.color', handler: 'color' },
   { icon: '🌱', label: 'settings.custom.companion', handler: 'companion' },
-  { icon: '🔠', label: 'settings.custom.font', handler: 'font' },
   { icon: '🖼️', label: 'settings.custom.background', handler: 'bg' },
 ];
 
@@ -25,7 +24,6 @@ export default function SettingsScreen() {
 
   const [showColor, setShowColor] = useState(false);
   const [showComp, setShowComp] = useState(false);
-  const [showFont, setShowFont] = useState(false);
   const [showLang, setShowLang] = useState(false);
   const [showTime, setShowTime] = useState(false);
   const [timeTarget, setTimeTarget] = useState<'bed'|'wake'>('bed');
@@ -133,7 +131,6 @@ export default function SettingsScreen() {
             <TouchableOpacity key={i} onPress={() => {
               if (ci.handler === 'color') setShowColor(true);
               else if (ci.handler === 'companion') setShowComp(true);
-              else if (ci.handler === 'font') setShowFont(true);
               else if (ci.handler === 'bg') handleBg();
             }} style={s.chip}>
               <T style={s.chipIcon}>{ci.icon}</T>
@@ -154,19 +151,11 @@ export default function SettingsScreen() {
                 <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 2 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableOpacity onPressIn={(e) => {
-                // Use nativeEvent to track position
-                const x = (e.nativeEvent as any).locationX;
-                const pct = Math.round(Math.max(0, Math.min(100, x / 300 * 100)));
-                setCustom({ background: { ...theme.background, overlay: pct / 100 } });
-              }} style={{ flex: 1, height: 36, borderRadius: 4, backgroundColor: theme.colors.surface, justifyContent: 'center', paddingHorizontal: 4 }}>
-                <View style={{ height: 8, backgroundColor: theme.colors.primary + '20', borderRadius: 4 }}>
-                  <View style={{ width: ((theme.background.overlay || 0.3) * 100) + '%', height: 8, backgroundColor: theme.colors.primary, borderRadius: 4 }} />
-                </View>
-              </TouchableOpacity>
-            </View>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
+            <SliderBg
+              value={theme.background.overlay || 0.3}
+              onChange={(v) => setCustom({ background: { ...theme.background, overlay: v } })}
+              theme={theme} />
           </View>
         ) : null}
       </ScrollView>
@@ -209,9 +198,27 @@ export default function SettingsScreen() {
         onSelect={(c: string) => { setCustom({ colors: { ...theme.colors, primary: c } }); setShowColor(false); }} currentColor={theme.colors.primary} />
       <CompanionModal visible={showComp} onClose={() => setShowComp(false)}
         onSelect={(t: string) => { setCustom({ companion: { ...theme.companion, type: t as any } }); setShowComp(false); }} currentType={theme.companion.type} />
-      <FontModal visible={showFont} onClose={() => setShowFont(false)}
-        onSelect={(f: string) => { setCustom({ font: f as any }); setShowFont(false); }} currentFont={theme.font}
-        onSizeSelect={(sz: string) => { setCustom({ density: sz as any }); }} currentSize={theme.density} />
+    </View>
+  );
+}
+
+// Slider component for background intensity
+function SliderBg({ value, onChange, theme }: { value: number; onChange: (v: number) => void; theme: any }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <TouchableOpacity onPress={() => onChange(Math.max(0, value - 0.05))}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+        <T style={{ fontSize: 20, color: theme.colors.textSecondary }}>−</T>
+      </TouchableOpacity>
+      <View style={{ flex: 1, height: 32, justifyContent: 'center', backgroundColor: theme.colors.surface, borderRadius: 16, paddingHorizontal: 8 }}>
+        <View style={{ height: 4, backgroundColor: theme.colors.surfaceBorder, borderRadius: 2 }}>
+          <View style={{ width: Math.round(value * 100) + '%', height: 4, backgroundColor: theme.colors.primary, borderRadius: 2 }} />
+        </View>
+      </View>
+      <TouchableOpacity onPress={() => onChange(Math.min(1, value + 0.05))}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+        <T style={{ fontSize: 20, color: theme.colors.textSecondary }}>＋</T>
+      </TouchableOpacity>
     </View>
   );
 }

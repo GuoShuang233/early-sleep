@@ -30,7 +30,7 @@ export default function CalendarScreen() {
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
     weekRow: { flexDirection: 'row' },
-    dayHead: { width: '14.28%', textAlign: 'center', fontSize: 11, color: t.theme.colors.textSecondary, paddingVertical: 8, fontWeight: '600' },
+    dayHead: { width: '14.28%', textAlign: 'center', fontSize: 10, color: t.theme.colors.textSecondary, paddingVertical: 6, fontWeight: '600' },
     cell: { width: '14.28%', height: 40, alignItems: 'center', justifyContent: 'center' },
     cellNum: { fontSize: 13, fontWeight: '500' },
     dot: { width: 4, height: 4, borderRadius: 2, marginTop: 2 },
@@ -62,11 +62,11 @@ export default function CalendarScreen() {
             const ds = y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
 
             return (
-              <TouchableOpacity key={day} style={[s.cell, { borderRadius: 20, backgroundColor: selectedDay === ds ? theme.colors.surface : 'transparent', borderWidth: isToday ? 2 : 0, borderColor: isToday ? theme.colors.primary : 'transparent' }]}
+              <TouchableOpacity key={day} style={[s.cell, { borderRadius: 20, backgroundColor: hasCompleted ? theme.colors.success + '25' : hasBedtime ? theme.colors.warning + '25' : selectedDay === ds ? theme.colors.surface : 'transparent', borderWidth: isToday ? 2 : 0, borderColor: isToday ? theme.colors.primary : 'transparent' }]}
                 onPress={() => setSelectedDay(selectedDay === ds ? null : ds)}>
                 <T style={[s.cellNum, { color: isToday ? theme.colors.primary : theme.colors.text, fontWeight: isToday ? '700' : '500' }]}>{day}</T>
-                {hasCompleted && <View style={[s.dot, { backgroundColor: theme.colors.success }]} />}
-                {hasBedtime && !hasCompleted && <View style={[s.dot, { backgroundColor: theme.colors.warning }]} />}
+                
+                
               </TouchableOpacity>
             );
           })}
