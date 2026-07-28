@@ -90,12 +90,12 @@ export default function ReportScreen() {
     if (!todayLog?.bedtime || !todayLog?.waketime) return 0;
     const [bh, bm] = todayLog.bedtime.split(':').map(Number);
     const [wh, wm] = todayLog.waketime.split(':').map(Number);
-    const [tbh, tbm] = tb.split(':').map(Number);
+    const [tbh, tbm] = targetBed.split(':').map(Number);
     const actualBed = bh * 60 + bm;
     const actualWake = wh * 60 + wm;
-    const targetBed = tbh * 60 + tbm;
+    const targetBedMin = tbh * 60 + tbm;
     // Bedtime: within 1h of target = 40pts, 2h = 20pts
-    const bedDiff = Math.abs(actualBed - targetBed);
+    const bedDiff = Math.abs(actualBed - targetBedMin);
     let bedScore = bedDiff <= 60 ? 40 : bedDiff <= 120 ? 20 : 0;
     // Sleep duration: 7-9h = 40pts, 5-7h = 30pts, <5h = 10pts
     let dur = actualWake - actualBed;
