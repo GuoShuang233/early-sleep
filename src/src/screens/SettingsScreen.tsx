@@ -10,6 +10,7 @@ import { useThemedStyles } from '../theme/useThemedStyles';
 import { PresetKey } from '../theme/themes';
 import { getSetting, setSetting } from '../data/database';
 import { ColorPickerModal, CompanionModal } from '../components/CustomizationModals';
+import Slider from '@react-native-community/slider';
 
 const CUSTOM = [
   { icon: '🎨', label: 'settings.custom.color', handler: 'color' },
@@ -151,11 +152,18 @@ export default function SettingsScreen() {
                 <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
-            <SliderBg
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 2 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
+            <Slider
+              style={{ width: '100%', height: 40 }}
+              minimumValue={0}
+              maximumValue={1}
+              step={0.01}
               value={theme.background.overlay || 0.3}
-              onChange={(v) => setCustom({ background: { ...theme.background, overlay: v } })}
-              theme={theme} />
+              onValueChange={(v) => setCustom({ background: { ...theme.background, overlay: v } })}
+              minimumTrackTintColor={theme.colors.primary}
+              maximumTrackTintColor={theme.colors.surfaceBorder}
+              thumbTintColor={theme.colors.primary}
+            />
           </View>
         ) : null}
       </ScrollView>
@@ -202,23 +210,3 @@ export default function SettingsScreen() {
   );
 }
 
-// Slider component for background intensity
-function SliderBg({ value, onChange, theme }: { value: number; onChange: (v: number) => void; theme: any }) {
-  return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-      <TouchableOpacity onPress={() => onChange(Math.max(0, value - 0.05))}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-        <T style={{ fontSize: 20, color: theme.colors.textSecondary }}>−</T>
-      </TouchableOpacity>
-      <View style={{ flex: 1, height: 32, justifyContent: 'center', backgroundColor: theme.colors.surface, borderRadius: 16, paddingHorizontal: 8 }}>
-        <View style={{ height: 4, backgroundColor: theme.colors.surfaceBorder, borderRadius: 2 }}>
-          <View style={{ width: Math.round(value * 100) + '%', height: 4, backgroundColor: theme.colors.primary, borderRadius: 2 }} />
-        </View>
-      </View>
-      <TouchableOpacity onPress={() => onChange(Math.min(1, value + 0.05))}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-        <T style={{ fontSize: 20, color: theme.colors.textSecondary }}>＋</T>
-      </TouchableOpacity>
-    </View>
-  );
-}
