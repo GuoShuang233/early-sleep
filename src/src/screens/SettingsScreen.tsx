@@ -154,15 +154,18 @@ export default function SettingsScreen() {
                 <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
-            <View style={{ flexDirection: 'row', gap: 2 }}>
-              {[10,20,30,40,50,60,70,80,90].map((v) => (
-                <TouchableOpacity key={v} hitSlop={{ top: 6, bottom: 6 }}
-                  onPress={() => setCustom({ background: { ...theme.background, overlay: v / 100 } })}
-                  style={{ flex: 1, height: 30, justifyContent: 'center', alignItems: 'center', borderRadius: 4, backgroundColor: Math.abs((theme.background.overlay || 0.3) * 100 - v) < 3 ? theme.colors.primary : theme.colors.surface }}>
-                  <T style={{ fontSize: 8, color: Math.abs((theme.background.overlay || 0.3) * 100 - v) < 3 ? '#fff' : theme.colors.textSecondary }}>{v}</T>
-                </TouchableOpacity>
-              ))}
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 2 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <TouchableOpacity onPressIn={(e) => {
+                // Use nativeEvent to track position
+                const x = (e.nativeEvent as any).locationX;
+                const pct = Math.round(Math.max(0, Math.min(100, x / 300 * 100)));
+                setCustom({ background: { ...theme.background, overlay: pct / 100 } });
+              }} style={{ flex: 1, height: 36, borderRadius: 4, backgroundColor: theme.colors.surface, justifyContent: 'center', paddingHorizontal: 4 }}>
+                <View style={{ height: 8, backgroundColor: theme.colors.primary + '20', borderRadius: 4 }}>
+                  <View style={{ width: ((theme.background.overlay || 0.3) * 100) + '%', height: 8, backgroundColor: theme.colors.primary, borderRadius: 4 }} />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
         ) : null}

@@ -1,20 +1,24 @@
 import React from 'react';
 import { Text as RNText, TextProps, StyleSheet } from 'react-native';
 import { useTheme } from './ThemeContext';
-import { resolveFont, fontSizeScale } from './fonts';
+import { resolveFont } from './fonts';
 
+/**
+ * Themed Text — applies theme font + density font size.
+ * Uses StyleSheet.flatten to guarantee fontFamily takes effect.
+ */
 export function T(props: TextProps & { children?: any }) {
   const { theme } = useTheme();
   const font = resolveFont(theme.font);
-  const scale = fontSizeScale(theme.density);
-  
-  // Build style: base props style + font override
-  const baseStyle = props.style;
-  const fontOverride: any = {};
-  if (font) fontOverride.fontFamily = font;
+
+  // Build a flat style object: base styles + font override
+  const flatStyle: any = StyleSheet.flatten(props.style) || {};
+  if (font) {
+    flatStyle.fontFamily = font;
+  }
 
   return (
-    <RNText {...props} style={[baseStyle, fontOverride]}>
+    <RNText {...props} style={flatStyle}>
       {props.children}
     </RNText>
   );

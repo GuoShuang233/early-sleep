@@ -62,7 +62,7 @@ export default function CalendarScreen() {
             const ds = y+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
 
             return (
-              <TouchableOpacity key={day} style={[s.cell, { borderRadius: 8, backgroundColor: selectedDay === ds ? theme.colors.surface : 'transparent', borderWidth: isToday ? 2 : 0, borderColor: isToday ? theme.colors.primary : 'transparent' }]}
+              <TouchableOpacity key={day} style={[s.cell, { borderRadius: 20, backgroundColor: selectedDay === ds ? theme.colors.surface : 'transparent', borderWidth: isToday ? 2 : 0, borderColor: isToday ? theme.colors.primary : 'transparent' }]}
                 onPress={() => setSelectedDay(selectedDay === ds ? null : ds)}>
                 <T style={[s.cellNum, { color: isToday ? theme.colors.primary : theme.colors.text, fontWeight: isToday ? '700' : '500' }]}>{day}</T>
                 {hasCompleted && <View style={[s.dot, { backgroundColor: theme.colors.success }]} />}

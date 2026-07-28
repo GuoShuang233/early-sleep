@@ -112,9 +112,9 @@ export function CompanionModal({ visible, onClose, onSelect, currentType }: any)
 // ── Font ──────────────────────────────────────────────────
 const FONTS = [
   { key: 'system', label: '系统默认', preview: '系统默认字体', family: undefined as any },
-  { key: 'rounded', label: '圆体', preview: '圆润可爱字体', family: 'sans-serif-rounded' as any },
+  { key: 'rounded', label: '圆体', preview: '圆润可爱字体', family: undefined as any },
   { key: 'serif', label: '衬线', preview: 'Serif 衬线体', family: 'serif' as any },
-  { key: 'handwrite', label: '手写', preview: '手写风格字体', family: 'cursive' as any },
+  { key: 'handwrite', label: '手写', preview: '手写风格字体', family: undefined as any },
   { key: 'mono', label: '等宽', preview: '等宽字体 1234', family: 'monospace' as any },
 ];
 
