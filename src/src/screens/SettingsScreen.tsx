@@ -13,7 +13,6 @@ import { ColorPickerModal, ButtonStyleModal, CompanionModal, FontModal } from '.
 
 const CUSTOM = [
   { icon: '🎨', label: 'settings.custom.color', handler: 'color' },
-  { icon: '🎪', label: 'settings.custom.button', handler: 'btn' },
   { icon: '🌱', label: 'settings.custom.companion', handler: 'companion' },
   { icon: '🔠', label: 'settings.custom.font', handler: 'font' },
   { icon: '🖼️', label: 'settings.custom.background', handler: 'bg' },
@@ -25,7 +24,6 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
 
   const [showColor, setShowColor] = useState(false);
-  const [showBtn, setShowBtn] = useState(false);
   const [showComp, setShowComp] = useState(false);
   const [showFont, setShowFont] = useState(false);
   const [showLang, setShowLang] = useState(false);
@@ -134,7 +132,6 @@ export default function SettingsScreen() {
           {CUSTOM.map((ci, i) => (
             <TouchableOpacity key={i} onPress={() => {
               if (ci.handler === 'color') setShowColor(true);
-              else if (ci.handler === 'btn') setShowBtn(true);
               else if (ci.handler === 'companion') setShowComp(true);
               else if (ci.handler === 'font') setShowFont(true);
               else if (ci.handler === 'bg') handleBg();
@@ -206,8 +203,6 @@ export default function SettingsScreen() {
 
       <ColorPickerModal visible={showColor} onClose={() => setShowColor(false)}
         onSelect={(c: string) => { setCustom({ colors: { ...theme.colors, primary: c } }); setShowColor(false); }} currentColor={theme.colors.primary} />
-      <ButtonStyleModal visible={showBtn} onClose={() => setShowBtn(false)}
-        onSelect={(s: string) => { setCustom({ button: { ...theme.button, style: s as any } }); setShowBtn(false); }} currentStyle={theme.button.style} />
       <CompanionModal visible={showComp} onClose={() => setShowComp(false)}
         onSelect={(t: string) => { setCustom({ companion: { ...theme.companion, type: t as any } }); setShowComp(false); }} currentType={theme.companion.type} />
       <FontModal visible={showFont} onClose={() => setShowFont(false)}
