@@ -107,6 +107,11 @@ const t: TranslationMap = {
   'lang.de': { zh:'德语', en:'German', ja:'ドイツ語', ko:'독일어', fr:'Allemand', de:'Deutsch', es:'Alemán', ru:'Немецкий' },
   'lang.es': { zh:'西班牙语', en:'Spanish', ja:'スペイン語', ko:'스페인어', fr:'Espagnol', de:'Spanisch', es:'Español', ru:'Испанский' },
   'lang.ru': { zh:'俄语', en:'Russian', ja:'ロシア語', ko:'러시아어', fr:'Russe', de:'Russisch', es:'Ruso', ru:'Русский' },
+
+  // Settings background
+  'settings.bg.set':      { zh:'背景已设置', en:'Background set', ja:'背景設定済み', ko:'배경 설정됨', fr:'Fond défini', de:'Hintergrund gesetzt', es:'Fondo establecido', ru:'Фон установлен' },
+  'settings.bg.reset':    { zh:'恢复默认', en:'Reset default', ja:'デフォルトに戻す', ko:'기본값 복원', fr:'Réinitialiser', de:'Zurücksetzen', es:'Restablecer', ru:'Сбросить' },
+  'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay intensity', ja:'マスク強度', ko:'오버레이 강도', fr:'Intensité', de:'Überlagerung', es:'Intensidad', ru:'Прозрачность' },
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant

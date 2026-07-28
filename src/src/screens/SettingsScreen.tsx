@@ -53,7 +53,6 @@ export default function SettingsScreen() {
     chipIcon: { fontSize: 22 },
     chipLabel: { fontSize: 9, color: tc.theme.colors.textSecondary, marginTop: 2 },
     setRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: tc.theme.colors.surfaceBorder },
-    uploadBox: { borderWidth: 2, borderStyle: 'dashed', borderColor: tc.theme.colors.primary + '30', borderRadius: 12, padding: 16, alignItems: 'center', marginBottom: 16 },
   }));
 
   const handleBg = () => {
@@ -152,10 +151,10 @@ export default function SettingsScreen() {
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                 <T style={{ fontSize: 16 }}>🖼️</T>
-                <T style={{ fontSize: 12, color: theme.colors.text }}>背景已设置</T>
+                <T style={{ fontSize: 12, color: theme.colors.text }}>{t('settings.bg.set')}</T>
               </View>
               <TouchableOpacity onPress={resetBackground} style={{ padding: 4 }}>
-                <T style={{ fontSize: 11, color: '#f87171' }}>恢复默认</T>
+                <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
             <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度</T>
