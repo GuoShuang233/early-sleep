@@ -74,15 +74,12 @@ export default function HomeScreen() {
 
   useFocusEffect(loadData);
 
-  // Load system usage data on focus
+  // Load system usage data on focus (always, not just after bedtime)
   useFocusEffect(useCallback(async () => {
-    const log = await getTodayLog(new Date().toISOString().slice(0, 10));
-    if (log?.bedtime) {
-      const [bh, bm] = log.bedtime.split(':').map(Number);
-      const sleepTime = new Date(); sleepTime.setHours(bh, bm, 0, 0);
-      const usage = await getPhoneUsageDuringSleep(sleepTime.getTime(), Date.now());
-      if (usage) { setAppsUsed(usage.apps || []); setTotalUsage(usage.totalUsage || ''); }
-    }
+    const now = Date.now();
+    const yesterday = now - 24 * 60 * 60 * 1000;
+    const usage = await getPhoneUsageDuringSleep(yesterday, now);
+    if (usage) { setAppsUsed(usage.apps || []); setTotalUsage(usage.totalUsage || ''); }
   }, []));
 
   const handleBedtime = async () => {

@@ -189,6 +189,16 @@ const t: TranslationMap = {
   'settings.badge':     { zh:'徽章', en:'Badges', ja:'バッジ', ko:'배지', fr:'Badges', de:'Abzeichen', es:'Insignias', ru:'Значки' },
   'report.wakeup':      { zh:'☀️ 今早起', en:'Woke up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufgewacht', es:'Desperté', ru:'Проснулся' },
 
+  'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
+  'color.current':      { zh:'当前', en:'Current', ja:'現在', ko:'현재', fr:'Actuel', de:'Aktuell', es:'Actual', ru:'Текущий' },
+  'settings.custom.button':{ zh:'🎪 按钮风格', en:'🎪 Button Style', ja:'🎪 ボタンスタイル', ko:'🎪 버튼 스타일', fr:'🎪 Style bouton', de:'🎪 Button-Stil', es:'🎪 Estilo botón', ru:'🎪 Стиль кнопок' },
+  'settings.custom.companion':{ zh:'🌱 虚拟伙伴', en:'🌱 Companion', ja:'🌱 仲間', ko:'🌱 동반자', fr:'🌱 Compagnon', de:'🌱 Begleiter', es:'🌱 Compañero', ru:'🌱 Питомец' },
+  'settings.custom.font':{ zh:'🔠 字体', en:'🔠 Font', ja:'🔠 フォント', ko:'🔠 글꼴', fr:'🔠 Police', de:'🔠 Schrift', es:'🔠 Fuente', ru:'🔠 Шрифт' },
+  'settings.font.size':  { zh:'字体大小', en:'Font Size', ja:'フォントサイズ', ko:'글꼴 크기', fr:'Taille police', de:'Schriftgröße', es:'Tamaño fuente', ru:'Размер шрифта' },
+  'settings.font.small': { zh:'小', en:'S', ja:'小', ko:'작게', fr:'Petit', de:'Klein', es:'Pequeño', ru:'Мал' },
+  'settings.font.medium':{ zh:'中', en:'M', ja:'中', ko:'중간', fr:'Moyen', de:'Mittel', es:'Medio', ru:'Сред' },
+  'settings.font.large': { zh:'大', en:'L', ja:'大', ko:'크게', fr:'Grand', de:'Groß', es:'Grande', ru:'Бол' },
+
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant
@@ -288,6 +298,16 @@ const S2T: Record<string, string> = {
   'settings.ach':       { zh:'🏆 成就', en:'Achievements', ja:'実績', ko:'성취', fr:'Succès', de:'Erfolge', es:'Logros', ru:'Достижения' },
   'settings.badge':     { zh:'徽章', en:'Badges', ja:'バッジ', ko:'배지', fr:'Badges', de:'Abzeichen', es:'Insignias', ru:'Значки' },
   'report.wakeup':      { zh:'☀️ 今早起', en:'Woke up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufgewacht', es:'Desperté', ru:'Проснулся' },
+
+  'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
+  'color.current':      { zh:'当前', en:'Current', ja:'現在', ko:'현재', fr:'Actuel', de:'Aktuell', es:'Actual', ru:'Текущий' },
+  'settings.custom.button':{ zh:'🎪 按钮风格', en:'🎪 Button Style', ja:'🎪 ボタンスタイル', ko:'🎪 버튼 스타일', fr:'🎪 Style bouton', de:'🎪 Button-Stil', es:'🎪 Estilo botón', ru:'🎪 Стиль кнопок' },
+  'settings.custom.companion':{ zh:'🌱 虚拟伙伴', en:'🌱 Companion', ja:'🌱 仲間', ko:'🌱 동반자', fr:'🌱 Compagnon', de:'🌱 Begleiter', es:'🌱 Compañero', ru:'🌱 Питомец' },
+  'settings.custom.font':{ zh:'🔠 字体', en:'🔠 Font', ja:'🔠 フォント', ko:'🔠 글꼴', fr:'🔠 Police', de:'🔠 Schrift', es:'🔠 Fuente', ru:'🔠 Шрифт' },
+  'settings.font.size':  { zh:'字体大小', en:'Font Size', ja:'フォントサイズ', ko:'글꼴 크기', fr:'Taille police', de:'Schriftgröße', es:'Tamaño fuente', ru:'Размер шрифта' },
+  'settings.font.small': { zh:'小', en:'S', ja:'小', ko:'작게', fr:'Petit', de:'Klein', es:'Pequeño', ru:'Мал' },
+  'settings.font.medium':{ zh:'中', en:'M', ja:'中', ko:'중간', fr:'Moyen', de:'Mittel', es:'Medio', ru:'Сред' },
+  'settings.font.large': { zh:'大', en:'L', ja:'大', ko:'크게', fr:'Grand', de:'Groß', es:'Grande', ru:'Бол' },
 
 };
 
