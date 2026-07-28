@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,6 +32,7 @@ export default function ReportScreen() {
   const [todayLog, setTodayLog] = useState<any>(null);
   const [streak, setStreak] = useState({ current: 0, longest: 0, total: 0, curfewRate: 0 });
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
+  const [showScoreDetail, setShowScoreDetail] = useState(false);
   const [targetBed, setTargetBed] = useState('23:00');
 
   const loadData = useCallback(async () => {
@@ -106,6 +107,28 @@ export default function ReportScreen() {
     return bedScore + durScore + curfewScore;
   })();
 
+
+  // Score breakdown for detail modal
+  const scoreDetail = (() => {
+    if (!todayLog?.bedtime || !todayLog?.waketime) return null;
+    const [bh, bm] = todayLog.bedtime.split(':').map(Number);
+    const [wh, wm] = todayLog.waketime.split(':').map(Number);
+    const [tbh, tbm] = targetBed.split(':').map(Number);
+    const actualBed = bh * 60 + bm;
+    const targetBedMin = tbh * 60 + tbm;
+    const bedDiff = Math.abs(actualBed - targetBedMin);
+    const bedScore = bedDiff <= 60 ? 40 : bedDiff <= 120 ? 20 : 0;
+    let dur = (wh * 60 + wm) - (bh * 60 + bm);
+    if (dur < 0) dur += 24 * 60;
+    const durScore = dur >= 420 ? 40 : dur >= 300 ? 30 : dur >= 180 ? 20 : 10;
+    const curfewScore = todayLog?.phone_curfew_kept ? 20 : 0;
+    return {
+      bed: { score: bedScore, max: 40, label: '就寝准时', detail: '目标 ' + targetBed + ' ±1h=' + bedScore + '分' },
+      dur: { score: durScore, max: 40, label: '睡眠时长', detail: Math.floor(dur/60) + 'h' + (dur%60) + 'm / 7h=' + durScore + '分' },
+      curfew: { score: curfewScore, max: 20, label: '未使用手机', detail: curfewScore > 0 ? '达标 +20分' : '未达标 +0分' },
+    };
+  })();
+
   const advice = getAdvice();
 
   return (
@@ -124,12 +147,12 @@ export default function ReportScreen() {
           <T style={s.statLabel}>☀️ 今早起</T>
           <T style={s.statValue}>{todayLog?.waketime || '--'}</T>
         </View>
-        <View style={s.statRow}>
+        <TouchableOpacity onPress={() => setShowScoreDetail(true)} style={s.statRow}>
           <T style={s.statLabel}>💚 健康生活</T>
           <T style={[s.statValue, { color: healthScore >= 80 ? theme.colors.success : healthScore >= 60 ? theme.colors.warning : theme.colors.error }]}>
-            {healthScore}分 · {healthScore >= 100 ? '健康' : healthScore >= 80 ? '亚健康' : healthScore >= 60 ? '不健康' : '不要命啦！'}
+            {healthScore}分 · {healthScore >= 100 ? '健康' : healthScore >= 80 ? '亚健康' : healthScore >= 60 ? '不健康' : '不要命啦！'} ›
           </T>
-        </View>
+        </TouchableOpacity>
 
         {todayLog?.note && (
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.warning + '10', borderWidth: 1, borderColor: theme.colors.warning + '15', borderRadius: 8, padding: 8, gap: 6, marginVertical: 8 }}>
@@ -168,6 +191,39 @@ export default function ReportScreen() {
           <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>播放</T>
         </View>
       </ScrollView>
+
+      {/* Health Score Detail Modal */}
+      <Modal visible={showScoreDetail} transparent animationType="fade" onRequestClose={() => setShowScoreDetail(false)}>
+        <View style={{ flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
+          <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
+            <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 4 }}>💚 健康评分明细</T>
+            <T style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 16 }}>满分100分</T>
+            {scoreDetail && (
+              <View style={{ gap: 12 }}>
+                {[scoreDetail.bed, scoreDetail.dur, scoreDetail.curfew].map((item, i) => (
+                  <View key={i} style={{ backgroundColor: theme.colors.background + '60', borderRadius: 10, padding: 12 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <T style={{ fontSize: 13, fontWeight: '500', color: theme.colors.text }}>{item.label}</T>
+                      <T style={{ fontSize: 13, fontWeight: '700', color: item.score >= item.max * 0.7 ? theme.colors.success : item.score >= item.max * 0.4 ? theme.colors.warning : theme.colors.error }}>{item.score}/{item.max}</T>
+                    </View>
+                    <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 4 }}>{item.detail}</T>
+                    <View style={{ height: 4, backgroundColor: theme.colors.surface, borderRadius: 2, marginTop: 6 }}>
+                      <View style={{ width: (item.score / item.max * 100) + '%', height: 4, backgroundColor: item.score >= item.max * 0.7 ? theme.colors.success : item.score >= item.max * 0.4 ? theme.colors.warning : theme.colors.error, borderRadius: 2 }} />
+                    </View>
+                  </View>
+                ))}
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: theme.colors.surfaceBorder }}>
+                  <T style={{ fontSize: 15, fontWeight: '600', color: theme.colors.text }}>总分</T>
+                  <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.primary }}>{healthScore}/100</T>
+                </View>
+              </View>
+            )}
+            <TouchableOpacity onPress={() => setShowScoreDetail(false)} style={{ padding: 12, alignItems: 'center', marginTop: 12 }}>
+              <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>关闭</T>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

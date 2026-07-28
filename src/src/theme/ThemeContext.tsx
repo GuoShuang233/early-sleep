@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
-import { I18nManager, Platform, NativeModules } from 'react-native';
+import { I18nManager, Platform, NativeModules, Appearance } from 'react-native';
 import {
   ThemeConfig, presetThemes, PresetKey, darkPrecision,
 } from './themes';
@@ -49,17 +49,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     })).catch(() => {});
   }, [currentPreset, customOverrides, autoSwitch, loaded]);
 
-  // Auto-switch timer (does NOT depend on currentPreset)
+  // Auto-switch: follow system dark mode
   useEffect(() => {
     if (!autoSwitch || !loaded) return;
     const apply = () => {
-      const h = new Date().getHours();
-      const t: PresetKey = (h >= 6 && h < 18) ? 'minimal-light' : 'dark-precision';
+      const cs = Appearance.getColorScheme();
+      const t: PresetKey = cs === 'dark' ? 'dark-precision' : 'minimal-light';
       setCurrentPreset((prev) => (prev === 'custom' ? prev : t));
     };
     apply();
-    const interval = setInterval(apply, 30 * 60 * 1000);
-    return () => clearInterval(interval);
+    const sub = Appearance.addChangeListener(() => apply());
+    return () => sub.remove();
   }, [autoSwitch, loaded]);
 
   // Memoize theme
