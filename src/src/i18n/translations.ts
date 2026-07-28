@@ -169,6 +169,14 @@ const t: TranslationMap = {
   'perm.later':         { zh:'暂不开启', en:'Not Now', ja:'あとで', ko:'나중에', fr:'Plus tard', de:'Später', es:'Ahora no', ru:'Позже' },
   'perm.go':            { zh:'去授权', en:'Authorize', ja:'許可する', ko:'허용', fr:'Autoriser', de:'Autorisieren', es:'Autorizar', ru:'Разрешить' },
 
+  'theme.dark':         { zh:'暗色精确', en:'Dark Precision', ja:'ダーク', ko:'다크', fr:'Sombre précis', de:'Dunkel präzise', es:'Oscuro preciso', ru:'Тёмный' },
+  'theme.warm':         { zh:'暖色助眠', en:'Warm Night', ja:'ウォーム', ko:'웜', fr:'Nuit chaude', de:'Warme Nacht', es:'Noche cálida', ru:'Тёплая ночь' },
+  'theme.nature':       { zh:'自然简约', en:'Nature Calm', ja:'ナチュラル', ko:'네이처', fr:'Nature calme', de:'Natur ruhig', es:'Naturaleza', ru:'Природа' },
+  'theme.light':        { zh:'极简亮色', en:'Minimal Light', ja:'ミニマル', ko:'미니멀', fr:'Lumière min', de:'Minimal hell', es:'Luz mínima', ru:'Минимальный' },
+  'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay', ja:'オーバーレイ', ko:'오버레이', fr:'Superposition', de:'Überlagerung', es:'Superposición', ru:'Наложение' },
+  'settings.export':    { zh:'导出主题', en:'Export Theme', ja:'テーマ出力', ko:'테마 내보내기', fr:'Exporter thème', de:'Thema exportieren', es:'Exportar tema', ru:'Экспорт темы' },
+  'settings.import':    { zh:'导入主题', en:'Import Theme', ja:'テーマ読込', ko:'테마 가져오기', fr:'Importer thème', de:'Thema importieren', es:'Importar tema', ru:'Импорт темы' },
+
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant
@@ -255,6 +263,14 @@ const S2T: Record<string, string> = {
   'perm.desc':          { zh:'我们需要「使用情况访问」权限来检测你睡前是否使用手机。这有助于记录真实的睡眠习惯。', en:'We need Usage Access to detect phone use during sleep.', ja:'睡眠中のスマホ使用を検出するために使用状況へのアクセスが必要です。', ko:'수면 중 휴대폰 사용을 감지하기 위해 사용 통계 권한이 필요합니다.', fr:'Nous avons besoin de l\'accès à l\'utilisation pour détecter l\'utilisation du téléphone.', de:'Wir benötigen Zugriff auf Nutzungsstatistiken.', es:'Necesitamos acceso a estadísticas de uso.', ru:'Нам нужен доступ к статистике использования.' },
   'perm.later':         { zh:'暂不开启', en:'Not Now', ja:'あとで', ko:'나중에', fr:'Plus tard', de:'Später', es:'Ahora no', ru:'Позже' },
   'perm.go':            { zh:'去授权', en:'Authorize', ja:'許可する', ko:'허용', fr:'Autoriser', de:'Autorisieren', es:'Autorizar', ru:'Разрешить' },
+
+  'theme.dark':         { zh:'暗色精确', en:'Dark Precision', ja:'ダーク', ko:'다크', fr:'Sombre précis', de:'Dunkel präzise', es:'Oscuro preciso', ru:'Тёмный' },
+  'theme.warm':         { zh:'暖色助眠', en:'Warm Night', ja:'ウォーム', ko:'웜', fr:'Nuit chaude', de:'Warme Nacht', es:'Noche cálida', ru:'Тёплая ночь' },
+  'theme.nature':       { zh:'自然简约', en:'Nature Calm', ja:'ナチュラル', ko:'네이처', fr:'Nature calme', de:'Natur ruhig', es:'Naturaleza', ru:'Природа' },
+  'theme.light':        { zh:'极简亮色', en:'Minimal Light', ja:'ミニマル', ko:'미니멀', fr:'Lumière min', de:'Minimal hell', es:'Luz mínima', ru:'Минимальный' },
+  'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay', ja:'オーバーレイ', ko:'오버레이', fr:'Superposition', de:'Überlagerung', es:'Superposición', ru:'Наложение' },
+  'settings.export':    { zh:'导出主题', en:'Export Theme', ja:'テーマ出力', ko:'테마 내보내기', fr:'Exporter thème', de:'Thema exportieren', es:'Exportar tema', ru:'Экспорт темы' },
+  'settings.import':    { zh:'导入主题', en:'Import Theme', ja:'テーマ読込', ko:'테마 가져오기', fr:'Importer thème', de:'Thema importieren', es:'Importar tema', ru:'Импорт темы' },
 
 };
 

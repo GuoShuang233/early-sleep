@@ -93,7 +93,7 @@ export default function CalendarScreen() {
           <View style={s.detail}>
             {(() => {
               const log = logs.find((l: any) => l.log_date === selectedDay);
-              if (!log) return <T style={{ color: theme.colors.textSecondary, fontSize: 13 }}>{selectedDay} ·  + ' ' + t('cal.nodata')}</T>;
+              if (!log) return <T style={{ color: theme.colors.textSecondary, fontSize: 13 }}>{selectedDay + ' · ' + t('cal.nodata')}</T>;
               return (
                 <View>
                   <T style={{ fontSize: 14, fontWeight: '600', color: theme.colors.text, marginBottom: 10 }}>{selectedDay}</T>

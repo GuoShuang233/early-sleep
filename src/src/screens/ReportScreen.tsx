@@ -150,7 +150,7 @@ export default function ReportScreen() {
         <TouchableOpacity onPress={() => setShowScoreDetail(true)} style={s.statRow}>
           <T style={s.statLabel}>💚 健康生活</T>
           <T style={[s.statValue, { color: healthScore >= 80 ? theme.colors.success : healthScore >= 60 ? theme.colors.warning : theme.colors.error }]}>
-            {healthScore}分 · {healthScore >= 90 ? t('health.great') : healthScore >= 70 ? t('health.ok') : healthScore >= 50 ? t('health.bad') : t('health.dead')} ›
+            {healthScore}分 · {healthScore >= 100 ? t('health.great') : healthScore >= 80 ? t('health.ok') : healthScore >= 60 ? t('health.bad') : t('health.dead')} ›
           </T>
         </TouchableOpacity>
 

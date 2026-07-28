@@ -75,7 +75,7 @@ export default function SettingsScreen() {
         <View style={s.presetRow}>
           {(['dark-precision','warm-night','nature-calm','minimal-light'] as PresetKey[]).map((key) => {
             const icons: Record<string,string> = {'dark-precision':'🌙','warm-night':'🔮','nature-calm':'🌿','minimal-light':'☀️'};
-            const labels: Record<string,string> = {'dark-precision':'暗色精确','warm-night':'暖色助眠','nature-calm':'自然简约','minimal-light':'极简亮色'};
+            const labels: Record<string,string> = {'dark-precision': t('theme.dark'),'warm-night': t('theme.warm'),'nature-calm': t('theme.nature'),'minimal-light': t('theme.light')};
             return (
               <TouchableOpacity key={key} onPress={() => setPreset(key)}
                 style={[s.presetItem, { borderColor: currentPreset === key ? theme.colors.primary : theme.colors.surfaceBorder }]}>
@@ -152,7 +152,7 @@ export default function SettingsScreen() {
                 <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 2 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 2 }}>{t('settings.bg.intensity')}  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
             <Slider
               style={{ width: '100%', height: 40 }}
               minimumValue={0}
