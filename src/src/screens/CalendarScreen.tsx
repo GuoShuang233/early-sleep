@@ -9,6 +9,15 @@ import { getRecentLogs } from '../data/database';
 
 const WDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
+function completionRate(log: any): string {
+  if (!log?.bedtime || !log?.waketime) return '--';
+  const bh = parseInt(log.bedtime.split(':')[0]) * 60 + parseInt(log.bedtime.split(':')[1]);
+  const wh = parseInt(log.waketime.split(':')[0]) * 60 + parseInt(log.waketime.split(':')[1]);
+  let dur = wh - bh;
+  if (dur < 0) dur += 24 * 60;
+  return String(Math.min(100, Math.round(dur / 420 * 100))) + '%';
+}
+
 export default function CalendarScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -35,20 +44,17 @@ export default function CalendarScreen() {
     detail: { marginTop: 16, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 14, padding: 16 },
   }));
 
-  const getLog = (day: number) => {
-    const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
-    return logs.find((l: any) => l.log_date === ds);
-  };
+  const fmtDate = (day: number) => y + '-' + String(m + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+
+  const getLog = (day: number) => logs.find((l: any) => l.log_date === fmtDate(day));
 
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
         <T style={{ fontSize: 18, fontWeight: '600', color: theme.colors.text, marginBottom: 16 }}>{y}年{m + 1}月</T>
-
         <View style={s.weekRow}>
           {WDAYS.map(d => <T key={d} style={s.dayHead}>{d}</T>)}
         </View>
-
         <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
           {Array.from({ length: firstDow }, (_, i) => <View key={'p' + i} style={s.cellOuter} />)}
           {Array.from({ length: daysInMonth }, (_, i) => {
@@ -57,13 +63,12 @@ export default function CalendarScreen() {
             const isToday = day === now.getDate();
             const ok = log?.bedtime && log?.waketime;
             const partial = !!log?.bedtime && !ok;
-            const ds = y + '-' + String(m + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            const ds = fmtDate(day);
             return (
               <View key={day} style={s.cellOuter}>
-                <TouchableOpacity style={[
-                  s.cell,
-                  { backgroundColor: ok ? theme.colors.success + '22' : partial ? theme.colors.warning + '22' : 'transparent' },
-                  isToday && { borderWidth: 2, borderColor: theme.colors.primary },
+                <TouchableOpacity style={[s.cell, {
+                  backgroundColor: ok ? theme.colors.success + '22' : partial ? theme.colors.warning + '22' : 'transparent',
+                }, isToday && { borderWidth: 2, borderColor: theme.colors.primary },
                   selectedDay === ds && { borderWidth: 2, borderColor: theme.colors.primary + '60' },
                 ]} onPress={() => setSelectedDay(selectedDay === ds ? null : ds)}>
                   <T style={[s.cellNum, { color: isToday ? theme.colors.primary : theme.colors.text }]}>{day}</T>
@@ -92,11 +97,13 @@ export default function CalendarScreen() {
               return (
                 <View>
                   <T style={{ fontSize: 14, fontWeight: '600', color: theme.colors.text, marginBottom: 10 }}>{selectedDay}</T>
-                  <View style={{ flexDirection: 'row', gap: 20 }}>
+                  <View style={{ flexDirection: 'row', gap: 20, marginBottom: 6 }}>
                     <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>就寝</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.bedtime || '--'}</T></View>
                     <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>起床</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.waketime || '--'}</T></View>
                     <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>打卡</T><T style={{ fontSize: 15, color: (log.bedtime && log.waketime) ? theme.colors.success : theme.colors.warning }}>{(log.bedtime && log.waketime) ? '✓' : '✗'}</T></View>
-                  <View style={{ marginTop: 8 }}><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>完成度</T><T style={{ fontSize: 15, color: theme.colors.primary, fontWeight: '500' }}>{(() => { if (!log.bedtime || !log.waketime) return '--'; const [bh, bm] = log.bedtime.split(':').map(Number); const [wh, wm] = log.waketime.split(':').map(Number); let dur = (wh * 60 + wm) - (bh * 60 + bm); if (dur < 0) dur += 24 * 60; const pct = Math.min(100, Math.round(dur / 420 * 100)); return String(pct) + '%'; })()}</T></View>
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 20 }}>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>完成度</T><T style={{ fontSize: 15, color: theme.colors.primary, fontWeight: '500' }}>{completionRate(log)}</T></View>
                   </View>
                   {log.note ? <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 8 }}>📝 {log.note}</T> : null}
                 </View>

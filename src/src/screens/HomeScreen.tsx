@@ -147,6 +147,7 @@ export default function HomeScreen() {
         {appsUsed.length > 0 && (
           <View style={s.card}>
             <T style={s.cardTitle}>📱 昨晚 App 使用 · {totalUsage}</T>
+            <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginBottom: 6 }}>总使用时长: {totalUsage}</T>
             {appsUsed.slice(0, 5).map((a: any, i: number) => (
               <View key={i} style={s.logEntry}>
                 <T style={{ fontSize: 13, color: theme.colors.text, flex: 1 }}>{a.appName || a.packageName}</T>
