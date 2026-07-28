@@ -95,7 +95,8 @@ export default function CalendarScreen() {
                   <View style={{ flexDirection: 'row', gap: 20 }}>
                     <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>就寝</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.bedtime || '--'}</T></View>
                     <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>起床</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.waketime || '--'}</T></View>
-                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>宵禁</T><T style={{ fontSize: 15, color: log.phone_curfew_kept ? theme.colors.success : theme.colors.warning }}>{log.phone_curfew_kept ? '✓' : '✗'}</T></View>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>打卡</T><T style={{ fontSize: 15, color: (log.bedtime && log.waketime) ? theme.colors.success : theme.colors.warning }}>{(log.bedtime && log.waketime) ? '✓' : '✗'}</T></View>
+                  <View style={{ marginTop: 8 }}><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>完成度</T><T style={{ fontSize: 15, color: theme.colors.primary, fontWeight: '500' }}>{(() => { if (!log.bedtime || !log.waketime) return '--'; const [bh, bm] = log.bedtime.split(':').map(Number); const [wh, wm] = log.waketime.split(':').map(Number); let dur = (wh * 60 + wm) - (bh * 60 + bm); if (dur < 0) dur += 24 * 60; const pct = Math.min(100, Math.round(dur / 420 * 100)); return String(pct) + '%'; })()}</T></View>
                   </View>
                   {log.note ? <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 8 }}>📝 {log.note}</T> : null}
                 </View>

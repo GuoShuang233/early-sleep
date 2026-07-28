@@ -84,6 +84,28 @@ export default function ReportScreen() {
     return lines;
   };
 
+
+  // Calculate health score based on sleep quality vs targets
+  const healthScore = (() => {
+    if (!todayLog?.bedtime || !todayLog?.waketime) return 0;
+    const [bh, bm] = todayLog.bedtime.split(':').map(Number);
+    const [wh, wm] = todayLog.waketime.split(':').map(Number);
+    const [tbh, tbm] = tb.split(':').map(Number);
+    const actualBed = bh * 60 + bm;
+    const actualWake = wh * 60 + wm;
+    const targetBed = tbh * 60 + tbm;
+    // Bedtime: within 1h of target = 40pts, 2h = 20pts
+    const bedDiff = Math.abs(actualBed - targetBed);
+    let bedScore = bedDiff <= 60 ? 40 : bedDiff <= 120 ? 20 : 0;
+    // Sleep duration: 7-9h = 40pts, 5-7h = 30pts, <5h = 10pts
+    let dur = actualWake - actualBed;
+    if (dur < 0) dur += 24 * 60;
+    let durScore = dur >= 420 ? 40 : dur >= 300 ? 30 : dur >= 180 ? 20 : 10;
+    // Curfew: no phone = 20pts
+    let curfewScore = todayLog?.phone_curfew_kept ? 20 : 0;
+    return bedScore + durScore + curfewScore;
+  })();
+
   const advice = getAdvice();
 
   return (
@@ -103,9 +125,9 @@ export default function ReportScreen() {
           <T style={s.statValue}>{todayLog?.waketime || '--'}</T>
         </View>
         <View style={s.statRow}>
-          <T style={s.statLabel}>📵 宵禁状态</T>
-          <T style={[s.statValue, { color: todayLog?.phone_curfew_kept ? theme.colors.success : theme.colors.warning }]}>
-            {todayLog?.phone_curfew_kept ? '✅ 达标' : '⚠️ 未达标'}
+          <T style={s.statLabel}>💚 健康生活</T>
+          <T style={[s.statValue, { color: healthScore >= 80 ? theme.colors.success : healthScore >= 60 ? theme.colors.warning : theme.colors.error }]}>
+            {healthScore}分 · {healthScore >= 100 ? '健康' : healthScore >= 80 ? '亚健康' : healthScore >= 60 ? '不健康' : '不要命啦！'}
           </T>
         </View>
 

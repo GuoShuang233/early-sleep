@@ -16,7 +16,7 @@ const t: TranslationMap = {
   'home.greeting.morning':{ zh:'☀️ 早上好', en:'☀️ Good Morning', ja:'☀️ おはようございます', ko:'☀️ 좋은 아침', fr:'☀️ Bonjour', de:'☀️ Guten Morgen', es:'☀️ Buenos días', ru:'☀️ Доброе утро' },
   'home.target':          { zh:'目标', en:'Target', ja:'目標', ko:'목표', fr:'Objectif', de:'Ziel', es:'Objetivo', ru:'Цель' },
   'home.streak':          { zh:'连续', en:'Streak', ja:'連続', ko:'연속', fr:'Série', de:'Serie', es:'Racha', ru:'Серия' },
-  'home.curfew.rate':     { zh:'宵禁率', en:'Curfew Rate', ja:'門限率', ko:'통금률', fr:'Taux respect', de:'Sperrzeit', es:'Tasa toque', ru:'Коменд. час' },
+  'home.curfew.rate': { zh:'完成度', en:'Completion', ja:'完了度', ko:'완성도', fr:'Complétion', de:'Abschluss', es:'Finalización', ru:'Завершено' },
   'home.sleep':           { zh:'睡眠', en:'Sleep', ja:'睡眠', ko:'수면', fr:'Sommeil', de:'Schlaf', es:'Sueño', ru:'Сон' },
   'home.bedtime':         { zh:'🌙 准备睡觉', en:'🌙 Go to Bed', ja:'🌙 寝る準備', ko:'🌙 잘 준비', fr:'🌙 Au lit', de:'🌙 Schlafen', es:'🌙 A dormir', ru:'🌙 Ко сну' },
   'home.bedtime.sub':     { zh:'放下手机', en:'Put down your phone', ja:'スマホを置いて', ko:'핸드폰을 내려놓으세요', fr:'Lâchez le téléphone', de:'Handy weglegen', es:'Suelta el móvil', ru:'Отложите телефон' },
@@ -39,7 +39,7 @@ const t: TranslationMap = {
   'report.note':     { zh:'📝 备注', en:'📝 Note', ja:'📝 メモ', ko:'📝 메모', fr:'📝 Note', de:'📝 Notiz', es:'📝 Nota', ru:'📝 Заметка' },
   'report.streak':   { zh:'🔥 连续天数', en:'🔥 Streak', ja:'🔥 連続日数', ko:'🔥 연속 일수', fr:'🔥 Série', de:'🔥 Serie', es:'🔥 Racha', ru:'🔥 Серия' },
   'report.longest':  { zh:'📈 最长连续', en:'📈 Longest', ja:'📈 最長連続', ko:'📈 최장 연속', fr:'📈 Record', de:'📈 Rekord', es:'📈 Récord', ru:'📈 Рекорд' },
-  'report.curfew':   { zh:'📊 宵禁达标率', en:'📊 Curfew Rate', ja:'📊 門限達成率', ko:'📊 통금 달성률', fr:'📊 Taux conformité', de:'📊 Sperrzeit-Quote', es:'📊 Tasa toque', ru:'📊 Соблюдение режима' },
+  'report.curfew': { zh:'打卡', en:'Check-in', ja:'チェックイン', ko:'체크인', fr:'Pointage', de:'Check-in', es:'Registro', ru:'Отметка' },
   'report.total':    { zh:'📋 总记录天数', en:'📋 Total Days', ja:'📋 総記録日数', ko:'📋 총 기록 일수', fr:'📋 Total jours', de:'📋 Gesamttage', es:'📋 Días totales', ru:'📋 Всего дней' },
 
   // Calendar
@@ -112,6 +112,7 @@ const t: TranslationMap = {
   'settings.bg.set':      { zh:'背景已设置', en:'Background set', ja:'背景設定済み', ko:'배경 설정됨', fr:'Fond défini', de:'Hintergrund gesetzt', es:'Fondo establecido', ru:'Фон установлен' },
   'settings.bg.reset':    { zh:'恢复默认', en:'Reset default', ja:'デフォルトに戻す', ko:'기본값 복원', fr:'Réinitialiser', de:'Zurücksetzen', es:'Restablecer', ru:'Сбросить' },
   'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay intensity', ja:'マスク強度', ko:'오버레이 강도', fr:'Intensité', de:'Überlagerung', es:'Intensidad', ru:'Прозрачность' },
+  'report.health': { zh:'健康生活', en:'Health Score', ja:'健康スコア', ko:'건강 점수', fr:'Score santé', de:'Gesundheit', es:'Salud', ru:'Здоровье' },
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant

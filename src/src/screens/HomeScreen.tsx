@@ -50,7 +50,16 @@ export default function HomeScreen() {
   useEffect(() => {
     (async () => {
       const ok = await hasUsagePermission();
-      if (!ok) await openUsageSettings();
+      if (!ok) {
+        Alert.alert(
+          '使用统计权限',
+          '我们需要「使用情况访问」权限来检测你睡前是否使用手机。这有助于记录真实的睡眠习惯。',
+          [
+            { text: '暂不开启', style: 'cancel' },
+            { text: '去授权', onPress: () => openUsageSettings() },
+          ]
+        );
+      }
     })();
   }, []);
 
