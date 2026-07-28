@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground } from 'react-native'
+import { View, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground, Platform, Alert, PermissionsAndroid } from 'react-native';
 import { T } from '../theme/T';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
@@ -8,28 +8,20 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { resolveFont } from '../theme/fonts';
 import { getTodayLog, logBedtime, logWaketime, getStreak, getRecentLogs, getSetting } from '../data/database';
+import { hasUsagePermission, openUsageSettings, getPhoneUsageDuringSleep } from '../native/UsageStats';
 
-function btnRadius(style: string) {
-  if (style === 'pill') return 30;
-  if (style === 'sharp') return 0;
-  if (['cat', 'bear', 'owl', 'star'].includes(style)) return 24;
-  return 14;
-}
-
-function btnExtra(btn: any, colors: any) {
-  const s = btn?.style || 'rounded';
-  const r: any = {};
-  if (s === 'glow') { r.shadowOpacity = 0.6; r.shadowRadius = 35; r.elevation = 12; r.borderWidth = 0; }
-  else if (s === 'outline') { r.borderWidth = 2.5; r.borderColor = colors.primary; r.backgroundColor = 'transparent'; r.borderRadius = 14; }
-  else if (s === '3d') { r.borderBottomWidth = 6; r.borderBottomColor = colors.primary + 'aa'; r.borderLeftWidth = 1; r.borderRightWidth = 1; r.borderLeftColor = colors.primary + '40'; r.borderRightColor = colors.primary + '40'; }
-  else if (s === 'pill') { r.paddingVertical = 20; r.paddingHorizontal = 32; }
-  else if (s === 'sharp') { r.borderWidth = 1; r.borderColor = colors.textSecondary + '40'; r.borderRadius = 2; }
-  else if (s === 'cat') { r.borderRadius = 18; r.backgroundColor = '#ff9eb5'; }
-  else if (s === 'bear') { r.borderRadius = 30; r.backgroundColor = '#c4a882'; }
-  else if (s === 'owl') { r.borderRadius = 20; r.backgroundColor = '#8b6f9e'; }
-  else if (s === 'star') { r.borderRadius = 22; r.backgroundColor = '#f7d44a'; }
-  return r;
-}
+const BTN_STYLES: Record<string, any> = {
+  rounded: { borderRadius: 14, backgroundColor: '' },
+  pill: { borderRadius: 30, paddingVertical: 20 },
+  sharp: { borderRadius: 2, borderWidth: 1 },
+  glow: { borderRadius: 14, shadowOpacity: 0.6, shadowRadius: 35, elevation: 12 },
+  outline: { borderRadius: 14, borderWidth: 2.5, backgroundColor: 'transparent' },
+  '3d': { borderRadius: 14, borderBottomWidth: 6 },
+  cat: { borderRadius: 20, backgroundColor: '#ff9eb5' },
+  bear: { borderRadius: 30, backgroundColor: '#c4a882' },
+  owl: { borderRadius: 22, backgroundColor: '#8b6f9e' },
+  star: { borderRadius: 24, backgroundColor: '#f7d44a' },
+};
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -44,9 +36,6 @@ export default function HomeScreen() {
     streakItem: { flex: 1, backgroundColor: tc.theme.colors.surface, borderWidth: 1, borderColor: tc.theme.colors.surfaceBorder, borderRadius: 12, padding: 12, alignItems: 'center' },
     streakNum: { fontSize: 22, fontWeight: '700' },
     streakLabel: { fontSize: 10, color: tc.theme.colors.textSecondary, marginTop: 3, textTransform: 'uppercase', letterSpacing: 0.5 },
-    adBanner: { flexDirection: 'row', alignItems: 'center', backgroundColor: tc.theme.colors.surface, borderWidth: 1, borderColor: tc.theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 4 },
-    adBadge: { fontSize: 8, color: tc.theme.colors.textSecondary }, adText: { flex: 1, fontSize: 11, color: tc.theme.colors.textSecondary },
-    adCta: { fontSize: 10, color: tc.theme.colors.primary, fontWeight: '600' },
     card: { backgroundColor: tc.theme.colors.surface, borderWidth: 1, borderColor: tc.theme.colors.surfaceBorder, borderRadius: 14, padding: 16, marginBottom: 14 },
     cardTitle: { fontSize: 12, color: tc.theme.colors.textSecondary, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8 },
     logEntry: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 6 },
@@ -65,6 +54,7 @@ export default function HomeScreen() {
   const [targetBedtime, setTargetBedtime] = useState('23:00');
   const [showBedtimeModal, setShowBedtimeModal] = useState(false);
   const [note, setNote] = useState('');
+  const [appsUsed, setAppsUsed] = useState<any[]>([]);
 
   const loadData = useCallback(async () => {
     const today = new Date().toISOString().slice(0, 10);
@@ -78,30 +68,58 @@ export default function HomeScreen() {
   useFocusEffect(loadData);
 
   const handleBedtime = async () => {
-    const today = new Date().toISOString().slice(0, 10);
-    const now = new Date().toTimeString().slice(0, 5);
-    await logBedtime(today, now, true, note);
-    setShowBedtimeModal(false); setNote('');
-    loadData();
-  };
-  const handleWakeup = async () => {
-    const today = new Date().toISOString().slice(0, 10);
-    const now = new Date().toTimeString().slice(0, 5);
-    await logWaketime(today, now);
-    loadData();
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const now = new Date().toTimeString().slice(0, 5);
+      const perm = await hasUsagePermission();
+      if (!perm) {
+        await openUsageSettings();
+        Alert.alert(t('settings.pref'), t('home.perm.desc') || '请授权使用统计权限以启用宵禁检测');
+      }
+      await logBedtime(today, now, true, note);
+      setShowBedtimeModal(false); setNote('');
+      loadData();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
-  const br = btnRadius(theme.button.style);
-  const activeFont = resolveFont(theme.font);
+  const handleWakeup = async () => {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const now = new Date().toTimeString().slice(0, 5);
+      const [log] = await Promise.all([getTodayLog(today)]);
+      if (log?.bedtime) {
+        const [bh, bm] = log.bedtime.split(':').map(Number);
+        const [wh, wm] = now.split(':').map(Number);
+        const sleepTime = new Date();
+        sleepTime.setHours(bh, bm, 0, 0);
+        const wakeTime = new Date();
+        wakeTime.setHours(wh, wm, 0, 0);
+        const usage = await getPhoneUsageDuringSleep(sleepTime.getTime(), wakeTime.getTime());
+        if (usage) {
+          setAppsUsed(usage.apps || []);
+        }
+      }
+      await logWaketime(today, now);
+      loadData();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const btnStyle = BTN_STYLES[theme.button.style] || BTN_STYLES.rounded;
+  const color = btnStyle.backgroundColor || theme.colors.primary;
+  const isOutline = theme.button.style === 'outline';
+
   const bgPhoto = theme.background.type === 'photo' ? theme.background.photoPath : null;
-  const bExtra = btnExtra(theme.button, theme.colors);
-  const Wrapper = bgPhoto ? ImageBackground : View;
+  const Wrapper: any = bgPhoto ? ImageBackground : View;
   const wrapProps = bgPhoto ? { source: { uri: bgPhoto } as any, style: s.container, imageStyle: { opacity: theme.background.overlay || 0.3 } } : { style: s.container };
 
   return (
     <Wrapper {...wrapProps}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <T style={[s.greeting, activeFont && { fontFamily: activeFont }]}>{t('home.greeting.night')}</T>
+        <T style={s.greeting}>{t('home.greeting.night')}</T>
         <T style={s.targetText}>{t('home.target')} {targetBedtime}</T>
 
         <View style={s.streakRow}>
@@ -112,14 +130,14 @@ export default function HomeScreen() {
 
         {!todayLog?.bedtime && (
           <TouchableOpacity onPress={() => setShowBedtimeModal(true)} activeOpacity={0.8}
-            style={{ backgroundColor: theme.colors.primary, padding: 16, alignItems: 'center', borderRadius: br, ...bExtra, shadowColor: theme.colors.primary, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8 }}>
-            <T style={{ color: '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</T>
-            <T style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</T>
+            style={{ backgroundColor: isOutline ? 'transparent' : color, padding: 16, alignItems: 'center', borderRadius: btnStyle.borderRadius || 14, borderWidth: isOutline ? 2.5 : (btnStyle.borderWidth || 0), borderColor: isOutline ? color : 'transparent', shadowColor: color, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8, paddingVertical: btnStyle.paddingVertical || 16 }}>
+            <T style={{ color: isOutline ? color : '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</T>
+            <T style={{ color: isOutline ? color + '99' : 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</T>
           </TouchableOpacity>
         )}
         {todayLog?.bedtime && !todayLog?.waketime && (
           <TouchableOpacity onPress={handleWakeup} activeOpacity={0.8}
-            style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: br, ...bExtra, padding: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
+            style={{ backgroundColor: isOutline ? 'transparent' : theme.colors.surface, borderWidth: isOutline ? 2 : 1, borderColor: isOutline ? color : theme.colors.surfaceBorder, borderRadius: btnStyle.borderRadius || 14, paddingVertical: btnStyle.paddingVertical || 14, paddingHorizontal: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
             <T style={{ color: theme.colors.text, fontSize: 16, fontWeight: '500' }}>{t('home.wakeup')}</T>
           </TouchableOpacity>
         )}
@@ -138,7 +156,7 @@ export default function HomeScreen() {
                 <View style={[s.logDot, { backgroundColor: log.phone_curfew_kept ? theme.colors.success : theme.colors.warning }]} />
                 <View style={s.logInfo}>
                   <T style={s.logLabel}>{log.log_date}</T>
-                  <T style={s.logTime}>{log.bedtime || '--'} → {log.waketime || '--'}{log.note ? ` · ${log.note}` : ''}</T>
+                  <T style={s.logTime}>{log.bedtime || '--'} → {log.waketime || '--'}{log.note ? ' · ' + log.note : ''}</T>
                 </View>
                 {log.phone_curfew_kept ? <T style={s.logCheck}>✅</T> : null}
               </View>
@@ -146,11 +164,23 @@ export default function HomeScreen() {
           </View>
         )}
 
-        <View style={s.adBanner}>
-          <T style={s.adBadge}>广告</T>
+        {appsUsed.length > 0 && (
+          <View style={s.card}>
+            <T style={s.cardTitle}>📱 昨晚用了这些 App</T>
+            {appsUsed.slice(0, 5).map((a: any, i: number) => (
+              <View key={i} style={s.logEntry}>
+                <T style={{ fontSize: 13, color: theme.colors.text, flex: 1 }}>{a.appName || a.packageName}</T>
+                <T style={{ fontSize: 11, color: theme.colors.textSecondary }}>{Math.round(a.usageMs/60000)} min</T>
+              </View>
+            ))}
+          </View>
+        )}
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 4 }}>
+          <T style={{ fontSize: 8, color: theme.colors.textSecondary }}>{t('calendar.ad')}</T>
           <T style={{ fontSize: 14 }}>🛏️</T>
-          <T style={s.adText}>{t('calendar.ad')}</T>
-          <T style={s.adCta}>{t('home.detail')}</T>
+          <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>{t('calendar.ad')}</T>
+          <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>{t('home.detail')}</T>
         </View>
       </ScrollView>
 
@@ -161,8 +191,8 @@ export default function HomeScreen() {
             <T style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: 20 }}>{t('home.modal.desc')}</T>
             <TextInput style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, fontSize: 14, color: theme.colors.text, marginBottom: 16 }}
               placeholder={t('home.note.placeholder')} placeholderTextColor={theme.colors.textSecondary} value={note} onChangeText={setNote} />
-            <TouchableOpacity onPress={handleBedtime} style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-              <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</T>
+            <TouchableOpacity onPress={handleBedtime} style={{ backgroundColor: color, borderRadius: 12, padding: 14, alignItems: 'center' }}>
+              <T style={{ color: isOutline ? color : '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</T>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowBedtimeModal(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
               <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('home.cancel')}</T>
