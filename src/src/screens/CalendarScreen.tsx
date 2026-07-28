@@ -93,17 +93,17 @@ export default function CalendarScreen() {
           <View style={s.detail}>
             {(() => {
               const log = logs.find((l: any) => l.log_date === selectedDay);
-              if (!log) return <T style={{ color: theme.colors.textSecondary, fontSize: 13 }}>{selectedDay} · 无记录</T>;
+              if (!log) return <T style={{ color: theme.colors.textSecondary, fontSize: 13 }}>{selectedDay} ·  + ' ' + t('cal.nodata')}</T>;
               return (
                 <View>
                   <T style={{ fontSize: 14, fontWeight: '600', color: theme.colors.text, marginBottom: 10 }}>{selectedDay}</T>
                   <View style={{ flexDirection: 'row', gap: 20, marginBottom: 6 }}>
-                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>就寝</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.bedtime || '--'}</T></View>
-                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>起床</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.waketime || '--'}</T></View>
-                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>打卡</T><T style={{ fontSize: 15, color: (log.bedtime && log.waketime) ? theme.colors.success : theme.colors.warning }}>{(log.bedtime && log.waketime) ? '✓' : '✗'}</T></View>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.bedtime')}</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.bedtime || '--'}</T></View>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.wakeup')}</T><T style={{ fontSize: 15, color: theme.colors.text, fontWeight: '500' }}>{log.waketime || '--'}</T></View>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.checkin')}</T><T style={{ fontSize: 15, color: (log.bedtime && log.waketime) ? theme.colors.success : theme.colors.warning }}>{(log.bedtime && log.waketime) ? '✓' : '✗'}</T></View>
                   </View>
                   <View style={{ flexDirection: 'row', gap: 20 }}>
-                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>完成度</T><T style={{ fontSize: 15, color: theme.colors.primary, fontWeight: '500' }}>{completionRate(log)}</T></View>
+                    <View><T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.rate')}</T><T style={{ fontSize: 15, color: theme.colors.primary, fontWeight: '500' }}>{completionRate(log)}</T></View>
                   </View>
                   {log.note ? <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginTop: 8 }}>📝 {log.note}</T> : null}
                 </View>

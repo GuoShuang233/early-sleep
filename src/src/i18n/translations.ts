@@ -113,6 +113,62 @@ const t: TranslationMap = {
   'settings.bg.reset':    { zh:'恢复默认', en:'Reset default', ja:'デフォルトに戻す', ko:'기본값 복원', fr:'Réinitialiser', de:'Zurücksetzen', es:'Restablecer', ru:'Сбросить' },
   'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay intensity', ja:'マスク強度', ko:'오버레이 강도', fr:'Intensité', de:'Überlagerung', es:'Intensidad', ru:'Прозрачность' },
   'report.health': { zh:'健康生活', en:'Health Score', ja:'健康スコア', ko:'건강 점수', fr:'Score santé', de:'Gesundheit', es:'Salud', ru:'Здоровье' },
+  // Report page
+  'report.title':       { zh:'每日报告', en:'Daily Report', ja:'デイリーレポート', ko:'일일 보고서', fr:'Rapport quotidien', de:'Tagesbericht', es:'Informe diario', ru:'Ежедневный отчет' },
+  'report.bedtime':     { zh:'🌙 就寝', en:'Bedtime', ja:'就寝', ko:'취침', fr:'Coucher', de:'Schlafenszeit', es:'Hora de dormir', ru:'Отход ко сну' },
+  'report.wakeup':      { zh:'☀️ 起床', en:'Wake up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufwachen', es:'Despertar', ru:'Пробуждение' },
+  'report.week':        { zh:'📅 本周', en:'This Week', ja:'今週', ko:'이번 주', fr:'Cette semaine', de:'Diese Woche', es:'Esta semana', ru:'На этой неделе' },
+  'report.stats':       { zh:'🏆 统计', en:'Stats', ja:'統計', ko:'통계', fr:'Stats', de:'Statistiken', es:'Estadísticas', ru:'Статистика' },
+  'report.streak':      { zh:'🔥 连续天数', en:'Streak', ja:'連続日数', ko:'연속 일수', fr:'Série', de:'Serie', es:'Racha', ru:'Серия' },
+  'report.longest':     { zh:'📈 最长连续', en:'Longest', ja:'最長連続', ko:'최장 연속', fr:'Record', de:'Rekord', es:'Récord', ru:'Рекорд' },
+  'report.rate':        { zh:'📊 完成度', en:'Completion Rate', ja:'完了率', ko:'완성률', fr:'Taux', de:'Abschlussrate', es:'Tasa', ru:'Процент' },
+  'report.total':       { zh:'📋 总记录天数', en:'Total Days', ja:'総記録日数', ko:'총 기록', fr:'Total jours', de:'Gesamttage', es:'Días totales', ru:'Всего дней' },
+  'report.advice.late1': { zh:'比目标晚了不少，今晚试试提前放下手机', en:'Quite late vs target, try putting down phone earlier tonight', ja:'目標よりかなり遅れています', ko:'목표보다 늦었습니다', fr:'Très en retard', de:'Deutlich zu spät', es:'Muy tarde', ru:'Сильно опоздали' },
+  'report.advice.late2': { zh:'比目标晚了一点，睡前1小时不刷短视频试试', en:'A bit late, try no short videos 1h before bed', ja:'少し遅れました', ko:'조금 늦었습니다', fr:'Un peu en retard', de:'Etwas zu spät', es:'Un poco tarde', ru:'Немного опоздали' },
+  'report.advice.ok':   { zh:'按时睡觉很棒！继续保持', en:'On time! Keep it up', ja:'時間通り！継続しましょう', ko:'제시간! 계속하세요', fr:'À l\'heure! Continuez', de:'Pünktlich! Weiter so', es:'¡A tiempo! Sigue así', ru:'Вовремя! Продолжайте' },
+  'report.advice.nolog':{ zh:'还没有打卡记录，记得睡前点击「准备睡觉」', en:'No check-in yet, remember to tap before sleep', ja:'まだ記録がありません', ko:'아직 기록이 없습니다', fr:'Pas encore pointé', de:'Noch nicht eingecheckt', es:'Aún sin registro', ru:'Ещё нет записи' },
+  'report.advice.low':  { zh:'完成度偏低，打卡后尽量不要再碰手机', en:'Low completion rate, avoid phone after check-in', ja:'完了率が低いです', ko:'완성률이 낮습니다', fr:'Taux faible', de:'Niedrige Rate', es:'Tasa baja', ru:'Низкий процент' },
+  'report.advice.streak':{ zh:'已连续{}天打卡，坚持下去！', en:'{} days streak, keep going!', ja:'{}日連続！', ko:'{}일 연속!', fr:'{} jours de suite!', de:'{} Tage in Folge!', es:'¡{} días seguidos!', ru:'{} дней подряд!' },
+
+  // Calendar
+  'cal.complete':       { zh:'完整', en:'Complete', ja:'完了', ko:'완료', fr:'Complet', de:'Vollständig', es:'Completo', ru:'Завершено' },
+  'cal.partial':        { zh:'仅就寝', en:'Bed Only', ja:'就寝のみ', ko:'취침만', fr:'Coucher seul', de:'Nur Schlafen', es:'Solo dormir', ru:'Только сон' },
+  'cal.nodata':         { zh:'无记录', en:'No Data', ja:'記録なし', ko:'기록 없음', fr:'Aucune donnée', de:'Keine Daten', es:'Sin datos', ru:'Нет данных' },
+  'cal.bedtime':        { zh:'就寝', en:'Bedtime', ja:'就寝', ko:'취침', fr:'Coucher', de:'Schlafen', es:'Dormir', ru:'Сон' },
+  'cal.wakeup':         { zh:'起床', en:'Wake', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufwachen', es:'Despertar', ru:'Пробуждение' },
+  'cal.checkin':        { zh:'打卡', en:'Check-in', ja:'チェックイン', ko:'체크인', fr:'Pointage', de:'Check-in', es:'Registro', ru:'Отметка' },
+  'cal.rate':           { zh:'完成度', en:'Rate', ja:'完了度', ko:'완성도', fr:'Taux', de:'Rate', es:'Tasa', ru:'Процент' },
+
+  // Time picker
+  'time.title':         { zh:'选择时间', en:'Select Time', ja:'時間選択', ko:'시간 선택', fr:'Choisir l\'heure', de:'Zeit wählen', es:'Seleccionar hora', ru:'Выберите время' },
+  'time.confirm':       { zh:'确认', en:'Confirm', ja:'確認', ko:'확인', fr:'Confirmer', de:'Bestätigen', es:'Confirmar', ru:'Подтвердить' },
+  'time.cancel':        { zh:'取消', en:'Cancel', ja:'キャンセル', ko:'취소', fr:'Annuler', de:'Abbrechen', es:'Cancelar', ru:'Отмена' },
+
+  // Health score
+  'health.title':       { zh:'💚 健康评分明细', en:'Health Score Details', ja:'健康スコア詳細', ko:'건강 점수 상세', fr:'Détails du score', de:'Gesundheitsbewertung', es:'Detalles de salud', ru:'Оценка здоровья' },
+  'health.max':         { zh:'满分100分', en:'Max 100 points', ja:'満点100点', ko:'만점 100점', fr:'Max 100 points', de:'Max 100 Punkte', es:'Máx 100 puntos', ru:'Макс 100 баллов' },
+  'health.total':       { zh:'总分', en:'Total', ja:'合計', ko:'총점', fr:'Total', de:'Gesamt', es:'Total', ru:'Итого' },
+  'health.close':       { zh:'关闭', en:'Close', ja:'閉じる', ko:'닫기', fr:'Fermer', de:'Schließen', es:'Cerrar', ru:'Закрыть' },
+  'health.bed.label':   { zh:'就寝准时', en:'On-time Bed', ja:'就寝時間厳守', ko:'취침 시간 준수', fr:'Heure coucher', de:'Pünktlich schlafen', es:'Hora de dormir', ru:'Вовремя спать' },
+  'health.dur.label':   { zh:'睡眠时长', en:'Sleep Duration', ja:'睡眠時間', ko:'수면 시간', fr:'Durée sommeil', de:'Schlafdauer', es:'Duración sueño', ru:'Длительность сна' },
+  'health.curfew.label':{ zh:'未使用手机', en:'No Phone Use', ja:'スマホ未使用', ko:'휴대폰 미사용', fr:'Pas de téléphone', de:'Kein Handy', es:'Sin teléfono', ru:'Без телефона' },
+
+  // Health score status
+  'health.great':       { zh:'🥳 健康', en:'Great', ja:'🥳 健康', ko:'🥳 건강', fr:'🥳 Parfait', de:'🥳 Gesund', es:'🥳 Saludable', ru:'🥳 Здоров' },
+  'health.ok':          { zh:'🙄 亚健康', en:'Fair', ja:'🙄 やや不良', ko:'🙄 보통', fr:'🙄 Correct', de:'🙄 Okay', es:'🙄 Regular', ru:'🙄 Нормально' },
+  'health.bad':         { zh:'🤡 不健康', en:'Poor', ja:'🤡 不良', ko:'🤡 나쁨', fr:'🤡 Mauvais', de:'🤡 Schlecht', es:'🤡 Mal', ru:'🤡 Плохо' },
+  'health.dead':        { zh:'☠️ 不要命啦！', en:'☠️ Danger!', ja:'☠️ 危険！', ko:'☠️ 위험!', fr:'☠️ Danger!', de:'☠️ Gefahr!', es:'☠️ ¡Peligro!', ru:'☠️ Опасно!' },
+
+  // Device stats
+  'device.usage':       { zh:'📱 昨晚设备使用', en:'Last Night Usage', ja:'昨晩の使用状況', ko:'지난밤 사용', fr:'Utilisation nocturne', de:'Nutzung letzte Nacht', es:'Uso anoche', ru:'Использование ночью' },
+  'device.total':       { zh:'总使用时长', en:'Total Usage', ja:'総使用時間', ko:'총 사용 시간', fr:'Total utilisation', de:'Gesamtnutzung', es:'Uso total', ru:'Общее время' },
+
+  // Permission
+  'perm.title':         { zh:'使用统计权限', en:'Usage Access', ja:'使用統計権限', ko:'사용 통계 권한', fr:'Accès utilisation', de:'Nutzungszugriff', es:'Acceso de uso', ru:'Доступ к статистике' },
+  'perm.desc':          { zh:'我们需要「使用情况访问」权限来检测你睡前是否使用手机。这有助于记录真实的睡眠习惯。', en:'We need Usage Access to detect phone use during sleep.', ja:'睡眠中のスマホ使用を検出するために使用状況へのアクセスが必要です。', ko:'수면 중 휴대폰 사용을 감지하기 위해 사용 통계 권한이 필요합니다.', fr:'Nous avons besoin de l\'accès à l\'utilisation pour détecter l\'utilisation du téléphone.', de:'Wir benötigen Zugriff auf Nutzungsstatistiken.', es:'Necesitamos acceso a estadísticas de uso.', ru:'Нам нужен доступ к статистике использования.' },
+  'perm.later':         { zh:'暂不开启', en:'Not Now', ja:'あとで', ko:'나중에', fr:'Plus tard', de:'Später', es:'Ahora no', ru:'Позже' },
+  'perm.go':            { zh:'去授权', en:'Authorize', ja:'許可する', ko:'허용', fr:'Autoriser', de:'Autorisieren', es:'Autorizar', ru:'Разрешить' },
+
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant
@@ -144,6 +200,62 @@ const S2T: Record<string, string> = {
   '在':'在','之':'之','以':'以','对':'對','第':'第','使':'使','用':'用','浏':'瀏','览':'覽',
   '器':'器','标':'標','签':'籤','网':'網','络':'絡','记':'記','录':'錄','续':'續','连':'連',
   '宵':'宵','禁':'禁','模':'模','式':'式',
+  // Report page
+  'report.title':       { zh:'每日报告', en:'Daily Report', ja:'デイリーレポート', ko:'일일 보고서', fr:'Rapport quotidien', de:'Tagesbericht', es:'Informe diario', ru:'Ежедневный отчет' },
+  'report.bedtime':     { zh:'🌙 就寝', en:'Bedtime', ja:'就寝', ko:'취침', fr:'Coucher', de:'Schlafenszeit', es:'Hora de dormir', ru:'Отход ко сну' },
+  'report.wakeup':      { zh:'☀️ 起床', en:'Wake up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufwachen', es:'Despertar', ru:'Пробуждение' },
+  'report.week':        { zh:'📅 本周', en:'This Week', ja:'今週', ko:'이번 주', fr:'Cette semaine', de:'Diese Woche', es:'Esta semana', ru:'На этой неделе' },
+  'report.stats':       { zh:'🏆 统计', en:'Stats', ja:'統計', ko:'통계', fr:'Stats', de:'Statistiken', es:'Estadísticas', ru:'Статистика' },
+  'report.streak':      { zh:'🔥 连续天数', en:'Streak', ja:'連続日数', ko:'연속 일수', fr:'Série', de:'Serie', es:'Racha', ru:'Серия' },
+  'report.longest':     { zh:'📈 最长连续', en:'Longest', ja:'最長連続', ko:'최장 연속', fr:'Record', de:'Rekord', es:'Récord', ru:'Рекорд' },
+  'report.rate':        { zh:'📊 完成度', en:'Completion Rate', ja:'完了率', ko:'완성률', fr:'Taux', de:'Abschlussrate', es:'Tasa', ru:'Процент' },
+  'report.total':       { zh:'📋 总记录天数', en:'Total Days', ja:'総記録日数', ko:'총 기록', fr:'Total jours', de:'Gesamttage', es:'Días totales', ru:'Всего дней' },
+  'report.advice.late1': { zh:'比目标晚了不少，今晚试试提前放下手机', en:'Quite late vs target, try putting down phone earlier tonight', ja:'目標よりかなり遅れています', ko:'목표보다 늦었습니다', fr:'Très en retard', de:'Deutlich zu spät', es:'Muy tarde', ru:'Сильно опоздали' },
+  'report.advice.late2': { zh:'比目标晚了一点，睡前1小时不刷短视频试试', en:'A bit late, try no short videos 1h before bed', ja:'少し遅れました', ko:'조금 늦었습니다', fr:'Un peu en retard', de:'Etwas zu spät', es:'Un poco tarde', ru:'Немного опоздали' },
+  'report.advice.ok':   { zh:'按时睡觉很棒！继续保持', en:'On time! Keep it up', ja:'時間通り！継続しましょう', ko:'제시간! 계속하세요', fr:'À l\'heure! Continuez', de:'Pünktlich! Weiter so', es:'¡A tiempo! Sigue así', ru:'Вовремя! Продолжайте' },
+  'report.advice.nolog':{ zh:'还没有打卡记录，记得睡前点击「准备睡觉」', en:'No check-in yet, remember to tap before sleep', ja:'まだ記録がありません', ko:'아직 기록이 없습니다', fr:'Pas encore pointé', de:'Noch nicht eingecheckt', es:'Aún sin registro', ru:'Ещё нет записи' },
+  'report.advice.low':  { zh:'完成度偏低，打卡后尽量不要再碰手机', en:'Low completion rate, avoid phone after check-in', ja:'完了率が低いです', ko:'완성률이 낮습니다', fr:'Taux faible', de:'Niedrige Rate', es:'Tasa baja', ru:'Низкий процент' },
+  'report.advice.streak':{ zh:'已连续{}天打卡，坚持下去！', en:'{} days streak, keep going!', ja:'{}日連続！', ko:'{}일 연속!', fr:'{} jours de suite!', de:'{} Tage in Folge!', es:'¡{} días seguidos!', ru:'{} дней подряд!' },
+
+  // Calendar
+  'cal.complete':       { zh:'完整', en:'Complete', ja:'完了', ko:'완료', fr:'Complet', de:'Vollständig', es:'Completo', ru:'Завершено' },
+  'cal.partial':        { zh:'仅就寝', en:'Bed Only', ja:'就寝のみ', ko:'취침만', fr:'Coucher seul', de:'Nur Schlafen', es:'Solo dormir', ru:'Только сон' },
+  'cal.nodata':         { zh:'无记录', en:'No Data', ja:'記録なし', ko:'기록 없음', fr:'Aucune donnée', de:'Keine Daten', es:'Sin datos', ru:'Нет данных' },
+  'cal.bedtime':        { zh:'就寝', en:'Bedtime', ja:'就寝', ko:'취침', fr:'Coucher', de:'Schlafen', es:'Dormir', ru:'Сон' },
+  'cal.wakeup':         { zh:'起床', en:'Wake', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufwachen', es:'Despertar', ru:'Пробуждение' },
+  'cal.checkin':        { zh:'打卡', en:'Check-in', ja:'チェックイン', ko:'체크인', fr:'Pointage', de:'Check-in', es:'Registro', ru:'Отметка' },
+  'cal.rate':           { zh:'完成度', en:'Rate', ja:'完了度', ko:'완성도', fr:'Taux', de:'Rate', es:'Tasa', ru:'Процент' },
+
+  // Time picker
+  'time.title':         { zh:'选择时间', en:'Select Time', ja:'時間選択', ko:'시간 선택', fr:'Choisir l\'heure', de:'Zeit wählen', es:'Seleccionar hora', ru:'Выберите время' },
+  'time.confirm':       { zh:'确认', en:'Confirm', ja:'確認', ko:'확인', fr:'Confirmer', de:'Bestätigen', es:'Confirmar', ru:'Подтвердить' },
+  'time.cancel':        { zh:'取消', en:'Cancel', ja:'キャンセル', ko:'취소', fr:'Annuler', de:'Abbrechen', es:'Cancelar', ru:'Отмена' },
+
+  // Health score
+  'health.title':       { zh:'💚 健康评分明细', en:'Health Score Details', ja:'健康スコア詳細', ko:'건강 점수 상세', fr:'Détails du score', de:'Gesundheitsbewertung', es:'Detalles de salud', ru:'Оценка здоровья' },
+  'health.max':         { zh:'满分100分', en:'Max 100 points', ja:'満点100点', ko:'만점 100점', fr:'Max 100 points', de:'Max 100 Punkte', es:'Máx 100 puntos', ru:'Макс 100 баллов' },
+  'health.total':       { zh:'总分', en:'Total', ja:'合計', ko:'총점', fr:'Total', de:'Gesamt', es:'Total', ru:'Итого' },
+  'health.close':       { zh:'关闭', en:'Close', ja:'閉じる', ko:'닫기', fr:'Fermer', de:'Schließen', es:'Cerrar', ru:'Закрыть' },
+  'health.bed.label':   { zh:'就寝准时', en:'On-time Bed', ja:'就寝時間厳守', ko:'취침 시간 준수', fr:'Heure coucher', de:'Pünktlich schlafen', es:'Hora de dormir', ru:'Вовремя спать' },
+  'health.dur.label':   { zh:'睡眠时长', en:'Sleep Duration', ja:'睡眠時間', ko:'수면 시간', fr:'Durée sommeil', de:'Schlafdauer', es:'Duración sueño', ru:'Длительность сна' },
+  'health.curfew.label':{ zh:'未使用手机', en:'No Phone Use', ja:'スマホ未使用', ko:'휴대폰 미사용', fr:'Pas de téléphone', de:'Kein Handy', es:'Sin teléfono', ru:'Без телефона' },
+
+  // Health score status
+  'health.great':       { zh:'🥳 健康', en:'Great', ja:'🥳 健康', ko:'🥳 건강', fr:'🥳 Parfait', de:'🥳 Gesund', es:'🥳 Saludable', ru:'🥳 Здоров' },
+  'health.ok':          { zh:'🙄 亚健康', en:'Fair', ja:'🙄 やや不良', ko:'🙄 보통', fr:'🙄 Correct', de:'🙄 Okay', es:'🙄 Regular', ru:'🙄 Нормально' },
+  'health.bad':         { zh:'🤡 不健康', en:'Poor', ja:'🤡 不良', ko:'🤡 나쁨', fr:'🤡 Mauvais', de:'🤡 Schlecht', es:'🤡 Mal', ru:'🤡 Плохо' },
+  'health.dead':        { zh:'☠️ 不要命啦！', en:'☠️ Danger!', ja:'☠️ 危険！', ko:'☠️ 위험!', fr:'☠️ Danger!', de:'☠️ Gefahr!', es:'☠️ ¡Peligro!', ru:'☠️ Опасно!' },
+
+  // Device stats
+  'device.usage':       { zh:'📱 昨晚设备使用', en:'Last Night Usage', ja:'昨晩の使用状況', ko:'지난밤 사용', fr:'Utilisation nocturne', de:'Nutzung letzte Nacht', es:'Uso anoche', ru:'Использование ночью' },
+  'device.total':       { zh:'总使用时长', en:'Total Usage', ja:'総使用時間', ko:'총 사용 시간', fr:'Total utilisation', de:'Gesamtnutzung', es:'Uso total', ru:'Общее время' },
+
+  // Permission
+  'perm.title':         { zh:'使用统计权限', en:'Usage Access', ja:'使用統計権限', ko:'사용 통계 권한', fr:'Accès utilisation', de:'Nutzungszugriff', es:'Acceso de uso', ru:'Доступ к статистике' },
+  'perm.desc':          { zh:'我们需要「使用情况访问」权限来检测你睡前是否使用手机。这有助于记录真实的睡眠习惯。', en:'We need Usage Access to detect phone use during sleep.', ja:'睡眠中のスマホ使用を検出するために使用状況へのアクセスが必要です。', ko:'수면 중 휴대폰 사용을 감지하기 위해 사용 통계 권한이 필요합니다.', fr:'Nous avons besoin de l\'accès à l\'utilisation pour détecter l\'utilisation du téléphone.', de:'Wir benötigen Zugriff auf Nutzungsstatistiken.', es:'Necesitamos acceso a estadísticas de uso.', ru:'Нам нужен доступ к статистике использования.' },
+  'perm.later':         { zh:'暂不开启', en:'Not Now', ja:'あとで', ko:'나중에', fr:'Plus tard', de:'Später', es:'Ahora no', ru:'Позже' },
+  'perm.go':            { zh:'去授权', en:'Authorize', ja:'許可する', ko:'허용', fr:'Autoriser', de:'Autorisieren', es:'Autorizar', ru:'Разрешить' },
+
 };
 
 

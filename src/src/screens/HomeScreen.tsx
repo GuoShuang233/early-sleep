@@ -52,11 +52,11 @@ export default function HomeScreen() {
       const ok = await hasUsagePermission();
       if (!ok) {
         Alert.alert(
-          '使用统计权限',
-          '我们需要「使用情况访问」权限来检测你睡前是否使用手机。这有助于记录真实的睡眠习惯。',
+          t('perm.title'),
+          t('perm.desc'),
           [
-            { text: '暂不开启', style: 'cancel' },
-            { text: '去授权', onPress: () => openUsageSettings() },
+            { text: t('perm.later'), style: 'cancel' },
+            { text: t('perm.go'), onPress: () => openUsageSettings() },
           ]
         );
       }
@@ -73,6 +73,17 @@ export default function HomeScreen() {
   }, []);
 
   useFocusEffect(loadData);
+
+  // Load system usage data on focus
+  useFocusEffect(useCallback(async () => {
+    const log = await getTodayLog(new Date().toISOString().slice(0, 10));
+    if (log?.bedtime) {
+      const [bh, bm] = log.bedtime.split(':').map(Number);
+      const sleepTime = new Date(); sleepTime.setHours(bh, bm, 0, 0);
+      const usage = await getPhoneUsageDuringSleep(sleepTime.getTime(), Date.now());
+      if (usage) { setAppsUsed(usage.apps || []); setTotalUsage(usage.totalUsage || ''); }
+    }
+  }, []));
 
   const handleBedtime = async () => {
     try {
@@ -146,7 +157,7 @@ export default function HomeScreen() {
 
         {appsUsed.length > 0 && (
           <View style={s.card}>
-            <T style={s.cardTitle}>📱 昨晚 App 使用 · {totalUsage}</T>
+            <T style={s.cardTitle}>{t('device.usage')} · {totalUsage}</T>
             <T style={{ fontSize: 11, color: theme.colors.textSecondary, marginBottom: 6 }}>总使用时长: {totalUsage}</T>
             {appsUsed.slice(0, 5).map((a: any, i: number) => (
               <View key={i} style={s.logEntry}>

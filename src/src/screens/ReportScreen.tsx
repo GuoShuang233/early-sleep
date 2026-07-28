@@ -67,20 +67,20 @@ export default function ReportScreen() {
       const actualMin = h * 60 + m;
       const targetMin = th * 60 + tm;
       if (actualMin - targetMin > 60) {
-        lines.push(`比目标晚睡了${Math.round((actualMin - targetMin) / 60)}小时，今晚试试提前30分钟放下手机`);
+        lines.push(t('report.advice.late1'));
       } else if (actualMin - targetMin > 30) {
-        lines.push('比目标晚了一点。今晚可以试试睡前1小时不刷短视频');
+        lines.push(t('report.advice.late2'));
       } else {
-        lines.push('按时睡觉很棒！继续保持这个节奏');
+        lines.push(t('report.advice.ok'));
       }
     } else {
-      lines.push('昨晚还没有打卡记录，记得睡前点击「准备睡觉」');
+      lines.push(t('report.advice.nolog'));
     }
     if (streak.curfewRate < 80 && streak.total > 3) {
-      lines.push('宵禁达标率偏低，打卡后尽量不要再碰手机');
+      lines.push(t('report.advice.low'));
     }
     if (streak.current >= 3) {
-      lines.push(`已连续${streak.current}天打卡，坚持下去！`);
+      lines.push(t('report.advice.streak').replace('{}', String(streak.current)));
     }
     return lines;
   };
@@ -136,11 +136,11 @@ export default function ReportScreen() {
       <ScrollView contentContainerStyle={s.scroll}>
         <View style={s.header}>
           <T style={{ fontSize: 36 }}>☀️</T>
-          <T style={s.headerTitle}>晨间报告</T>
+          <T style={s.headerTitle}>{t('report.title')}</T>
         </View>
 
         <View style={s.statRow}>
-          <T style={s.statLabel}>🌙 昨晚就寝</T>
+          <T style={s.statLabel}>{t('report.bedtime')}</T>
           <T style={s.statValue}>{todayLog?.bedtime || '--'}</T>
         </View>
         <View style={s.statRow}>
@@ -150,7 +150,7 @@ export default function ReportScreen() {
         <TouchableOpacity onPress={() => setShowScoreDetail(true)} style={s.statRow}>
           <T style={s.statLabel}>💚 健康生活</T>
           <T style={[s.statValue, { color: healthScore >= 80 ? theme.colors.success : healthScore >= 60 ? theme.colors.warning : theme.colors.error }]}>
-            {healthScore}分 · {healthScore >= 100 ? '健康' : healthScore >= 80 ? '亚健康' : healthScore >= 60 ? '不健康' : '不要命啦！'} ›
+            {healthScore}分 · {healthScore >= 90 ? t('health.great') : healthScore >= 70 ? t('health.ok') : healthScore >= 50 ? t('health.bad') : t('health.dead')} ›
           </T>
         </TouchableOpacity>
 
@@ -161,22 +161,22 @@ export default function ReportScreen() {
           </View>
         )}
 
-        <T style={s.sectionTitle}>📅 本周</T>
+        <T style={s.sectionTitle}>{t('report.week')}</T>
         <View style={s.weekRow}>
           {weekDays.map((w, i) => (
             <View key={i} style={s.weekItem}>
               <T style={s.weekDay}>{w.day}</T>
               <View style={[s.weekDot, { backgroundColor: ['#4a4a5a', theme.colors.warning, theme.colors.success][w.status] }]} />
-              <T style={s.weekLabel}>{['--', '晚睡', '达标'][w.status]}</T>
+              <T style={{ fontSize: 14 }}>{['○', '🌙', '✅'][w.status]}</T>
             </View>
           ))}
         </View>
 
         <T style={s.sectionTitle}>🏆 统计</T>
-        <View style={s.statRow}><T style={s.statLabel}>🔥 连续天数</T><T style={s.statValue}>{streak.current}</T></View>
-        <View style={s.statRow}><T style={s.statLabel}>📈 最长连续</T><T style={s.statValue}>{streak.longest}</T></View>
-        <View style={s.statRow}><T style={s.statLabel}>📊 宵禁达标率</T><T style={s.statValue}>{streak.curfewRate}%</T></View>
-        <View style={s.statRow}><T style={s.statLabel}>📋 总记录天数</T><T style={s.statValue}>{streak.total}</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>{t('report.streak')}</T><T style={s.statValue}>{streak.current}</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>{t('report.longest')}</T><T style={s.statValue}>{streak.longest}</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>{t('report.rate')}</T><T style={s.statValue}>{streak.curfewRate}%</T></View>
+        <View style={s.statRow}><T style={s.statLabel}>{t('report.total')}</T><T style={s.statValue}>{streak.total}</T></View>
 
         <View style={s.advice}>
           {advice.map((line, i) => (
