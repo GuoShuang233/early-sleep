@@ -76,7 +76,7 @@ export default function AchievementsScreen() {
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
-        <T style={s.title}>🏆 成就</T>
+        <T style={s.title}>{t('settings.ach')}</T>
 
         <View style={s.companionCard}>
           <T style={s.companionEmoji}>{companionEmoji(companionType, stage)}</T>
@@ -84,10 +84,10 @@ export default function AchievementsScreen() {
           <View style={s.progressBar}>
             <View style={[s.progressFill, { width: `${Math.min((streak.current / (Math.max(stage, 1) * 3)) * 100, 100)}%` }]} />
           </View>
-          <T style={s.progressLabel}>连续 {streak.current} / {Math.max(stage + 1, 1) * 3} 天</T>
+          <T style={s.progressLabel}>{t('ach.continue').replace('{}', String(streak.current)).replace('{}', String(Math.max(stage + 1, 1) * 3))}</T>
         </View>
 
-        <T style={s.sectionTitle}>徽章</T>
+        <T style={s.sectionTitle}>{t('settings.badge')}</T>
         <View style={s.badgeGrid}>
           {badges.map((b, i) => {
             const unlocked = streak.current >= b.min;
@@ -101,10 +101,10 @@ export default function AchievementsScreen() {
         </View>
 
         <View style={s.ad}>
-          <T style={s.adBadge}>广告</T>
+          <T style={s.adBadge}>{t('ad.label')}</T>
           <T style={{ fontSize: 14 }}>🎬</T>
-          <T style={s.adText}>夜间助眠音乐·免费试听</T>
-          <T style={s.adCta}>播放</T>
+          <T style={s.adText}>🛏️ Sleep Music</T>
+          <T style={s.adCta}>▶</T>
         </View>
       </ScrollView>
     </View>

@@ -144,7 +144,7 @@ export default function ReportScreen() {
           <T style={s.statValue}>{todayLog?.bedtime || '--'}</T>
         </View>
         <View style={s.statRow}>
-          <T style={s.statLabel}>☀️ 今早起</T>
+          <T style={s.statLabel}>{t('report.wakeup')}</T>
           <T style={s.statValue}>{todayLog?.waketime || '--'}</T>
         </View>
         <TouchableOpacity onPress={() => setShowScoreDetail(true)} style={s.statRow}>
@@ -172,7 +172,7 @@ export default function ReportScreen() {
           ))}
         </View>
 
-        <T style={s.sectionTitle}>🏆 统计</T>
+        <T style={s.sectionTitle}>{t('report.stats')}</T>
         <View style={s.statRow}><T style={s.statLabel}>{t('report.streak')}</T><T style={s.statValue}>{streak.current}</T></View>
         <View style={s.statRow}><T style={s.statLabel}>{t('report.longest')}</T><T style={s.statValue}>{streak.longest}</T></View>
         <View style={s.statRow}><T style={s.statLabel}>{t('report.rate')}</T><T style={s.statValue}>{streak.curfewRate}%</T></View>
@@ -187,8 +187,8 @@ export default function ReportScreen() {
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 16 }}>
           <T style={{ fontSize: 7, color: theme.colors.textSecondary }}>{t('ad.label')}</T>
           <T style={{ fontSize: 14 }}>🎬</T>
-          <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>夜间助眠音乐·免费试听</T>
-          <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>播放</T>
+          <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>🛏️ Sleep Music</T>
+          <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>▶</T>
         </View>
       </ScrollView>
 
@@ -219,7 +219,7 @@ export default function ReportScreen() {
               </View>
             )}
             <TouchableOpacity onPress={() => setShowScoreDetail(false)} style={{ padding: 12, alignItems: 'center', marginTop: 12 }}>
-              <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>关闭</T>
+              <T style={{ fontSize: 14, color: theme.colors.primary, fontWeight: '600' }}>{t('health.close')}</T>
             </TouchableOpacity>
           </View>
         </View>

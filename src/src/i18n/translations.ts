@@ -185,6 +185,10 @@ const t: TranslationMap = {
   'comp.grow':          { zh:'随连续天数进化成长', en:'Evolves with streak', ja:'連続日数で進化', ko:'연속 일수에 따라 진화', fr:'Évolue avec la série', de:'Entwickelt sich mit Serie', es:'Evoluciona con la racha', ru:'Растёт с серией' },
   'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
 
+  'settings.ach':       { zh:'🏆 成就', en:'Achievements', ja:'実績', ko:'성취', fr:'Succès', de:'Erfolge', es:'Logros', ru:'Достижения' },
+  'settings.badge':     { zh:'徽章', en:'Badges', ja:'バッジ', ko:'배지', fr:'Badges', de:'Abzeichen', es:'Insignias', ru:'Значки' },
+  'report.wakeup':      { zh:'☀️ 今早起', en:'Woke up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufgewacht', es:'Desperté', ru:'Проснулся' },
+
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant
@@ -287,6 +291,10 @@ const S2T: Record<string, string> = {
   'ach.14day':          { zh:'连续14天', en:'14-day streak', ja:'14日連続', ko:'14일 연속', fr:'14 jours', de:'14 Tage', es:'14 días', ru:'14 дней' },
   'comp.grow':          { zh:'随连续天数进化成长', en:'Evolves with streak', ja:'連続日数で進化', ko:'연속 일수에 따라 진화', fr:'Évolue avec la série', de:'Entwickelt sich mit Serie', es:'Evoluciona con la racha', ru:'Растёт с серией' },
   'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
+
+  'settings.ach':       { zh:'🏆 成就', en:'Achievements', ja:'実績', ko:'성취', fr:'Succès', de:'Erfolge', es:'Logros', ru:'Достижения' },
+  'settings.badge':     { zh:'徽章', en:'Badges', ja:'バッジ', ko:'배지', fr:'Badges', de:'Abzeichen', es:'Insignias', ru:'Значки' },
+  'report.wakeup':      { zh:'☀️ 今早起', en:'Woke up', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufgewacht', es:'Desperté', ru:'Проснулся' },
 
 };
 
