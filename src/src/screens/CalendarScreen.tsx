@@ -31,8 +31,8 @@ export default function CalendarScreen() {
     scroll: { padding: 20, paddingBottom: 80 },
     weekRow: { flexDirection: 'row' },
     dayHead: { width: '14.28%', textAlign: 'center', fontSize: 11, color: t.theme.colors.textSecondary, paddingVertical: 8, fontWeight: '600' },
-    cell: { width: '14.28%', aspectRatio: 1, alignItems: 'center', justifyContent: 'center' },
-    cellNum: { fontSize: 12, fontWeight: '500' },
+    cell: { width: '14.28%', height: 40, alignItems: 'center', justifyContent: 'center' },
+    cellNum: { fontSize: 13, fontWeight: '500' },
     dot: { width: 4, height: 4, borderRadius: 2, marginTop: 2 },
     detail: { marginTop: 16, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 14, padding: 16 },
   }));

@@ -154,12 +154,13 @@ export default function SettingsScreen() {
                 <T style={{ fontSize: 11, color: '#f87171' }}>{t('settings.bg.reset')}</T>
               </TouchableOpacity>
             </View>
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度</T>
-            <View style={{ flexDirection: 'row', gap: 6 }}>
-              {[30, 50, 70].map((v) => (
-                <TouchableOpacity key={v} onPress={() => setCustom({ background: { ...theme.background, overlay: v / 100 } })}
-                  style={{ paddingVertical: 6, paddingHorizontal: 14, borderWidth: 1, borderRadius: 8, borderColor: (theme.background.overlay || 0.3) * 100 === v ? theme.colors.primary : theme.colors.surfaceBorder, backgroundColor: theme.colors.surface }}>
-                  <T style={{ fontSize: 10, color: (theme.background.overlay || 0.3) * 100 === v ? theme.colors.primary : theme.colors.text }}>{v}%</T>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary, marginTop: 10, marginBottom: 6 }}>遮罩强度  {Math.round((theme.background.overlay || 0.3) * 100)}%</T>
+            <View style={{ flexDirection: 'row', gap: 2 }}>
+              {[10,20,30,40,50,60,70,80,90].map((v) => (
+                <TouchableOpacity key={v} hitSlop={{ top: 6, bottom: 6 }}
+                  onPress={() => setCustom({ background: { ...theme.background, overlay: v / 100 } })}
+                  style={{ flex: 1, height: 30, justifyContent: 'center', alignItems: 'center', borderRadius: 4, backgroundColor: Math.abs((theme.background.overlay || 0.3) * 100 - v) < 3 ? theme.colors.primary : theme.colors.surface }}>
+                  <T style={{ fontSize: 8, color: Math.abs((theme.background.overlay || 0.3) * 100 - v) < 3 ? '#fff' : theme.colors.textSecondary }}>{v}</T>
                 </TouchableOpacity>
               ))}
             </View>

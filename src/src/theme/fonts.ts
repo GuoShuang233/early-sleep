@@ -1,13 +1,14 @@
-// Font mappings — uses bundled .ttf files
-// On Android, fontFamily must match the filename without extension
+// Font mappings
+// On Android, 'serif' and 'monospace' are guaranteed system fonts
+// Custom TTF fonts in assets/fonts/ may need native registration
 
 export function resolveFont(key: string): string | undefined {
   const map: Record<string, string | undefined> = {
-    'system': undefined,
-    'rounded': undefined,
-    'serif': 'NotoSerif',              // NotoSerif.ttf
-    'handwrite': undefined,
-    'mono': 'JetBrainsMono-Regular',   // JetBrainsMono-Regular.ttf
+    'system': undefined,       // System default (no fontFamily)
+    'rounded': undefined,     // Not available
+    'serif': 'serif',         // Built-in Android serif font (guaranteed)
+    'handwrite': undefined,   // Not available
+    'mono': 'monospace',      // Built-in Android monospace font (guaranteed)
   };
   return map[key];
 }
