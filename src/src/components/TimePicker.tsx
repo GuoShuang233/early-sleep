@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
+import { useI18n } from '../i18n/I18nContext';
 
 const HOURS = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
 const MINUTES = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
@@ -11,6 +12,7 @@ export default function TimePicker({ value, onChange, onClose }: {
   value: string; onChange: (v: string) => void; onClose: () => void;
 }) {
   const { theme } = useTheme();
+  const { t } = useI18n();
   const [h, m] = value.split(':').map(Number);
   const [selH, setSelH] = useState(h);
   const [selM, setSelM] = useState(m);
@@ -56,7 +58,7 @@ export default function TimePicker({ value, onChange, onClose }: {
     <Modal visible transparent animationType="none" onRequestClose={onClose}>
       <View style={{ flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
       <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
-        <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>选择时间</T>
+        <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 16 }}>{t('time.title')}</T>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 20, marginBottom: 16 }}>
           {renderCol(HOURS, selH, setSelH)}
           <T style={{ fontSize: 24, color: theme.colors.text, marginTop: -CONTAINER_HEIGHT/2 + ITEM_HEIGHT*2 }}>:</T>
@@ -64,10 +66,10 @@ export default function TimePicker({ value, onChange, onClose }: {
         </View>
         <TouchableOpacity onPress={() => onChange(`${String(selH).padStart(2,'0')}:${String(selM).padStart(2,'0')}`)}
           style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-          <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>确认</T>
+          <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('time.confirm')}</T>
         </TouchableOpacity>
         <TouchableOpacity onPress={onClose} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
-          <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>取消</T>
+          <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('time.cancel')}</T>
         </TouchableOpacity>
       </View>
       </View>

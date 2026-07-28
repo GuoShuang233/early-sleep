@@ -123,9 +123,9 @@ export default function ReportScreen() {
     const durScore = dur >= 420 ? 40 : dur >= 300 ? 30 : dur >= 180 ? 20 : 10;
     const curfewScore = todayLog?.phone_curfew_kept ? 20 : 0;
     return {
-      bed: { score: bedScore, max: 40, label: '就寝准时', detail: '目标 ' + targetBed + ' ±1h=' + bedScore + '分' },
-      dur: { score: durScore, max: 40, label: '睡眠时长', detail: Math.floor(dur/60) + 'h' + (dur%60) + 'm / 7h=' + durScore + '分' },
-      curfew: { score: curfewScore, max: 20, label: '未使用手机', detail: curfewScore > 0 ? '达标 +20分' : '未达标 +0分' },
+      bed: { score: bedScore, max: 40, label: t('health.bed.label'), detail: '目标 ' + targetBed + ' +/-1h=' + bedScore + '/' + '40' },
+      dur: { score: durScore, max: 40, label: t('health.dur.label'), detail: Math.floor(dur/60) + 'h' + (dur%60) + 'm' },
+      curfew: { score: curfewScore, max: 20, label: t('health.curfew.label'), detail: curfewScore > 0 ? '+20' : '+0' },
     };
   })();
 
@@ -148,7 +148,7 @@ export default function ReportScreen() {
           <T style={s.statValue}>{todayLog?.waketime || '--'}</T>
         </View>
         <TouchableOpacity onPress={() => setShowScoreDetail(true)} style={s.statRow}>
-          <T style={s.statLabel}>💚 健康生活</T>
+          <T style={s.statLabel}>💚 {t('report.health')}</T>
           <T style={[s.statValue, { color: healthScore >= 80 ? theme.colors.success : healthScore >= 60 ? theme.colors.warning : theme.colors.error }]}>
             {healthScore}分 · {healthScore >= 100 ? t('health.great') : healthScore >= 80 ? t('health.ok') : healthScore >= 60 ? t('health.bad') : t('health.dead')} ›
           </T>
@@ -185,7 +185,7 @@ export default function ReportScreen() {
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 16 }}>
-          <T style={{ fontSize: 7, color: theme.colors.textSecondary }}>广告</T>
+          <T style={{ fontSize: 7, color: theme.colors.textSecondary }}>{t('ad.label')}</T>
           <T style={{ fontSize: 14 }}>🎬</T>
           <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>夜间助眠音乐·免费试听</T>
           <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>播放</T>
@@ -196,8 +196,8 @@ export default function ReportScreen() {
       <Modal visible={showScoreDetail} transparent animationType="fade" onRequestClose={() => setShowScoreDetail(false)}>
         <View style={{ flex: 1, backgroundColor: '#0a0a12', justifyContent: 'center', padding: 20 }}>
           <View style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 20, padding: 24 }}>
-            <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 4 }}>💚 健康评分明细</T>
-            <T style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 16 }}>满分100分</T>
+            <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.text, textAlign: 'center', marginBottom: 4 }}>{t('health.title')}</T>
+            <T style={{ fontSize: 12, color: theme.colors.textSecondary, textAlign: 'center', marginBottom: 16 }}>{t('health.max')}</T>
             {scoreDetail && (
               <View style={{ gap: 12 }}>
                 {[scoreDetail.bed, scoreDetail.dur, scoreDetail.curfew].map((item, i) => (
@@ -213,7 +213,7 @@ export default function ReportScreen() {
                   </View>
                 ))}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 8, borderTopWidth: 1, borderTopColor: theme.colors.surfaceBorder }}>
-                  <T style={{ fontSize: 15, fontWeight: '600', color: theme.colors.text }}>总分</T>
+                  <T style={{ fontSize: 15, fontWeight: '600', color: theme.colors.text }}>{t('health.total')}</T>
                   <T style={{ fontSize: 18, fontWeight: '700', color: theme.colors.primary }}>{healthScore}/100</T>
                 </View>
               </View>

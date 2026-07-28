@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getTodayLog, logBedtime, logWaketime, getStreak, getRecentLogs, getSetting } from '../data/database';
 import { hasUsagePermission, openUsageSettings, getPhoneUsageDuringSleep } from '../native/UsageStats';
+import { getSleepSessions } from '../native/HealthConnect';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -46,6 +47,7 @@ export default function HomeScreen() {
   const [note, setNote] = useState('');
   const [appsUsed, setAppsUsed] = useState<any[]>([]);
   const [totalUsage, setTotalUsage] = useState('');
+  const [sleepData, setSleepData] = useState<any[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -80,6 +82,8 @@ export default function HomeScreen() {
     if (log?.bedtime) {
       const [bh, bm] = log.bedtime.split(':').map(Number);
       const sleepTime = new Date(); sleepTime.setHours(bh, bm, 0, 0);
+      const sessions = await getSleepSessions();
+      if (sessions.length > 0) setSleepData(sessions);
       const usage = await getPhoneUsageDuringSleep(sleepTime.getTime(), Date.now());
       if (usage) { setAppsUsed(usage.apps || []); setTotalUsage(usage.totalUsage || ''); }
     }
@@ -155,6 +159,18 @@ export default function HomeScreen() {
           </View>
         )}
 
+        {sleepData.length > 0 && (
+          <View style={s.card}>
+            <T style={s.cardTitle}>😴 系统睡眠记录</T>
+            {sleepData.map((s: any, i: number) => (
+              <View key={i} style={s.logEntry}>
+                <T style={{ fontSize: 13, color: theme.colors.text, flex: 1 }}>{s.startTime?.slice(11, 16)} → {s.endTime?.slice(11, 16)}</T>
+                <T style={{ fontSize: 11, color: theme.colors.textSecondary }}>{s.duration}</T>
+              </View>
+            ))}
+          </View>
+        )}
+
         {appsUsed.length > 0 && (
           <View style={s.card}>
             <T style={s.cardTitle}>{t('device.usage')} · {totalUsage}</T>
@@ -186,7 +202,7 @@ export default function HomeScreen() {
 
         {/* AD: Banner 1 */}
         <View style={s.adBanner}>
-          <T style={s.adBadge}>广告</T>
+          <T style={s.adBadge}>{t('ad.label')}</T>
           <T style={{ fontSize: 14 }}>🛏️</T>
           <T style={s.adText}>智能助眠眼罩 · 热销推荐</T>
           <T style={s.adCta}>查看</T>

@@ -81,11 +81,11 @@ export default function CalendarScreen() {
         <View style={{ flexDirection: 'row', gap: 16, justifyContent: 'center', marginTop: 10 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.success }} />
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary }}>完整</T>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.complete')}</T>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.warning }} />
-            <T style={{ fontSize: 10, color: theme.colors.textSecondary }}>仅就寝</T>
+            <T style={{ fontSize: 10, color: theme.colors.textSecondary }}>{t('cal.partial')}</T>
           </View>
         </View>
 

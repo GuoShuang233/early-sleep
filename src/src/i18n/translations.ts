@@ -177,6 +177,14 @@ const t: TranslationMap = {
   'settings.export':    { zh:'导出主题', en:'Export Theme', ja:'テーマ出力', ko:'테마 내보내기', fr:'Exporter thème', de:'Thema exportieren', es:'Exportar tema', ru:'Экспорт темы' },
   'settings.import':    { zh:'导入主题', en:'Import Theme', ja:'テーマ読込', ko:'테마 가져오기', fr:'Importer thème', de:'Thema importieren', es:'Importar tema', ru:'Импорт темы' },
 
+  'ad.label':           { zh:'广告', en:'Ad', ja:'広告', ko:'광고', fr:'Pub', de:'Anzeige', es:'Anuncio', ru:'Реклама' },
+  'ach.continue':       { zh:'连续 {} / {} 天', en:'{} / {} days', ja:'{} / {} 日', ko:'{} / {} 일', fr:'{} / {} jours', de:'{} / {} Tage', es:'{} / {} días', ru:'{} / {} дней' },
+  'ach.3day':           { zh:'连续3天', en:'3-day streak', ja:'3日連続', ko:'3일 연속', fr:'3 jours', de:'3 Tage', es:'3 días', ru:'3 дня' },
+  'ach.7day':           { zh:'连续7天', en:'7-day streak', ja:'7日連続', ko:'7일 연속', fr:'7 jours', de:'7 Tage', es:'7 días', ru:'7 дней' },
+  'ach.14day':          { zh:'连续14天', en:'14-day streak', ja:'14日連続', ko:'14일 연속', fr:'14 jours', de:'14 Tage', es:'14 días', ru:'14 дней' },
+  'comp.grow':          { zh:'随连续天数进化成长', en:'Evolves with streak', ja:'連続日数で進化', ko:'연속 일수에 따라 진화', fr:'Évolue avec la série', de:'Entwickelt sich mit Serie', es:'Evoluciona con la racha', ru:'Растёт с серией' },
+  'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
+
 };
 
 // Simple Simplified→Traditional Chinese character mapping for zh-Hant
@@ -271,6 +279,14 @@ const S2T: Record<string, string> = {
   'settings.bg.intensity':{ zh:'遮罩强度', en:'Overlay', ja:'オーバーレイ', ko:'오버레이', fr:'Superposition', de:'Überlagerung', es:'Superposición', ru:'Наложение' },
   'settings.export':    { zh:'导出主题', en:'Export Theme', ja:'テーマ出力', ko:'테마 내보내기', fr:'Exporter thème', de:'Thema exportieren', es:'Exportar tema', ru:'Экспорт темы' },
   'settings.import':    { zh:'导入主题', en:'Import Theme', ja:'テーマ読込', ko:'테마 가져오기', fr:'Importer thème', de:'Thema importieren', es:'Importar tema', ru:'Импорт темы' },
+
+  'ad.label':           { zh:'广告', en:'Ad', ja:'広告', ko:'광고', fr:'Pub', de:'Anzeige', es:'Anuncio', ru:'Реклама' },
+  'ach.continue':       { zh:'连续 {} / {} 天', en:'{} / {} days', ja:'{} / {} 日', ko:'{} / {} 일', fr:'{} / {} jours', de:'{} / {} Tage', es:'{} / {} días', ru:'{} / {} дней' },
+  'ach.3day':           { zh:'连续3天', en:'3-day streak', ja:'3日連続', ko:'3일 연속', fr:'3 jours', de:'3 Tage', es:'3 días', ru:'3 дня' },
+  'ach.7day':           { zh:'连续7天', en:'7-day streak', ja:'7日連続', ko:'7일 연속', fr:'7 jours', de:'7 Tage', es:'7 días', ru:'7 дней' },
+  'ach.14day':          { zh:'连续14天', en:'14-day streak', ja:'14日連続', ko:'14일 연속', fr:'14 jours', de:'14 Tage', es:'14 días', ru:'14 дней' },
+  'comp.grow':          { zh:'随连续天数进化成长', en:'Evolves with streak', ja:'連続日数で進化', ko:'연속 일수에 따라 진화', fr:'Évolue avec la série', de:'Entwickelt sich mit Serie', es:'Evoluciona con la racha', ru:'Растёт с серией' },
+  'color.title':        { zh:'🎨 选择主色', en:'🎨 Pick Color', ja:'🎨 色を選択', ko:'🎨 색상 선택', fr:'🎨 Choisir couleur', de:'🎨 Farbe wählen', es:'🎨 Elegir color', ru:'🎨 Выбрать цвет' },
 
 };
 
