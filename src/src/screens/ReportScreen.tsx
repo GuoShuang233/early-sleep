@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
+import { useI18n } from '../i18n/I18nContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { useFocusEffect } from '@react-navigation/native';
@@ -9,6 +10,7 @@ import { getStreak, getRecentLogs, getTodayLog, getSetting } from '../data/datab
 
 export default function ReportScreen() {
   const { theme } = useTheme();
+  const { t } = useI18n();
   const insets = useSafeAreaInsets();
   const s = useThemedStyles((t) => ({
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },

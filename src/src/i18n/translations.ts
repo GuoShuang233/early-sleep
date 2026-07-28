@@ -238,13 +238,6 @@ const S2T: Record<string, string> = {
   'report.advice.streak':{ zh:'已连续{}天打卡，坚持下去！', en:'{} days streak, keep going!', ja:'{}日連続！', ko:'{}일 연속!', fr:'{} jours de suite!', de:'{} Tage in Folge!', es:'¡{} días seguidos!', ru:'{} дней подряд!' },
 
   // Calendar
-  'cal.complete':       { zh:'完整', en:'Complete', ja:'完了', ko:'완료', fr:'Complet', de:'Vollständig', es:'Completo', ru:'Завершено' },
-  'cal.partial':        { zh:'仅就寝', en:'Bed Only', ja:'就寝のみ', ko:'취침만', fr:'Coucher seul', de:'Nur Schlafen', es:'Solo dormir', ru:'Только сон' },
-  'cal.nodata':         { zh:'无记录', en:'No Data', ja:'記録なし', ko:'기록 없음', fr:'Aucune donnée', de:'Keine Daten', es:'Sin datos', ru:'Нет данных' },
-  'cal.bedtime':        { zh:'就寝', en:'Bedtime', ja:'就寝', ko:'취침', fr:'Coucher', de:'Schlafen', es:'Dormir', ru:'Сон' },
-  'cal.wakeup':         { zh:'起床', en:'Wake', ja:'起床', ko:'기상', fr:'Réveil', de:'Aufwachen', es:'Despertar', ru:'Пробуждение' },
-  'cal.checkin':        { zh:'打卡', en:'Check-in', ja:'チェックイン', ko:'체크인', fr:'Pointage', de:'Check-in', es:'Registro', ru:'Отметка' },
-  'cal.rate':           { zh:'完成度', en:'Rate', ja:'完了度', ko:'완성도', fr:'Taux', de:'Rate', es:'Tasa', ru:'Процент' },
 
   // Time picker
   'time.title':         { zh:'选择时间', en:'Select Time', ja:'時間選択', ko:'시간 선택', fr:'Choisir l\'heure', de:'Zeit wählen', es:'Seleccionar hora', ru:'Выберите время' },
