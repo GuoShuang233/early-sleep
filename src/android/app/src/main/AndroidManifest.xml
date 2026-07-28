@@ -24,6 +24,8 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+        <!-- Voice action: "Hey Google, log bedtime in Early Sleep" -->
+        <meta-data android:name="com.google.android.actions.SUPPORT_VOICE_ACTIONS" android:value="true" />
       </activity>
     </application>
 </manifest>

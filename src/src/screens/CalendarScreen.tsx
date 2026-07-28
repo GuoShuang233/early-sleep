@@ -1,146 +1,92 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import React, { useState, useCallback } from 'react';
+import { View, ScrollView } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
 import { getRecentLogs } from '../data/database';
 
-const MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-const DAYS = ['日','一','二','三','四','五','六'];
-
 export default function CalendarScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const now = new Date();
-  const [year, setYear] = useState(now.getFullYear());
-  const [month, setMonth] = useState(now.getMonth());
-  const [logs, setLogs] = useState<any[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-
   const s = useThemedStyles((t) => ({
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
-    scroll: { padding: 20, paddingBottom: 40 },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-    headerBtn: { padding: 10, borderRadius: 10, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder },
-    headerBtnText: { fontSize: 16, color: t.theme.colors.text },
-    headerTitle: { fontSize: 18, fontWeight: '700', color: t.theme.colors.text },
-    dayHeaderRow: { flexDirection: 'row', marginBottom: 4 },
-    dayHeader: { width: '14.28%', alignItems: 'center', paddingVertical: 6 },
-    dayHeaderText: { fontSize: 11, color: t.theme.colors.textSecondary, fontWeight: '500' },
-    weekRow: { flexDirection: 'row' },
-    dayCell: { width: '14.28%', alignItems: 'center', paddingVertical: 8 },
-    dayNum: { fontSize: 13, fontWeight: '500', color: t.theme.colors.text },
-    dayDot: { width: 5, height: 5, borderRadius: 2.5, marginTop: 2 },
-    selectedDay: { backgroundColor: t.theme.colors.primary + '20', borderRadius: 8 },
-    detailCard: { marginTop: 16, borderRadius: 14, padding: 16, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder },
-    detailTitle: { fontSize: 14, fontWeight: '600', color: t.theme.colors.text, marginBottom: 8 },
-    detailRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-    detailLabel: { fontSize: 12, color: t.theme.colors.textSecondary },
-    detailValue: { fontSize: 12, fontWeight: '500', color: t.theme.colors.text },
-    noteText: { fontSize: 12, color: t.theme.colors.warning, marginTop: 4, fontStyle: 'italic' },
-    emptyText: { fontSize: 12, color: t.theme.colors.textSecondary, textAlign: 'center', paddingVertical: 20 },
-    ad: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 16 },
-    adBadge: { fontSize: 7, color: t.theme.colors.textSecondary },
-    adText: { flex: 1, fontSize: 11, color: t.theme.colors.textSecondary },
-    adCta: { fontSize: 10, color: t.theme.colors.primary, fontWeight: '600' },
+    scroll: { padding: 20, paddingBottom: 80 },
+    weekHeader: { flexDirection: 'row', marginBottom: 4 },
+    dayLabel: { width: '14.28%', textAlign: 'center', fontSize: 10, color: t.theme.colors.textSecondary, paddingVertical: 6 },
+    dayCell: { width: '14.28%', aspectRatio: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginBottom: 2 },
+    dayNum: { fontSize: 13, fontWeight: '500' },
+    legend: { flexDirection: 'row', gap: 16, justifyContent: 'center', marginTop: 12 },
+    legendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    legendDot: { width: 8, height: 8, borderRadius: 4 },
+    legendText: { fontSize: 10, color: t.theme.colors.textSecondary },
   }));
 
+  const [logs, setLogs] = useState<any[]>([]);
+
   const loadData = useCallback(async () => {
-    const allLogs = await getRecentLogs(365);
-    setLogs(allLogs);
+    const recent = await getRecentLogs(60);
+    setLogs(recent);
   }, []);
-  useEffect(() => { loadData(); }, [loadData]);
 
-  const firstDay = new Date(year, month, 1).getDay();
+  useFocusEffect(loadData);
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const weeks: number[][] = [];
-  let week: number[] = [];
-  for (let i = 0; i < firstDay; i++) week.push(0);
-  for (let d = 1; d <= daysInMonth; d++) {
-    week.push(d);
-    if (week.length === 7) { weeks.push(week); week = []; }
-  }
-  if (week.length > 0) weeks.push(week);
+  const firstDow = new Date(year, month, 0).getDay();
 
-  const getLogForDate = (day: number) => {
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+  const getStatus = (day: number) => {
     const ds = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return logs.find((l: any) => l.log_date === ds);
+    const log = logs.find((l: any) => l.log_date === ds);
+    if (!log) return 0; // no data (grey)
+    if (log.bedtime && log.waketime) return 2; // completed (green)
+    if (log.bedtime) return 1; // bedtime only (amber)
+    return 0;
   };
 
-  const handleDayPress = (day: number) => {
-    const ds = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    setSelectedDate(selectedDate === ds ? null : ds);
-  };
-
-  const selectedLog = selectedDate ? logs.find((l: any) => l.log_date === selectedDate) : null;
+  const statusColors = [
+    'transparent',
+    theme.colors.warning,
+    theme.colors.success,
+  ];
 
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
-        {/* Month Navigation */}
-        <View style={s.header}>
-          <TouchableOpacity style={s.headerBtn} onPress={() => { if (month === 0) { setYear(y => y - 1); setMonth(11); } else setMonth(m => m - 1); }}>
-            <T style={s.headerBtnText}>←</T>
-          </TouchableOpacity>
-          <T style={s.headerTitle}>{year}年 {MONTHS[month]}</T>
-          <TouchableOpacity style={s.headerBtn} onPress={() => { if (month === 11) { setYear(y => y + 1); setMonth(0); } else setMonth(m => m + 1); }}>
-            <T style={s.headerBtnText}>→</T>
-          </TouchableOpacity>
+        <T style={{ fontSize: 18, fontWeight: '600', color: theme.colors.text, marginBottom: 12 }}>
+          {year}年{month + 1}月
+        </T>
+        <View style={s.weekHeader}>
+          {weekDays.map((d) => <T key={d} style={s.dayLabel}>{d}</T>)}
         </View>
-
-        {/* Day Headers */}
-        <View style={s.dayHeaderRow}>
-          {DAYS.map((d, i) => (
-            <View key={i} style={s.dayHeader}>
-              <T style={s.dayHeaderText}>{d}</T>
-            </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+          {Array.from({ length: firstDow }, (_, i) => (
+            <View key={`pad-${i}`} style={s.dayCell} />
           ))}
+          {Array.from({ length: daysInMonth }, (_, i) => {
+            const day = i + 1;
+            const status = getStatus(day);
+            const isToday = day === now.getDate();
+            return (
+              <View key={day} style={[s.dayCell, {
+                backgroundColor: status > 0 ? statusColors[status] + (status === 1 ? '30' : '20') : 'transparent',
+                borderWidth: isToday ? 2 : 0,
+                borderColor: isToday ? theme.colors.primary : 'transparent',
+              }]}>
+                <T style={[s.dayNum, { color: status > 0 ? statusColors[status] : theme.colors.text }]}>{day}</T>
+              </View>
+            );
+          })}
         </View>
-
-        {/* Weeks */}
-        {weeks.map((w, wi) => (
-          <View key={wi} style={s.weekRow}>
-            {w.map((day, di) => {
-              if (day === 0) return <View key={di} style={s.dayCell} />;
-              const log = getLogForDate(day);
-              const dotColor = log ? (log.phone_curfew_kept ? theme.colors.success : theme.colors.warning) : null;
-              const isSelected = selectedDate === `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-              return (
-                <TouchableOpacity
-                  key={di}
-                  style={[s.dayCell, isSelected && s.selectedDay]}
-                  onPress={() => handleDayPress(day)}>
-                  <T style={[s.dayNum, { opacity: day <= daysInMonth ? 1 : 0.3 }]}>{day}</T>
-                  {dotColor && <View style={[s.dayDot, { backgroundColor: dotColor }]} />}
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        ))}
-
-        {/* Selected Day Detail */}
-        {selectedLog && (
-          <View style={s.detailCard}>
-            <T style={s.detailTitle}>{selectedDate}</T>
-            <View style={s.detailRow}><T style={s.detailLabel}>🌙 就寝</T><T style={s.detailValue}>{selectedLog.bedtime || '--'}</T></View>
-            <View style={s.detailRow}><T style={s.detailLabel}>☀️ 起床</T><T style={s.detailValue}>{selectedLog.waketime || '--'}</T></View>
-            <View style={s.detailRow}><T style={s.detailLabel}>📵 宵禁</T><T style={s.detailValue}>{selectedLog.phone_curfew_kept ? '✅ 达标' : '❌ 违规'}</T></View>
-            {selectedLog.note && <T style={s.noteText}>📝 {selectedLog.note}</T>}
-          </View>
-        )}
-        {selectedDate && !selectedLog && (
-          <View style={s.detailCard}>
-            <T style={s.detailTitle}>{selectedDate}</T>
-            <T style={s.emptyText}>当日无记录</T>
-          </View>
-        )}
-
-        <View style={s.ad}>
-          <T style={s.adBadge}>广告</T>
-          <T style={{ fontSize: 14 }}>🛏️</T>
-          <T style={s.adText}>泰国乳胶枕·限时7折</T>
-          <T style={s.adCta}>了解</T>
+        <View style={s.legend}>
+          <View style={s.legendItem}><View style={[s.legendDot, { backgroundColor: theme.colors.success }]} /><T style={s.legendText}>完整</T></View>
+          <View style={s.legendItem}><View style={[s.legendDot, { backgroundColor: theme.colors.warning }]} /><T style={s.legendText}>仅就寝</T></View>
+          <View style={s.legendItem}><View style={[s.legendDot, { backgroundColor: '#4a4a5a' }]} /><T style={s.legendText}>无记录</T></View>
         </View>
       </ScrollView>
     </View>

@@ -1,16 +1,18 @@
 import React from 'react';
 import { Text as RNText, TextProps } from 'react-native';
 import { useTheme } from './ThemeContext';
-import { resolveFont } from './fonts';
+import { resolveFont, fontSizeScale } from './fonts';
 
-// Themed Text component - applies the active font globally
-// Uses fontFamily as a hard override to ensure it actually takes effect
+// Themed Text component — applies active font + density-based scaling
 export function T(props: TextProps & { children?: any }) {
   const { theme } = useTheme();
   const font = resolveFont(theme.font);
-  const fontStyle = font ? { fontFamily: font } : {};
+  const scale = fontSizeScale(theme.density);
+  const fontStyle: any = font ? { fontFamily: font } : {};
   return (
-    <RNText {...props} style={[props.style, fontStyle]}>
+    <RNText {...props}
+      allowFontScaling={false}
+      style={[props.style, fontStyle, scale !== 1 ? { fontSize: (props.style as any)?.fontSize ? (props.style as any).fontSize * scale : undefined } : null]}>
       {props.children}
     </RNText>
   );

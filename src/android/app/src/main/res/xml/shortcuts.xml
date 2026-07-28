@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="bedtime"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/bedtime_short_label"
+        android:shortcutLongLabel="@string/bedtime_long_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.earlysleep"
+            android:targetClass="com.earlysleep.MainActivity">
+            <extra android:name="action" android:value="bedtime" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="wakeup"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/wakeup_short_label"
+        android:shortcutLongLabel="@string/wakeup_long_label">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.earlysleep"
+            android:targetClass="com.earlysleep.MainActivity">
+            <extra android:name="action" android:value="wakeup" />
+        </intent>
+    </shortcut>
+</shortcuts>

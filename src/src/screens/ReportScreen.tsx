@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, ScrollView } from 'react-native'
+import React, { useState, useCallback } from 'react';
+import { View, ScrollView } from 'react-native';
 import { T } from '../theme/T';
 import { useTheme } from '../theme/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
-import { getStreak, getRecentLogs, getTodayLog } from '../data/database';
+import { useFocusEffect } from '@react-navigation/native';
+import { getStreak, getRecentLogs, getTodayLog, getSetting } from '../data/database';
 
 export default function ReportScreen() {
   const { theme } = useTheme();
@@ -13,50 +14,37 @@ export default function ReportScreen() {
     container: { flex: 1, paddingTop: insets.top, backgroundColor: t.theme.colors.background },
     scroll: { padding: 20, paddingBottom: 80 },
     header: { alignItems: 'center', paddingVertical: 12 },
-    headerIcon: { fontSize: 36 },
     headerTitle: { fontSize: 22, fontWeight: '700', color: t.theme.colors.text, marginTop: 4 },
     statRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: t.theme.colors.surfaceBorder },
     statLabel: { fontSize: 13, color: t.theme.colors.textSecondary },
     statValue: { fontSize: 13, fontWeight: '600', color: t.theme.colors.text },
-    noteBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.theme.colors.warning + '10', borderWidth: 1, borderColor: t.theme.colors.warning + '15', borderRadius: 8, padding: 8, gap: 6, marginVertical: 8 },
-    noteIcon: { fontSize: 12 },
-    noteText: { fontSize: 11, color: t.theme.colors.warning, flex: 1 },
     sectionTitle: { fontSize: 11, color: t.theme.colors.textSecondary, fontWeight: '600', marginTop: 16, marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.8 },
-    appRow: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingVertical: 5 },
-    appName: { width: 50, fontSize: 11, color: t.theme.colors.textSecondary },
-    appBarBg: { flex: 1, height: 14, backgroundColor: t.theme.colors.surface, borderRadius: 7, overflow: 'hidden' },
-    appBarFill: { height: '100%', borderRadius: 7 },
-    appTime: { width: 40, textAlign: 'right', fontSize: 11, color: t.theme.colors.text },
-    advice: { borderRadius: 10, padding: 12, marginVertical: 12, backgroundColor: t.theme.colors.primary + '12', borderWidth: 1, borderColor: t.theme.colors.primary + '20' },
-    adviceText: { fontSize: 12, lineHeight: 18, color: t.theme.colors.text },
     weekRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
     weekItem: { flex: 1, alignItems: 'center', padding: 10, borderRadius: 10, backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder },
     weekDay: { fontSize: 10, color: t.theme.colors.textSecondary, marginBottom: 4 },
     weekDot: { width: 6, height: 6, borderRadius: 3, marginBottom: 2 },
     weekLabel: { fontSize: 8, color: t.theme.colors.textSecondary },
-    ad: { flexDirection: 'row', alignItems: 'center', backgroundColor: t.theme.colors.surface, borderWidth: 1, borderColor: t.theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 16 },
-    adBadge: { fontSize: 7, color: t.theme.colors.textSecondary }, adText: { flex: 1, fontSize: 11, color: t.theme.colors.textSecondary },
-    adCta: { fontSize: 10, color: t.theme.colors.primary, fontWeight: '600' },
+    advice: { borderRadius: 10, padding: 12, marginVertical: 12, backgroundColor: t.theme.colors.primary + '12', borderWidth: 1, borderColor: t.theme.colors.primary + '20' },
+    adviceText: { fontSize: 12, lineHeight: 18, color: t.theme.colors.text },
+    highlight: { color: t.theme.colors.primary, fontWeight: '600' },
   }));
 
   const [todayLog, setTodayLog] = useState<any>(null);
   const [streak, setStreak] = useState({ current: 0, longest: 0, total: 0, curfewRate: 0 });
   const [recentLogs, setRecentLogs] = useState<any[]>([]);
+  const [targetBed, setTargetBed] = useState('23:00');
 
   const loadData = useCallback(async () => {
     const today = new Date().toISOString().slice(0, 10);
-    const [log, st, recent] = await Promise.all([getTodayLog(today), getStreak(), getRecentLogs(14)]);
+    const [log, st, recent, tb] = await Promise.all([
+      getTodayLog(today), getStreak(), getRecentLogs(14), getSetting('target_bedtime'),
+    ]);
     setTodayLog(log); setStreak(st); setRecentLogs(recent);
+    if (tb) setTargetBed(tb);
   }, []);
-  useEffect(() => { loadData(); }, [loadData]);
 
-  const stats = [
-    { icon: '🌙', label: '就寝', value: todayLog?.bedtime || '--' },
-    { icon: '☀️', label: '起床', value: todayLog?.waketime || '--' },
-    { icon: '📵', label: '宵禁', value: todayLog?.phone_curfew_kept ? '✅ 达标' : '--' },
-  ];
+  useFocusEffect(loadData);
 
-  // Week mini calendar
   const weekDays: { day: string; status: number }[] = [];
   for (let i = 6; i >= 0; i--) {
     const d = new Date(); d.setDate(d.getDate() - i);
@@ -65,33 +53,69 @@ export default function ReportScreen() {
     const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
     weekDays.push({
       day: dayNames[d.getDay()],
-      status: log ? (log.phone_curfew_kept ? 2 : 1) : 0,
+      status: log ? (log.bedtime && log.waketime ? 2 : 1) : 0,
     });
   }
+
+  // Generate AI-style advice based on real data
+  const getAdvice = () => {
+    const lines: string[] = [];
+    if (todayLog?.bedtime) {
+      const [h, m] = todayLog.bedtime.split(':').map(Number);
+      const [th, tm] = targetBed.split(':').map(Number);
+      const actualMin = h * 60 + m;
+      const targetMin = th * 60 + tm;
+      if (actualMin - targetMin > 60) {
+        lines.push(`比目标晚睡了${Math.round((actualMin - targetMin) / 60)}小时，今晚试试提前30分钟放下手机`);
+      } else if (actualMin - targetMin > 30) {
+        lines.push('比目标晚了一点。今晚可以试试睡前1小时不刷短视频');
+      } else {
+        lines.push('按时睡觉很棒！继续保持这个节奏');
+      }
+    } else {
+      lines.push('昨晚还没有打卡记录，记得睡前点击「准备睡觉」');
+    }
+    if (streak.curfewRate < 80 && streak.total > 3) {
+      lines.push('宵禁达标率偏低，打卡后尽量不要再碰手机');
+    }
+    if (streak.current >= 3) {
+      lines.push(`已连续${streak.current}天打卡，坚持下去！`);
+    }
+    return lines;
+  };
+
+  const advice = getAdvice();
 
   return (
     <View style={s.container}>
       <ScrollView contentContainerStyle={s.scroll}>
         <View style={s.header}>
-          <T style={s.headerIcon}>☀️</T>
-          <T style={s.headerTitle}>早上好</T>
+          <T style={{ fontSize: 36 }}>☀️</T>
+          <T style={s.headerTitle}>晨间报告</T>
         </View>
 
-        {stats.map((st, i) => (
-          <View key={i} style={s.statRow}>
-            <T style={s.statLabel}>{st.icon} {st.label}</T>
-            <T style={s.statValue}>{st.value}</T>
-          </View>
-        ))}
+        <View style={s.statRow}>
+          <T style={s.statLabel}>🌙 昨晚就寝</T>
+          <T style={s.statValue}>{todayLog?.bedtime || '--'}</T>
+        </View>
+        <View style={s.statRow}>
+          <T style={s.statLabel}>☀️ 今早起</T>
+          <T style={s.statValue}>{todayLog?.waketime || '--'}</T>
+        </View>
+        <View style={s.statRow}>
+          <T style={s.statLabel}>📵 宵禁状态</T>
+          <T style={[s.statValue, { color: todayLog?.phone_curfew_kept ? theme.colors.success : theme.colors.warning }]}>
+            {todayLog?.phone_curfew_kept ? '✅ 达标' : '⚠️ 未达标'}
+          </T>
+        </View>
 
         {todayLog?.note && (
-          <View style={s.noteBox}>
-            <T style={s.noteIcon}>📝</T>
-            <T style={s.noteText}>{todayLog.note}</T>
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.warning + '10', borderWidth: 1, borderColor: theme.colors.warning + '15', borderRadius: 8, padding: 8, gap: 6, marginVertical: 8 }}>
+            <T style={{ fontSize: 12 }}>📝</T>
+            <T style={{ fontSize: 11, color: theme.colors.warning, flex: 1 }}>{todayLog.note}</T>
           </View>
         )}
 
-        {/* Week Calendar */}
         <T style={s.sectionTitle}>📅 本周</T>
         <View style={s.weekRow}>
           {weekDays.map((w, i) => (
@@ -103,23 +127,23 @@ export default function ReportScreen() {
           ))}
         </View>
 
-        {/* Streak */}
         <T style={s.sectionTitle}>🏆 统计</T>
         <View style={s.statRow}><T style={s.statLabel}>🔥 连续天数</T><T style={s.statValue}>{streak.current}</T></View>
         <View style={s.statRow}><T style={s.statLabel}>📈 最长连续</T><T style={s.statValue}>{streak.longest}</T></View>
         <View style={s.statRow}><T style={s.statLabel}>📊 宵禁达标率</T><T style={s.statValue}>{streak.curfewRate}%</T></View>
         <View style={s.statRow}><T style={s.statLabel}>📋 总记录天数</T><T style={s.statValue}>{streak.total}</T></View>
 
-        {/* Advice */}
         <View style={s.advice}>
-          <T style={s.adviceText}>💡 打卡后又刷了半小时。今晚试试打卡后直接放客厅充电？</T>
+          {advice.map((line, i) => (
+            <T key={i} style={s.adviceText}>💡 {line}</T>
+          ))}
         </View>
 
-        <View style={s.ad}>
-          <T style={s.adBadge}>广告</T>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 16 }}>
+          <T style={{ fontSize: 7, color: theme.colors.textSecondary }}>广告</T>
           <T style={{ fontSize: 14 }}>🎬</T>
-          <T style={s.adText}>夜间助眠音乐·免费试听</T>
-          <T style={s.adCta}>播放</T>
+          <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>夜间助眠音乐·免费试听</T>
+          <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>播放</T>
         </View>
       </ScrollView>
     </View>

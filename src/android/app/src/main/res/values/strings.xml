@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">EarlySleep</string>
+    <string name="bedtime_short_label">准备睡觉</string>
+    <string name="bedtime_long_label">打开早睡系统打卡就寝</string>
+    <string name="wakeup_short_label">起床</string>
+    <string name="wakeup_long_label">打开早睡系统打卡起床</string>
 </resources>

@@ -1,27 +1,15 @@
-import React, { useState, useCallback } from 'react';
-import { View, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground, Platform, Alert, PermissionsAndroid } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, TouchableOpacity, ScrollView, TextInput, Modal, ImageBackground, Alert } from 'react-native';
 import { T } from '../theme/T';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../theme/ThemeContext';
 import { useI18n } from '../i18n/I18nContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemedStyles } from '../theme/useThemedStyles';
-import { resolveFont } from '../theme/fonts';
 import { getTodayLog, logBedtime, logWaketime, getStreak, getRecentLogs, getSetting } from '../data/database';
 import { hasUsagePermission, openUsageSettings, getPhoneUsageDuringSleep } from '../native/UsageStats';
 
-const BTN_STYLES: Record<string, any> = {
-  rounded: { borderRadius: 14, backgroundColor: '' },
-  pill: { borderRadius: 30, paddingVertical: 20 },
-  sharp: { borderRadius: 2, borderWidth: 1 },
-  glow: { borderRadius: 14, shadowOpacity: 0.6, shadowRadius: 35, elevation: 12 },
-  outline: { borderRadius: 14, borderWidth: 2.5, backgroundColor: 'transparent' },
-  '3d': { borderRadius: 14, borderBottomWidth: 6 },
-  cat: { borderRadius: 20, backgroundColor: '#ff9eb5' },
-  bear: { borderRadius: 30, backgroundColor: '#c4a882' },
-  owl: { borderRadius: 22, backgroundColor: '#8b6f9e' },
-  star: { borderRadius: 24, backgroundColor: '#f7d44a' },
-};
+const PET_EMOJI: Record<string, string> = { cat: '🐾', bear: '🐻', owl: '🦉', star: '⭐' };
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -43,7 +31,6 @@ export default function HomeScreen() {
     logInfo: { flex: 1 },
     logLabel: { fontSize: 13, color: tc.theme.colors.text, fontWeight: '500' },
     logTime: { fontSize: 11, color: tc.theme.colors.textSecondary, marginTop: 1 },
-    logCheck: { fontSize: 11, color: tc.theme.colors.success },
     modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', padding: 20 },
     modalContent: { backgroundColor: tc.theme.colors.background, borderRadius: 20, padding: 28, borderWidth: 1, borderColor: tc.theme.colors.surfaceBorder },
   }));
@@ -55,11 +42,22 @@ export default function HomeScreen() {
   const [showBedtimeModal, setShowBedtimeModal] = useState(false);
   const [note, setNote] = useState('');
   const [appsUsed, setAppsUsed] = useState<any[]>([]);
+  const [permDenied, setPermDenied] = useState(false);
+
+  // Request usage stats permission on first launch (not during bedtime flow)
+  useEffect(() => {
+    (async () => {
+      const ok = await hasUsagePermission();
+      if (!ok) {
+        await openUsageSettings();
+      }
+    })();
+  }, []);
 
   const loadData = useCallback(async () => {
     const today = new Date().toISOString().slice(0, 10);
     const [log, st, recent, target] = await Promise.all([
-      getTodayLog(today), getStreak(), getRecentLogs(7), getSetting('target_bedtime'),
+      getTodayLog(today), getStreak(), getRecentLogs(14), getSetting('target_bedtime'),
     ]);
     setTodayLog(log); setStreak(st); setRecentLogs(recent);
     if (target) setTargetBedtime(target);
@@ -71,94 +69,139 @@ export default function HomeScreen() {
     try {
       const today = new Date().toISOString().slice(0, 10);
       const now = new Date().toTimeString().slice(0, 5);
-      const perm = await hasUsagePermission();
-      if (!perm) {
-        await openUsageSettings();
-        Alert.alert(t('settings.pref'), t('home.perm.desc') || '请授权使用统计权限以启用宵禁检测');
+      const ok = await hasUsagePermission();
+      if (!ok) {
+        setPermDenied(true);
+        Alert.alert('权限提示', '需要「使用情况访问」权限才能自动检测宵禁。请在设置中开启。', [
+          { text: '去设置', onPress: () => openUsageSettings() },
+          { text: '稍后再说' },
+        ]);
       }
-      await logBedtime(today, now, true, note);
-      setShowBedtimeModal(false); setNote('');
+      await logBedtime(today, now, ok, note);
+      setShowBedtimeModal(false); setNote(''); setPermDenied(false);
       loadData();
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
   };
 
   const handleWakeup = async () => {
     try {
       const today = new Date().toISOString().slice(0, 10);
       const now = new Date().toTimeString().slice(0, 5);
-      const [log] = await Promise.all([getTodayLog(today)]);
+      const log = await getTodayLog(today);
       if (log?.bedtime) {
         const [bh, bm] = log.bedtime.split(':').map(Number);
         const [wh, wm] = now.split(':').map(Number);
-        const sleepTime = new Date();
-        sleepTime.setHours(bh, bm, 0, 0);
-        const wakeTime = new Date();
-        wakeTime.setHours(wh, wm, 0, 0);
+        const sleepTime = new Date(); sleepTime.setHours(bh, bm, 0, 0);
+        const wakeTime = new Date(); wakeTime.setHours(wh, wm, 0, 0);
+        const durMs = wakeTime.getTime() - sleepTime.getTime();
+        const durMin = Math.round(durMs / 60000);
+        // Check if sleep was at least 1 hour and bedtime was within 2h of target
+        const [tbh, tbm] = targetBedtime.split(':').map(Number);
+        const targetMin = tbh * 60 + tbm;
+        const actualMin = bh * 60 + bm;
+        const lateByMin = actualMin - targetMin;
+        const isOnTime = lateByMin <= 30; // within 30 min of target
+
         const usage = await getPhoneUsageDuringSleep(sleepTime.getTime(), wakeTime.getTime());
-        if (usage) {
-          setAppsUsed(usage.apps || []);
+        if (usage) setAppsUsed(usage.apps || []);
+        const phoneUsed = usage?.usedPhone || false;
+
+        // Valid sleep: at least 1 hour, and either on time or phone not used
+        const isValid = durMin >= 60 && (isOnTime || !phoneUsed);
+        await logWaketime(today, now);
+        if (!isValid && durMin < 60) {
+          Alert.alert('⚠️', '睡眠时间不到1小时，不算有效记录。');
         }
+        await logBedtime(today, log.bedtime, !phoneUsed, log.note || '');
+      } else {
+        await logWaketime(today, now);
       }
-      await logWaketime(today, now);
       loadData();
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
   };
 
-  const btnStyle = BTN_STYLES[theme.button.style] || BTN_STYLES.rounded;
-  const color = btnStyle.backgroundColor || theme.colors.primary;
-  const isOutline = theme.button.style === 'outline';
-
+  const style = theme.button.style || 'rounded';
+  const petEmoji = PET_EMOJI[style] || '';
   const bgPhoto = theme.background.type === 'photo' ? theme.background.photoPath : null;
   const Wrapper: any = bgPhoto ? ImageBackground : View;
   const wrapProps = bgPhoto ? { source: { uri: bgPhoto } as any, style: s.container, imageStyle: { opacity: theme.background.overlay || 0.3 } } : { style: s.container };
 
+  const isOutline = style === 'outline';
+  const isPet = ['cat', 'bear', 'owl', 'star'].includes(style);
+  const isGlow = style === 'glow';
+  const is3d = style === '3d';
+  const isPill = style === 'pill';
+  const isSharp = style === 'sharp';
+
   return (
     <Wrapper {...wrapProps}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        <T style={s.greeting}>{t('home.greeting.night')}</T>
+        <T style={s.greeting}>{petEmoji} {t('home.greeting.night')}</T>
         <T style={s.targetText}>{t('home.target')} {targetBedtime}</T>
 
         <View style={s.streakRow}>
           <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.primary }]}>{streak.current}</T><T style={s.streakLabel}>{t('home.streak')}</T></View>
           <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.warning }]}>{streak.curfewRate}%</T><T style={s.streakLabel}>{t('home.curfew.rate')}</T></View>
-          <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.success }]}>--</T><T style={s.streakLabel}>{t('home.sleep')}</T></View>
+          <View style={s.streakItem}><T style={[s.streakNum, { color: theme.colors.success }]}>{streak.total}</T><T style={s.streakLabel}>{t('home.sleep')}</T></View>
         </View>
 
         {!todayLog?.bedtime && (
           <TouchableOpacity onPress={() => setShowBedtimeModal(true)} activeOpacity={0.8}
-            style={{ backgroundColor: isOutline ? 'transparent' : color, padding: 16, alignItems: 'center', borderRadius: btnStyle.borderRadius || 14, borderWidth: isOutline ? 2.5 : (btnStyle.borderWidth || 0), borderColor: isOutline ? color : 'transparent', shadowColor: color, shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.25, shadowRadius: 32, elevation: 8, paddingVertical: btnStyle.paddingVertical || 16 }}>
-            <T style={{ color: isOutline ? color : '#fff', fontSize: 17, fontWeight: '600' }}>{t('home.bedtime')}</T>
-            <T style={{ color: isOutline ? color + '99' : 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</T>
+            style={{
+              backgroundColor: isOutline ? 'transparent' : (isPet ? theme.colors.primary : theme.colors.primary),
+              padding: isPill ? 24 : 16,
+              alignItems: 'center',
+              borderRadius: isPill ? 32 : isSharp ? 2 : isPet ? 22 : 14,
+              borderWidth: isOutline ? 2.5 : (isSharp ? 1 : 0),
+              borderColor: isOutline ? theme.colors.primary : (isSharp ? theme.colors.primary : 'transparent'),
+              borderBottomWidth: is3d ? 6 : undefined,
+              borderBottomColor: is3d ? theme.colors.primary + 'aa' : undefined,
+              shadowColor: isGlow ? theme.colors.primary : undefined,
+              shadowOffset: isGlow ? { width: 0, height: 0 } : undefined,
+              shadowOpacity: isGlow ? 0.6 : 0,
+              shadowRadius: isGlow ? 35 : 0,
+              elevation: isGlow ? 12 : 2,
+              marginBottom: 14,
+            }}>
+            <T style={{ color: '#fff', fontSize: 17, fontWeight: '600' }}>{petEmoji} {t('home.bedtime')}</T>
+            <T style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginTop: 2 }}>{t('home.bedtime.sub')}</T>
           </TouchableOpacity>
         )}
+
         {todayLog?.bedtime && !todayLog?.waketime && (
           <TouchableOpacity onPress={handleWakeup} activeOpacity={0.8}
-            style={{ backgroundColor: isOutline ? 'transparent' : theme.colors.surface, borderWidth: isOutline ? 2 : 1, borderColor: isOutline ? color : theme.colors.surfaceBorder, borderRadius: btnStyle.borderRadius || 14, paddingVertical: btnStyle.paddingVertical || 14, paddingHorizontal: 14, alignItems: 'center', marginTop: 8, marginBottom: 16 }}>
+            style={{
+              backgroundColor: theme.colors.surface,
+              borderWidth: isOutline ? 2 : 1,
+              borderColor: isOutline ? theme.colors.primary : theme.colors.surfaceBorder,
+              borderRadius: isPill ? 32 : isSharp ? 2 : 14,
+              padding: 14, alignItems: 'center',
+              marginTop: 8, marginBottom: 16,
+            }}>
             <T style={{ color: theme.colors.text, fontSize: 16, fontWeight: '500' }}>{t('home.wakeup')}</T>
           </TouchableOpacity>
         )}
+
         {todayLog?.bedtime && todayLog?.waketime && (
           <View style={{ backgroundColor: theme.colors.success + '14', borderWidth: 1, borderColor: theme.colors.success + '25', borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 16 }}>
             <T style={{ color: theme.colors.success, fontSize: 16, fontWeight: '600' }}>{t('home.completed')}</T>
-            <T style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: 4 }}>{t('report.bedtime')} {todayLog.bedtime} · {t('report.wakeup')} {todayLog.waketime}</T>
+            <T style={{ color: theme.colors.textSecondary, fontSize: 12, marginTop: 4 }}>
+              {t('report.bedtime')} {todayLog.bedtime} · {t('report.wakeup')} {todayLog.waketime}
+            </T>
           </View>
         )}
 
         {recentLogs.length > 0 && (
           <View style={s.card}>
             <T style={s.cardTitle}>{t('home.recent')}</T>
-            {recentLogs.map((log, i) => (
+            {recentLogs.slice(0, 7).map((log, i) => (
               <View key={i} style={s.logEntry}>
-                <View style={[s.logDot, { backgroundColor: log.phone_curfew_kept ? theme.colors.success : theme.colors.warning }]} />
+                <View style={[s.logDot, { backgroundColor: log.bedtime && log.waketime ? theme.colors.success : theme.colors.warning }]} />
                 <View style={s.logInfo}>
                   <T style={s.logLabel}>{log.log_date}</T>
                   <T style={s.logTime}>{log.bedtime || '--'} → {log.waketime || '--'}{log.note ? ' · ' + log.note : ''}</T>
                 </View>
-                {log.phone_curfew_kept ? <T style={s.logCheck}>✅</T> : null}
+                {log.bedtime && log.waketime ? <T style={{ fontSize: 11, color: theme.colors.success }}>✅</T> : null}
               </View>
             ))}
           </View>
@@ -166,22 +209,15 @@ export default function HomeScreen() {
 
         {appsUsed.length > 0 && (
           <View style={s.card}>
-            <T style={s.cardTitle}>📱 昨晚用了这些 App</T>
+            <T style={s.cardTitle}>📱 昨晚 App 使用</T>
             {appsUsed.slice(0, 5).map((a: any, i: number) => (
               <View key={i} style={s.logEntry}>
                 <T style={{ fontSize: 13, color: theme.colors.text, flex: 1 }}>{a.appName || a.packageName}</T>
-                <T style={{ fontSize: 11, color: theme.colors.textSecondary }}>{Math.round(a.usageMs/60000)} min</T>
+                <T style={{ fontSize: 11, color: theme.colors.textSecondary }}>{Math.round(a.usageMs / 60000)} min</T>
               </View>
             ))}
           </View>
         )}
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, gap: 8, marginTop: 4 }}>
-          <T style={{ fontSize: 8, color: theme.colors.textSecondary }}>{t('calendar.ad')}</T>
-          <T style={{ fontSize: 14 }}>🛏️</T>
-          <T style={{ flex: 1, fontSize: 11, color: theme.colors.textSecondary }}>{t('calendar.ad')}</T>
-          <T style={{ fontSize: 10, color: theme.colors.primary, fontWeight: '600' }}>{t('home.detail')}</T>
-        </View>
       </ScrollView>
 
       <Modal visible={showBedtimeModal} transparent animationType="fade">
@@ -191,8 +227,9 @@ export default function HomeScreen() {
             <T style={{ fontSize: 14, color: theme.colors.textSecondary, textAlign: 'center', lineHeight: 20, marginBottom: 20 }}>{t('home.modal.desc')}</T>
             <TextInput style={{ backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 10, padding: 12, fontSize: 14, color: theme.colors.text, marginBottom: 16 }}
               placeholder={t('home.note.placeholder')} placeholderTextColor={theme.colors.textSecondary} value={note} onChangeText={setNote} />
-            <TouchableOpacity onPress={handleBedtime} style={{ backgroundColor: color, borderRadius: 12, padding: 14, alignItems: 'center' }}>
-              <T style={{ color: isOutline ? color : '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</T>
+            <TouchableOpacity onPress={handleBedtime}
+              style={{ backgroundColor: theme.colors.primary, borderRadius: 12, padding: 14, alignItems: 'center' }}>
+              <T style={{ color: '#fff', fontSize: 16, fontWeight: '600' }}>{t('home.confirm.bedtime')}</T>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setShowBedtimeModal(false)} style={{ padding: 12, alignItems: 'center', marginTop: 8 }}>
               <T style={{ color: theme.colors.textSecondary, fontSize: 14 }}>{t('home.cancel')}</T>

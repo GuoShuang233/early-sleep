@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "android/app/src/main/assets/fonts/JetBrainsMono-Regular.ttf",
+      "sha1": "2ec2264f0a75984fb83ba3853d26da9971b25a55"
+    },
+    {
+      "path": "android/app/src/main/assets/fonts/NotoSerif.ttf",
+      "sha1": "35f023a37f126313403845ac2a8a733baac79f8c"
+    }
+  ]
+}
